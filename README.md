@@ -2,7 +2,7 @@
 
 日语复合动词可视化图鉴 —— **前項 × 後項 的組み合わせ地図**。
 
-格子就是目录，词卡就在格子下面：横轴是后项系（〜出す、〜込む…），纵轴是前项系（取り〜、出し〜…），一个交点就是一个复合动词。朱印 = 已収蔵（有完整标本卡），淡格 = 已认识（占位卡），暗格 = 等待新词。
+两个视图、同一份词库：**収蔵棚**（词按系分架 —— 前項棚/后项棚，棚或卡片两种摆法）和 **交差点図**（前項×後項 组合格子图，点亮/全図两种显示模式）。格子就是目录，一个交点就是一个复合动词：朱印 = 已収蔵（有完整标本卡），淡格 = 已认识（占位卡），暗格 = 等待新词。
 
 > 这是对 Open Design 里 `zukan.html` 单文件设计的 **React 忠实移植** + 扩展缝隙。设计真源保留在 [`design/zukan.html`](design/zukan.html)，Open Design 源文件夹未动。
 
@@ -40,7 +40,8 @@ bikuri-Goizukan/
 │   ├── styles.css            # 由 design/zukan.html 逐字抽取 + 赞助弹窗样式
 │   ├── data/
 │   │   ├── series.json       # ★ 前項系/后项系（很少改）
-│   │   └── words.json        # ★ 词库（加词就改它）
+│   │   ├── words.json        # ★ 词库（加词就改它）
+│   │   └── volumes.json      # 点亮模式的「分巻」语义分组（后项列 → 卷）
 │   ├── lib/
 │   │   ├── data.js           # 数据派生函数（gridAt / seriesName / 统计…）
 │   │   └── nav.jsx           # 导航 Context（openWord / openSeries / goBack…）
@@ -113,7 +114,7 @@ npm run preview    # 本地预览构建产物（验证部署效果）
 
 - [ ] `npm run check:data` 通过
 - [ ] `npm run build` 通过
-- [ ] `npm run preview` 打开，与 `design/zukan.html` 并排核对：矩阵、过滤 ①–⑤、点格开卡、系别库、6 个定制系页、hash 直达（`#kangaekomu`、`#series-kaesu`、`#serieslib`）、「← 回到」按钮
+- [ ] `npm run preview` 打开，与 `design/zukan.html` 并排核对：収蔵棚（棚/卡片切换）、交差点図（点亮/全図切换、卷导航翻页、图例折叠、bare-band、过滤 ①–⑤）、点格开卡、6 个定制系页、hash 直达（`#map`、`#kangaekomu`、`#series-kaesu`）、「← 回到」按钮
 - [ ] 首次访问出现赞助弹窗 → 关闭 → 刷新不再出现；换浏览器/隐身再访问会再出现
 - [ ] `public/donate-qr.svg` 已换成你的真实收款码（或改 `config.js` 的 `qrPath`）
 

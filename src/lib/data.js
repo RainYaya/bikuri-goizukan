@@ -8,11 +8,14 @@
 
 import seriesData from '../data/series.json';
 import wordData from '../data/words.json';
+import volumesData from '../data/volumes.json';
 
 export const ROWS = seriesData.rows;
 export const COLS = seriesData.cols;
 export const SERIES_NAME = seriesData.seriesNames;
 export const WORDS = wordData.words;
+/* 后项系按语义分卷 —— 点亮模式（lit）的分卷依据 */
+export const VOLUMES = volumesData;
 
 export function rowSeries(id) {
   for (let i = 0; i < ROWS.length; i++) if (ROWS[i].id === id) return ROWS[i];
@@ -84,6 +87,17 @@ export function seriesDominantCls(kind, id) {
 /* 词面 → id 查找表：近缘种面板里可点击钻取 */
 export const BYNAME = {};
 for (const k in WORDS) BYNAME[WORDS[k].word] = WORDS[k].id;
+
+/* 点亮模式：卷内有词的系行（只保留有词的行，卷内交叉点照画 3 态，块内接近满） */
+export function volRows(vol) {
+  return ROWS.filter((r) => vol.cols.some((c) => gridAt(r.id, c)));
+}
+/* 卷内词数（该卷所有列的词条去重前计数；一格一词，故直接求和） */
+export function wordsInVol(vol) {
+  let n = 0;
+  vol.cols.forEach((c) => { n += wordsInCol(c).length; });
+  return n;
+}
 
 /* 图鉴统计（cover 顶部 chips） */
 export function zukanStats() {

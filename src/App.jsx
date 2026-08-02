@@ -1,18 +1,21 @@
 /**
- * App.jsx —— 应用外壳与状态机。
+ * App.jsx —— 应用外壳与状态机（新版本：収蔵棚 / 交差点図 双域）。
  *
- * 状态：{ view, word, series, cls, origin }
- *   view    : 'home' | 'serieslib' | 'series' | 'word'
- *   word    : 当前词条 id（view='word' 时）
- *   series  : 当前系 id（view='series' 时）
- *   cls     : 构词分类过滤（'all' | '①'..'⑤'），跨视图保留
- *   origin  : 词卡是从哪打开的（'home' | 'serieslib' | 'series:<id>'），决定「← 回到」按钮去向
+ * 状态：{ view, domain, word, series, backSeries, cls, mode, shelfMode }
+ *   domain    : 'shelf'（収蔵棚）| 'map'（交差点図）—— 顶层导航
+ *   view      : 'shelf' | 'map' | 'series' | 'word'
+ *   word      : 当前词条 id（view='word'）
+ *   series    : 当前系 id（view='series'）
+ *   backSeries: 从哪个系打开的词卡（返回键 → 系総覧）
+ *   cls       : 构词分类过滤（'all' | '①'..'⑤'）
+ *   mode      : 'lit'（点亮模式，分巻剪枝）| 'full'（全図点阵）
+ *   shelfMode : 'shelves'（棚表示）| 'cards'（卡片表示）
  *
- * hash 路由与原版一致用 history.replaceState（不产生浏览器历史，返回靠站内「←」按钮）。
+ * hash 路由与原版一致用 history.replaceState。默认进入 収蔵棚。
  */
 import { useCallback, useEffect, useState } from 'react';
 import { WORDS } from './lib/data.js';
-import { NavContext, inSeriesDomain } from './lib/nav.jsx';
+import { NavContext } from './lib/nav.jsx';
 import Nav from './components/Nav.jsx';
 import Cover from './components/Cover.jsx';
 import GridMap from './components/GridMap.jsx';
@@ -20,19 +23,20 @@ import Stage from './components/Stage.jsx';
 import DonateModal from './components/DonateModal.jsx';
 import { site } from './config.js';
 
+const BASE = { view: 'shelf', domain: 'shelf', word: null, series: null, backSeries: null, cls: 'all', mode: 'lit', shelfMode: 'shelves' };
+
 function parseHash(h) {
   const key = (h || '').replace(/^#/, '');
-  const base = { view: 'home', word: null, series: null, origin: null, cls: 'all' };
-  if (!key) return base;
-  if (key === 'serieslib') return { ...base, view: 'serieslib' };
-  if (key.indexOf('series-') === 0) return { ...base, view: 'series', series: key.slice(7) };
-  if (WORDS[key]) return { ...base, view: 'word', word: key };
-  return base;
+  if (!key) return { ...BASE };
+  if (key === 'map') return { ...BASE, view: 'map', domain: 'map' };
+  if (key.indexOf('series-') === 0) return { ...BASE, view: 'series', series: key.slice(7) };
+  if (WORDS[key]) return { ...BASE, view: 'word', word: key };
+  return { ...BASE };
 }
 
 function hashFor(state) {
+  if (state.view === 'map') return '#map';
   if (state.view === 'series') return '#series-' + state.series;
-  if (state.view === 'serieslib') return '#serieslib';
   if (state.view === 'word') return '#' + state.word;
   return '';
 }
@@ -40,14 +44,16 @@ function hashFor(state) {
 export default function App() {
   const [state, setState] = useState(() => parseHash(window.location.hash));
 
-  /* 系別域：切换 body.in-series，隐藏 cover / grid-map */
+  /* body 类：in-series（藏封面）· map-view（显交差点図）。shelf 域默认藏 #grid-map */
   useEffect(() => {
-    document.body.classList.toggle('in-series', inSeriesDomain(state));
+    const inSeries = state.view === 'series' || (state.view === 'word' && state.backSeries);
+    const mapView = state.domain === 'map' && !inSeries;
+    document.body.classList.toggle('in-series', inSeries);
+    document.body.classList.toggle('map-view', mapView);
   }, [state]);
 
-  /* 地址栏 hash 变化（手动输入 / 外部直达）：重新解析 */
   useEffect(() => {
-    const onHash = () => setState((prev) => ({ ...parseHash(window.location.hash), cls: prev.cls }));
+    const onHash = () => setState((prev) => ({ ...parseHash(window.location.hash), cls: prev.cls, mode: prev.mode, shelfMode: prev.shelfMode }));
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
@@ -60,39 +66,46 @@ export default function App() {
     });
   }, []);
 
-  const openWord = useCallback((id, origin) => {
-    if (!WORDS[id]) return;
-    navigate({ view: 'word', word: id, series: null, origin: origin || 'home' });
+  const openShelves = useCallback(() => {
+    navigate({ view: 'shelf', domain: 'shelf', word: null, series: null, backSeries: null });
+  }, [navigate]);
+
+  const openMap = useCallback(() => {
+    navigate({ view: 'map', domain: 'map', word: null, series: null, backSeries: null });
   }, [navigate]);
 
   const openSeries = useCallback((id) => {
-    navigate({ view: 'series', series: id, word: null, origin: null });
+    navigate({ view: 'series', series: id, word: null, backSeries: null });
   }, [navigate]);
 
-  const openSeriesLib = useCallback(() => {
-    navigate({ view: 'serieslib', series: null, word: null, origin: null });
-  }, [navigate]);
-
-  const openHome = useCallback(() => {
-    navigate({ view: 'home', word: null, series: null, origin: null });
-  }, [navigate]);
-
-  const setCls = useCallback((cls) => {
-    setState((prev) => ({ ...prev, cls }));
+  const openWord = useCallback((id) => {
+    if (!WORDS[id]) return;
+    setState((prev) => {
+      const fromSeries = prev.view === 'series' || (prev.view === 'word' && prev.backSeries);
+      const merged = { ...prev, view: 'word', word: id, series: null, backSeries: fromSeries ? prev.backSeries : null };
+      history.replaceState(null, '', hashFor(merged));
+      return merged;
+    });
   }, []);
 
-  /* 展示区「← 回到」按钮（与原版 setCrumb / sb-back 逻辑一致） */
+  const setCls = useCallback((cls) => { setState((prev) => ({ ...prev, cls })); }, []);
+  const setMode = useCallback((mode) => { setState((prev) => ({ ...prev, mode })); }, []);
+  const setShelfMode = useCallback((shelfMode) => {
+    setState((prev) => ({ ...prev, shelfMode }));
+  }, []);
+
   const goBack = useCallback(() => {
     if (state.view === 'word') {
-      if (state.origin && state.origin.indexOf('series:') === 0) openSeries(state.origin.slice(7));
-      else if (state.origin === 'serieslib') openSeriesLib();
-      else openHome();
+      if (state.backSeries) openSeries(state.backSeries);
+      else if (state.domain === 'map') openMap();
+      else openShelves();
     } else if (state.view === 'series') {
-      openSeriesLib();
+      if (state.domain === 'map') openMap();
+      else openShelves();
     }
-  }, [state, openSeries, openSeriesLib, openHome]);
+  }, [state, openSeries, openMap, openShelves]);
 
-  const nav = { state, openWord, openSeries, openSeriesLib, openHome, goBack, setCls };
+  const nav = { state, openWord, openSeries, openShelves, openMap, goBack, setCls, setMode, setShelfMode };
 
   return (
     <NavContext.Provider value={nav}>

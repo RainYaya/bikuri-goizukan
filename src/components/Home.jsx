@@ -16,17 +16,17 @@ export default function Home() {
 
       <section>
         <p className="eyebrow">使い方 <span className="zh">怎么用</span></p>
-        <h2 className="sec-title" lang="ja">二つの動線</h2>
+        <h2 className="sec-title" lang="ja">二つの見方</h2>
         <div className="conf-pair">
           <div className="conf-card">
-            <div className="conf-header"><span className="conf-jp">点格子</span><span className="conf-em">看单词</span></div>
-            <p className="conf-cn" lang="zh-CN">在地図里点任意实格 / 淡格，下方展示区原地切换成那个词的卡片 —— 不跳网页。</p>
-            <p className="conf-note" lang="zh-CN">収蔵済 → 完整标本卡（语源解剖 · 近缘种 · 用例 · 口诀）；既知 → 未収蔵占位卡。</p>
+            <div className="conf-header"><span className="conf-jp">収蔵棚</span><span className="conf-em">按系分架看词</span></div>
+            <p className="conf-cn" lang="zh-CN">词按系归架：前項棚（词根家族，如「取り〜」11 词一架）+ 後項棚（语法骨架，如「〜込む」「〜返す」）。架头 = 系名片，点它展开系総覧；架上词 chip 点它看词卡。</p>
+            <p className="conf-note" lang="zh-CN">収蔵済 → 完整标本卡；既知 → 未収蔵占位卡。架子只存在于有词的系 —— 空系收进底部「未収蔵系」条带，等新词来开架。<b>棚表示 / 卡片表示</b> 两种摆法在右上角一键切换 —— 卡片摆法里每个系都能看到空槽计数。</p>
           </div>
           <div className="conf-card">
-            <div className="conf-header"><span className="conf-jp">点系別</span><span className="conf-em">看线 · 家族</span></div>
-            <p className="conf-cn" lang="zh-CN">顶部导航切到「系別」——那是与「词」不同的领域：线。按 前項系 / 後項系 / 融合・特殊 三仓组织。</p>
-            <p className="conf-note" lang="zh-CN">点开任一系：系名片（原型 · 语感 · 収蔵进度）、系内小地图、成员墙一屏展开；原来 tori / kaesu / komu 三个分页的内容都在各自的系总览里。</p>
+            <div className="conf-header"><span className="conf-jp">交差点図</span><span className="conf-em">前項×後項 组合</span></div>
+            <p className="conf-cn" lang="zh-CN">行 = 前项系，列 = 后项系，一格 = 一个组合交点。点实格看标本卡，点淡格看未収蔵占位，暗格留待新词。</p>
+            <p className="conf-note" lang="zh-CN">词多了图自动分巻 + 剪枝，保持「图≈满」；「全図点阵」模式留给想逛完整坐标的人 —— 加新词 = 点亮一格，架子与格子同时出现。</p>
           </div>
         </div>
       </section>

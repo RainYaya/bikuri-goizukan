@@ -1,13 +1,12 @@
-import { useNav, inSeriesDomain } from '../lib/nav.jsx';
+import { useNav } from '../lib/nav.jsx';
 
 export default function Nav() {
-  const { state, openHome, openSeriesLib } = useNav();
-  const inSeries = inSeriesDomain(state);
+  const { state, openShelves, openMap } = useNav();
   return (
     <nav className="nav" aria-label="图鉴导航">
-      <button className={!inSeries ? 'cur' : ''} data-act="home" onClick={openHome}>総索引</button>
-      <button className={inSeries ? 'cur' : ''} data-act="serieslib" onClick={openSeriesLib}>系別</button>
-      <span className="nav-hint">総索引看词（格子图）· 系別看线（家族图景）</span>
+      <button className={state.domain === 'shelf' ? 'cur' : ''} data-act="shelf" onClick={openShelves}>収蔵棚</button>
+      <button className={state.domain === 'map' ? 'cur' : ''} data-act="map" onClick={openMap}>交差点図</button>
+      <span className="nav-hint">収蔵棚 = 按系看词（棚・卡片两种摆法一键切换）· 交差点図 = 前項×後項 格子</span>
     </nav>
   );
 }

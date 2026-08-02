@@ -238,39 +238,116 @@ section + section { border-top: 1px solid var(--border-soft); }
 .fbtn:hover { border-color: var(--accent-hover); color: var(--accent-hover); }
 .fbtn.on { background: color-mix(in oklab, var(--accent), black 12%); color: var(--accent-on); border-color: transparent; }
 .matrix-scroll { overflow-x: auto; padding-bottom: var(--space-2); -webkit-overflow-scrolling: touch; }
-.matrix {
+/* 全図点阵模式 —— 完整坐标（pokédex 原教旨，格已压缩） */
+.matrix.full {
   display: grid;
-  grid-template-columns: 112px repeat(19, minmax(64px, auto));
-  gap: 5px;
-  min-width: 1400px;
+  grid-template-columns: 96px repeat(19, minmax(42px, 56px));
+  gap: 4px;
+  min-width: 1220px;
 }
-.mcorner { text-align: center; font-size: var(--text-xs); font-weight: 600; color: var(--fg-2); letter-spacing: 0.04em; align-self: end; padding-bottom: 6px; }
+/* 点亮模式 —— 卷页式：一次一页，卷导航翻页 */
+.matrix.lit { display: block; }
+.vol-nav {
+  display: flex; align-items: center; gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+.vol-nav-arrow {
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-warm);
+  color: var(--fg-2);
+  font-size: 16px; line-height: 1;
+  display: grid; place-items: center;
+  transition: all var(--motion-fast) var(--ease-standard);
+}
+.vol-nav-arrow:hover:not(:disabled) { color: var(--accent-hover); border-color: var(--accent-hover); }
+.vol-nav-arrow:disabled { opacity: 0.35; cursor: default; }
+.vol-tabs {
+  flex: 1; min-width: 0;
+  display: flex; align-items: center; gap: var(--space-2);
+  overflow-x: auto;
+  padding: 2px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.vol-tabs::-webkit-scrollbar { display: none; }
+.vol-tab {
+  flex-shrink: 0;
+  display: inline-flex; align-items: baseline; gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, var(--surface), transparent 30%);
+  font-size: var(--text-sm); font-weight: 500;
+  color: var(--fg-2);
+  white-space: nowrap;
+  transition: all var(--motion-fast) var(--ease-standard);
+}
+.vol-tab:hover { color: var(--accent-hover); border-color: var(--accent-hover); }
+.vol-tab.is-on {
+  background: color-mix(in oklab, var(--accent), black 12%);
+  color: var(--accent-on);
+  border-color: transparent;
+  font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif;
+  font-weight: 600;
+}
+.vol-tab .vt-count { font-size: 10.5px; opacity: 0.75; font-family: var(--font-mono), ui-monospace, Menlo, Consolas, monospace; }
+.vol-page {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--surface), transparent 20%);
+  padding: var(--space-4) var(--space-4) var(--space-5);
+  animation: pageIn 320ms var(--ease-standard) both;
+}
+.vol-page.prev { animation-name: pageInPrev; }
+@keyframes pageIn { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+@keyframes pageInPrev { from { opacity: 0; transform: translateX(-18px); } to { opacity: 1; transform: none; } }
+.vol-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: var(--space-3); }
+.vol-no {
+  font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif;
+  font-size: 14px; font-weight: 700; letter-spacing: 0.04em;
+  color: color-mix(in oklab, var(--accent), black 12%);
+  flex-shrink: 0;
+}
+.vol-name { font-size: 16px; font-weight: 600; font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif; letter-spacing: -0.01em; flex-shrink: 0; }
+.vol-kan { font-size: 11.5px; color: var(--muted); line-height: 1.5; flex: 1; min-width: 110px; }
+.vol-count { font-size: 11px; font-family: var(--font-mono), ui-monospace, Menlo, Consolas, monospace; color: var(--fg-2); flex-shrink: 0; }
+.vol-grid { display: grid; gap: 4px; grid-template-columns: 96px repeat(var(--vc), minmax(56px, 96px)); width: 100%; }
+.vol-grid .mcorner { padding-bottom: 2px; }
+.mcorner { text-align: center; font-size: 11px; font-weight: 600; color: var(--fg-2); letter-spacing: 0.04em; align-self: end; padding-bottom: 4px; }
 .mrow {
   display: flex; align-items: center; justify-content: flex-end;
-  font-size: var(--text-sm); font-weight: 600;
+  font-size: 12.5px; font-weight: 600;
   font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif;
-  padding-right: 8px;
+  padding-right: 6px;
   color: var(--fg-2);
   white-space: nowrap;
   transition: color var(--motion-fast) var(--ease-standard);
 }
 .mrow.hl { color: color-mix(in oklab, var(--accent), black 14%); }
-.mcol { text-align: center; font-size: var(--text-xs); color: var(--muted); letter-spacing: 0.02em; padding-top: 2px; transition: color var(--motion-fast) var(--ease-standard); }
+.mcol { text-align: center; font-size: 11px; color: var(--muted); letter-spacing: 0.02em; padding-top: 3px; line-height: 1.25; transition: color var(--motion-fast) var(--ease-standard); }
 .mcol.hl { color: color-mix(in oklab, var(--accent), black 14%); font-weight: 600; }
 .cell {
-  min-height: 52px;
-  border-radius: 9px;
+  min-height: 40px;
+  border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  text-align: center; padding: 5px 4px;
+  text-align: center; padding: 4px 3px;
   position: relative;
   transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard), opacity var(--motion-fast) var(--ease-standard);
 }
 .cell .w {
   font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif;
-  font-size: 12.5px; font-weight: 600; letter-spacing: -0.01em;
+  font-size: 12px; font-weight: 600; letter-spacing: -0.01em;
   line-height: 1.25;
   word-break: keep-all;
 }
+/* 长词（≥5 字）自动缩字号 —— 不再撑宽整列 */
+.cell.lg .w { font-size: 10px; }
+/* 卷页式单页更宽 —— 页内词条字号略放大，全図点阵不受影响 */
+.vol-page .cell .w { font-size: 13px; }
+.vol-page .cell.lg .w { font-size: 11px; }
 /* 収蔵済 —— 朱印实格 */
 .cell.filled {
   background: var(--surface-warm);
@@ -311,6 +388,23 @@ section + section { border-top: 1px solid var(--border-soft); }
 .matrix.dim .cell:not(.on) { opacity: 0.16; }
 .matrix.dim .mcol:not(.on), .matrix.dim .mrow:not(.on) { opacity: 0.35; }
 /* 融合带 */
+.bare-band {
+  margin-top: var(--space-4);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--surface), transparent 25%);
+  padding: var(--space-3) var(--space-4);
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3);
+  font-size: var(--text-xs); color: var(--fg-2);
+}
+.bare-label { font-weight: 600; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+.bare-label small { text-transform: none; letter-spacing: 0.03em; font-weight: 500; }
+.bare-chips { display: inline-flex; flex-wrap: wrap; gap: var(--space-2); }
+.bare-chip {
+  padding: 3px 10px; border-radius: var(--radius-pill);
+  border: 1px dashed var(--border); background: var(--surface-warm);
+  font-size: 11.5px; color: var(--fg-2);
+}
 .yugo-band {
   margin-top: var(--space-4);
   border: 1px solid var(--border);
@@ -347,6 +441,22 @@ section + section { border-top: 1px solid var(--border-soft); }
 .lg-swatch.known { background: color-mix(in oklab, var(--surface), transparent 35%); border: 1px dashed var(--border); }
 .lg-swatch.empty { background: color-mix(in oklab, var(--fg), transparent 96.8%); border: 1px dashed color-mix(in oklab, var(--fg), transparent 89%); }
 .lg-swatch.empty::after { content:"？"; position:absolute; inset:0; display:grid; place-items:center; font-size:9px; color: color-mix(in oklab, var(--fg), transparent 72%); }
+/* 凡例折叠开关 */
+.legend-toggle {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: var(--space-4);
+  font-size: var(--text-xs); color: var(--fg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface-warm);
+  padding: 4px 12px;
+  cursor: pointer; user-select: none;
+  transition: all var(--motion-fast) var(--ease-standard);
+}
+.legend-toggle:hover { color: var(--accent-hover); border-color: var(--accent-hover); }
+.lg-toggle-label { font-weight: 600; letter-spacing: 0.06em; }
+.lg-toggle-caret { transition: transform var(--motion-fast) var(--ease-standard); }
+.legend-row[hidden] { display: none; }
 
 /* ─────────────── 展示区 ─────────────── */
 .stage {
@@ -368,6 +478,8 @@ section + section { border-top: 1px solid var(--border-soft); }
   background: var(--surface-warm);
 }
 .stage-bar .sb-back:hover { color: var(--accent-hover); border-color: var(--accent-hover); }
+.shelf-switch { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+.shelf-switch .sw-label { font-size: var(--text-xs); color: var(--muted); letter-spacing: 0.06em; margin-right: 2px; }
 .view { animation: fadeUp 320ms var(--ease-standard) both; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
@@ -625,6 +737,8 @@ section + section { border-top: 1px solid var(--border-soft); }
   padding: 0;
   overflow: hidden;
   position: relative;
+  max-width: min(920px, 100%);
+  margin-inline: auto;
 }
 .specimen::before {
   content: "";
@@ -643,7 +757,7 @@ section + section { border-top: 1px solid var(--border-soft); }
   align-items: baseline;
   background: var(--surface-warm);
   border-bottom: 1px solid var(--border);
-  padding: 10px 28px;
+  padding: 8px 24px;
   font-size: var(--text-xs);
   color: var(--fg-2);
   letter-spacing: 0.04em;
@@ -653,9 +767,9 @@ section + section { border-top: 1px solid var(--border-soft); }
 .spec-main {
   display: grid;
   grid-template-columns: auto 1fr auto;
-  gap: 32px;
+  gap: 24px;
   align-items: center;
-  padding: 40px 48px 36px;
+  padding: 32px 40px 28px;
 }
 .lemma .word {
   font-size: clamp(54px, 8vw, 84px);
@@ -684,14 +798,14 @@ section + section { border-top: 1px solid var(--border-soft); }
   color: var(--fg);
 }
 .type-badge small { color: var(--muted); font-weight: 500; }
-.spec-sec { border-top: 1px solid var(--border-soft); padding: 32px 48px; }
+.spec-sec { border-top: 1px solid var(--border-soft); padding: 24px 40px; }
 .spec-sec .sec-label {
   font-size: var(--text-xs);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-3);
 }
 .spec-sec .sec-label .zh { text-transform: none; letter-spacing: 0.04em; margin-left: 8px; color: var(--muted); opacity: .8; }
 .eq { display: flex; align-items: stretch; justify-content: center; flex-wrap: wrap; gap: var(--space-3); }
@@ -720,17 +834,17 @@ section + section { border-top: 1px solid var(--border-soft); }
 }
 .shift b { font-weight: 600; color: var(--fg); }
 .op { align-self: center; font-family: var(--font-display), Georgia, serif; font-size: 26px; color: var(--fg-2); padding: 0 2px; }
-.core-img { margin: var(--space-6) 0 0; text-align: center; font-size: var(--text-sm); color: var(--fg-2); letter-spacing: 0.02em; }
+.core-img { margin: 0 0 var(--space-3); font-size: var(--text-sm); color: var(--fg-2); letter-spacing: 0.02em; }
 .core-img b { color: var(--fg); font-weight: 600; }
 .family-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
 .family {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: color-mix(in oklab, var(--surface), transparent 25%);
-  padding: var(--space-5);
+  padding: var(--space-4);
 }
 .family h4 { font-size: var(--text-lg); letter-spacing: -0.01em; margin-bottom: 2px; }
-.family .fsub { font-size: var(--text-xs); color: var(--muted); margin-bottom: var(--space-4); }
+.family .fsub { font-size: var(--text-xs); color: var(--muted); margin-bottom: var(--space-3); }
 .fam-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
 .fam-item {
   display: flex; align-items: baseline; gap: 10px;
@@ -755,9 +869,9 @@ section + section { border-top: 1px solid var(--border-soft); }
 }
 .intersect b { color: var(--fg); }
 .habitat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
-.habitat { border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); padding: var(--space-5) var(--space-5) var(--space-4); }
+.habitat { border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); padding: var(--space-4); }
 .habitat h4 { font-size: var(--text-lg); margin-bottom: 2px; }
-.habitat .hsub { font-size: var(--text-xs); color: var(--muted); margin-bottom: var(--space-4); }
+.habitat .hsub { font-size: var(--text-xs); color: var(--muted); margin-bottom: var(--space-3); }
 .usage-list {
   list-style: none; margin: 0; padding: 0;
   background-image: repeating-linear-gradient(transparent 0 43px, color-mix(in oklab, var(--fg), transparent 92%) 43px 44px);
@@ -770,14 +884,18 @@ section + section { border-top: 1px solid var(--border-soft); }
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background-image: repeating-linear-gradient(transparent 0 30px, color-mix(in oklab, var(--fg), transparent 90%) 30px 31px);
-  padding: var(--space-5) var(--space-6);
-  max-width: 640px;
+  padding: var(--space-4) var(--space-5);
+  margin-top: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
 }
-.note-label { font-size: var(--text-xs); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.note-label { font-size: var(--text-xs); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
 .note-ja {
   font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", "Songti SC", "SimSun", Georgia, serif;
-  font-size: 24px; font-style: italic;
-  margin: var(--space-3) 0 var(--space-2);
+  font-size: 22px; font-style: italic;
+  margin: 0;
   letter-spacing: -0.01em;
   line-height: 1.4;
 }
@@ -790,6 +908,8 @@ section + section { border-top: 1px solid var(--border-soft); }
   background: color-mix(in oklab, var(--surface), transparent 20%);
   padding: 0;
   overflow: hidden;
+  max-width: min(920px, 100%);
+  margin-inline: auto;
 }
 .pending-main { display: grid; grid-template-columns: auto 1fr auto; gap: 28px; align-items: center; padding: 32px 40px 28px; }
 .seal-hollow {
@@ -877,8 +997,59 @@ section + section { border-top: 1px solid var(--border-soft); }
   border: 1px solid var(--border); background: var(--surface-warm); color: var(--fg-2);
 }
 
+/* ─────────────── 収蔵棚（主视图 · 按系分架） ─────────────── */
+#grid-map { display: none; }
+body.map-view #grid-map { display: block; }
+body.in-series .cover { display: none; }
+.shelf-bin { margin-top: var(--space-8); }
+.shelf-bin:first-of-type { margin-top: 0; }
+.shelf { margin-bottom: var(--space-4); }
+.shelf-head {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: var(--surface-warm);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--motion-fast) var(--ease-standard);
+}
+.shelf-head:hover { border-color: color-mix(in oklab, var(--accent), transparent 55%); }
+.sh-name { font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", "Songti SC", Georgia, serif; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+.sh-proto { font-size: 11px; color: var(--muted); font-family: var(--font-mono), ui-monospace, Menlo, Consolas, monospace; white-space: nowrap; }
+.sh-kan { font-size: 12px; color: var(--fg-2); flex: 1; min-width: 160px; line-height: 1.5; }
+.sh-count { font-size: 11px; color: var(--muted); letter-spacing: 0.02em; white-space: nowrap; }
+.sh-count b { color: color-mix(in oklab, var(--accent), black 14%); font-weight: 600; }
+.sh-bar { width: 110px; height: 3px; border-radius: 99px; background: var(--border-soft); overflow: hidden; flex-shrink: 0; }
+.sh-bar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, color-mix(in oklab, var(--accent), white 12%), var(--accent)); }
+.shelf-words {
+  display: flex; flex-wrap: wrap; gap: var(--space-2);
+  padding: 12px 14px;
+  border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background: color-mix(in oklab, var(--surface), transparent 20%);
+}
+.shelf-words .fw-chip .fdot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45);
+  align-self: center; flex-shrink: 0;
+}
+.shelf-words .fw-chip.plain { background: color-mix(in oklab, var(--surface), transparent 30%); }
+.shelf-bare {
+  margin-top: var(--space-4);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--surface), transparent 25%);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-xs); color: var(--fg-2);
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3);
+}
+.shelf-bare .bare-chip { cursor: pointer; }
+.shelf-bare .bare-chip:hover { border-color: color-mix(in oklab, var(--accent), transparent 55%); color: var(--accent-hover); }
+
 /* ─────────────── 系別域（线与点分离） ─────────────── */
-body.in-series .cover, body.in-series #grid-map { display: none; }
 
 /* 系别库（三仓） */
 .slib-bin { margin-top: var(--space-8); }
@@ -992,6 +1163,8 @@ body.in-series .cover, body.in-series #grid-map { display: none; }
 }
 @media (max-width: 640px) {
   section { padding: var(--section-y-phone) 0; }
+  .vol-grid { grid-template-columns: 72px repeat(var(--vc), minmax(40px, 54px)); }
+  .vol-kan { min-width: 0; }
   .cover { padding-top: 24px; }
   .family-grid, .habitat-grid, .conf-pair, .meta-pair { grid-template-columns: 1fr; }
   .struct-grid { grid-template-columns: 1fr; }
@@ -1014,6 +1187,8 @@ body.in-series .cover, body.in-series #grid-map { display: none; }
   .scard-grid { grid-template-columns: 1fr; }
   .series-head .seal { display: none; }
   .series-head { padding: 24px; }
+  .sh-kan { min-width: 0; flex-basis: 100%; }
+  .sh-bar { display: none; }
 }
 </style>
 </head>
@@ -1022,9 +1197,8 @@ body.in-series .cover, body.in-series #grid-map { display: none; }
 
   <!-- ═══ 导航 ═══ -->
   <nav class="nav" data-od-id="page-nav" aria-label="图鉴导航">
-    <button class="cur" data-act="home">総索引</button>
-    <button data-act="serieslib">系別</button>
-    <span class="nav-hint">総索引看词（格子图）· 系別看线（家族图景）</span>
+    <button class="cur" data-act="shelf">収蔵棚</button>
+    <button data-act="map">交差点図</button>
   </nav>
 
   <!-- ═══ 封面（紧凑） ═══ -->
@@ -1033,14 +1207,11 @@ body.in-series .cover, body.in-series #grid-map { display: none; }
       <div>
         <p class="eyebrow">和語複合動詞 · 収蔵図鑑 <span class="zh">单文件交互图鉴</span></p>
         <h1 lang="ja">複合動詞図鑑</h1>
-        <p class="cover-sub" lang="zh-CN">前項 × 後項 の組み合わせ地図——格子就是目录，词卡就在格子下面。
-          <span class="zh" lang="zh-CN">横轴后项系 × 纵轴前项系：朱印 = 已収蔵，淡格 = 已认识，暗格 = 等待新种。</span>
-        </p>
+        <p class="cover-sub" lang="zh-CN">複合動詞を「系」ごとに棚へ——同じ言葉、二つの見方。</p>
         <div class="cover-chips" id="stat-chips"></div>
       </div>
       <div class="cover-seal">
         <div class="seal seal-lg">図鑑</div>
-        <p class="stamp" id="stat-line">収蔵 No.01–04<br>融合系 05 予定</p>
       </div>
     </div>
     <div class="rule-double"></div>
@@ -1052,7 +1223,7 @@ body.in-series .cover, body.in-series #grid-map { display: none; }
       <div class="grow">
         <p class="eyebrow">系列分布図 <span class="zh">组合地图</span></p>
         <h2 class="sec-title" lang="ja">前項 × 後項 —— 組み合わせ地図</h2>
-        <p class="sec-sub" lang="zh-CN">一格 = 一个词。点「实格（収蔵済）」直接看标本卡，点「淡格（已认识）」看未収蔵占位，空槽暗格留待未来新词。加新词 = 在地图点亮一格。</p>
+        <p class="sec-sub" lang="zh-CN">一格 = 一个词。点亮模式按语义分巻、一次一页；点实格看标本卡，淡格看占位，暗格留待新词 —— 加新词 = 点亮一格。</p>
       </div>
       <div class="filters" data-od-id="class-filter" aria-label="构词分类过滤">
         <span class="flabel">構詞分類</span>
@@ -1063,10 +1234,20 @@ body.in-series .cover, body.in-series #grid-map { display: none; }
         <button class="fbtn" data-cls="④">④ 後項接尾辞化</button>
         <button class="fbtn" data-cls="⑤">⑤ 融合</button>
       </div>
+      <div class="filters" data-od-id="map-mode" aria-label="地图显示模式">
+        <span class="flabel">表示模式</span>
+        <button class="fbtn on" data-mode="lit">点亮模式</button>
+        <button class="fbtn" data-mode="full">全図点阵</button>
+      </div>
     </div>
 
     <div class="matrix-scroll">
-      <div class="matrix" id="matrix" data-od-id="matrix-grid"></div>
+      <div class="matrix full" id="matrix" data-od-id="matrix-grid"></div>
+    </div>
+
+    <div class="bare-band" id="bare-band" data-od-id="bare-band" style="display:none;">
+      <span class="bare-label">未収蔵系 <small>—— 还没有词的系，不占地图，等新词来升格</small></span>
+      <span class="bare-chips" id="bare-chips"></span>
     </div>
 
     <div class="yugo-band" data-od-id="yugo-band">
@@ -1076,11 +1257,14 @@ body.in-series .cover, body.in-series #grid-map { display: none; }
       <span class="ynote">（既知 · 标本卡予定）</span>
     </div>
 
-    <div class="legend-row" data-od-id="matrix-legend">
-      <span class="lg-item"><span class="lg-swatch filled"></span>収蔵済 —— 有标本卡，点格查看</span>
-      <span class="lg-item"><span class="lg-swatch known"></span>既知 —— 认识，标本卡待制作</span>
-      <span class="lg-item"><span class="lg-swatch empty"></span>未遇见 —— 空槽暗格，等你点亮</span>
-      <span class="lg-item">分类过滤：按构词类型 ①–⑤ 只点亮对应格子</span>
+    <button class="legend-toggle" data-od-id="legend-toggle" aria-expanded="false" aria-controls="legend-row">
+      <span class="lg-toggle-label">凡例</span>
+      <span class="lg-toggle-caret">▸</span>
+    </button>
+    <div class="legend-row" id="legend-row" data-od-id="matrix-legend" hidden>
+      <span class="lg-item"><span class="lg-swatch filled"></span>朱点实格 —— 収蔵済 · 有标本卡，点格查看</span>
+      <span class="lg-item"><span class="lg-swatch known"></span>淡格 —— 既知 · 认识，标本卡待制作</span>
+      <span class="lg-item"><span class="lg-swatch empty"></span>暗格 —— 未遇见 · 空槽等你点亮</span>
     </div>
   </section>
 
@@ -1089,6 +1273,11 @@ body.in-series .cover, body.in-series #grid-map { display: none; }
     <div class="stage-bar">
       <span class="sb-label">展示区</span>
       <span class="sb-crumb" id="sb-crumb">総索引</span>
+      <div class="shelf-switch" id="shelf-switch" style="display:none;" data-od-id="shelf-mode-switch" aria-label="収蔵棚显示方式">
+        <span class="sw-label">表示</span>
+        <button class="fbtn on" data-shelf-mode="shelves">棚表示</button>
+        <button class="fbtn" data-shelf-mode="cards">卡片表示</button>
+      </div>
       <button class="sb-back" data-act="back" id="sb-back" style="display:none;">← 回到地図</button>
     </div>
     <div id="view-root" class="view"></div>
@@ -1137,6 +1326,17 @@ var COLS = [
   { id: 'naosu',   name: '〜直す',     proto: '直す',     kan: '重来一遍。' }
 ];
 var SERIES_NAME = { tori: '取り〜系', kaesu: '〜返す系', komu: '〜込む系', dashi: '出し〜系', oshimu: '〜惜しむ系', yugo: '融合系' };
+
+/* 后項系按语义分卷 —— 有词的列超过阈值时自动启用（现在 19 列 > 14）
+ * 每卷只保留「卷内有词的系行」，卷内交叉点照画 3 态，块内接近满。 */
+var VOLUMES = [
+  { id: 'v1', no: '壱', name: '取出・移動', kan: '向外拿出 · 拔起 · 移除 —— 获取的原点动作。', cols: ['dasu', 'nuku', 'nozoku'] },
+  { id: 'v2', no: '弐', name: '進入・没頭', kan: '塞进去出不来 —— 深入 · 沉浸 · 受容。', cols: ['komu', 'ireru'] },
+  { id: 'v3', no: '参', name: '折返・復元', kan: '走到头折返 · 回到原状 · 重新做一遍。', cols: ['kaesu', 'modosu', 'naosu'] },
+  { id: 'v4', no: '肆', name: '処理・統合', kan: '消除 · 完成 · 经办 · 收拢 —— 把事处置干净。', cols: ['kesu', 'ageru', 'atsukau', 'matomeru'] },
+  { id: 'v5', no: '伍', name: '心理・態度', kan: '惜着不给 · 磨蹭 · 敞开坦白 —— 心的态度。', cols: ['oshimu', 'shiburu', 'akeru'] },
+  { id: 'v6', no: '陸', name: '圧・強調', kan: '战胜 · 按住 · 分配 · 施加 —— 外来的力。', cols: ['katsu', 'osaeru', 'ateru', 'kakeru'] }
+];
 
 /* —— 収蔵済（有完整标本卡）—— */
 var WORDS = {
@@ -1321,7 +1521,7 @@ var WORDS = {
 /* ═══════════════════════════════════════════════
  * 状态
  * ═══════════════════════════════════════════════ */
-var state = { view: 'home', word: null, series: null, cls: 'all', origin: null };
+var state = { view: 'shelf', domain: 'shelf', word: null, series: null, backSeries: null, cls: 'all', mode: 'lit', shelfMode: 'shelves', volIdx: 0, volDir: null };
 /* 词面 → id 查找表：近缘种面板里可点击钻取 */
 var BYNAME = {};
 (function () { for (var k in WORDS) BYNAME[WORDS[k].word] = WORDS[k].id; })();
@@ -1346,13 +1546,64 @@ function cellHTML(w) {
   if (!w) {
     return '<div class="cell empty"></div>';
   }
+  var lg = w.word.length >= 5 ? ' lg' : '';
   if (w.status === 'collected') {
-    return '<button class="cell filled" data-word="' + w.id + '" title="' + w.word + ' — ' + w.reading + ' · ' + (w.tagline.replace(/<[^>]+>/g, '')) + '"><span class="seal-dot"></span><span class="w">' + w.word + '</span></button>';
+    return '<button class="cell filled' + lg + '" data-word="' + w.id + '" title="' + w.word + ' — ' + w.reading + ' · ' + (w.tagline.replace(/<[^>]+>/g, '')) + '"><span class="seal-dot"></span><span class="w">' + w.word + '</span></button>';
   }
-  return '<button class="cell known" data-word="' + w.id + '" title="' + w.word + ' — ' + w.reading + ' · ' + w.gloss + '（既知）"><span class="w">' + w.word + '</span></button>';
+  return '<button class="cell known' + lg + '" data-word="' + w.id + '" title="' + w.word + ' — ' + w.reading + ' · ' + w.gloss + '（既知）"><span class="w">' + w.word + '</span></button>';
 }
-function renderMatrix() {
+/* —— 点亮模式：分巻 + 剪枝 —— */
+function volRows(vol) {
+  return ROWS.filter(function (r) {
+    return vol.cols.some(function (c) { return gridAt(r.id, c); });
+  });
+}
+function renderMatrixLit() {
   var el = document.getElementById('matrix');
+  el.className = 'matrix lit';
+  var vols = VOLUMES.filter(function (v) { return volRows(v).length > 0; });
+  if (!vols.length) { el.innerHTML = '<p class="sec-sub">还没有词 —— 收到第一个词后这里点亮第一卷。</p>'; return; }
+  if (state.volIdx == null || state.volIdx < 0 || state.volIdx >= vols.length) state.volIdx = 0;
+  var cur = vols[state.volIdx];
+  var rows = volRows(cur);
+  var words = 0;
+  cur.cols.forEach(function (c) { words += wordsInCol(c).length; });
+  var tabs = vols.map(function (v, i) {
+    var wc = 0;
+    v.cols.forEach(function (c) { wc += wordsInCol(c).length; });
+    return '<button class="vol-tab' + (i === state.volIdx ? ' is-on' : '') + '" data-vol-page="' + i + '" title="' + v.kan + '"><span lang="ja">' + v.no + ' ' + v.name + '</span><span class="vt-count">' + wc + '</span></button>';
+  }).join('');
+  var nav = '<div class="vol-nav" data-od-id="vol-nav">' +
+    '<button class="vol-nav-arrow" data-vol-page="-1"' + (state.volIdx === 0 ? ' disabled' : '') + ' aria-label="上一卷">←</button>' +
+    '<div class="vol-tabs">' + tabs + '</div>' +
+    '<button class="vol-nav-arrow" data-vol-page="+1"' + (state.volIdx === vols.length - 1 ? ' disabled' : '') + ' aria-label="下一卷">→</button>' +
+    '</div>';
+  var grid = '<div class="vol-grid" style="--vc:' + cur.cols.length + '">' +
+    '<div class="mcorner" lang="ja">前項 ＼ 後項</div>';
+  cur.cols.forEach(function (c) {
+    grid += '<div class="mcol" data-col="' + c + '" title="' + colName(c) + '">' + colName(c) + '</div>';
+  });
+  rows.forEach(function (r) {
+    grid += '<div class="mrow" data-row="' + r.id + '">' + r.name + '</div>';
+    cur.cols.forEach(function (c) {
+      grid += cellHTML(gridAt(r.id, c));
+    });
+  });
+  grid += '</div>';
+  var page = '<div class="vol-page' + (state.volDir === 'prev' ? ' prev' : '') + '" data-od-id="vol-' + cur.id + '">' +
+    '<div class="vol-head"><span class="vol-no">第' + cur.no + '巻</span>' +
+    '<span class="vol-name" lang="ja">' + cur.name + '</span>' +
+    '<span class="vol-kan" lang="zh-CN">' + cur.kan + '</span>' +
+    '<span class="vol-count">' + words + ' 語 · ' + (state.volIdx + 1) + ' / ' + vols.length + '</span></div>' +
+    grid + '</div>';
+  el.innerHTML = nav + page;
+  state.volDir = null;
+}
+/* (卷页式取代平衡列打包 —— 每卷独立成页，由卷导航翻页，不再需要两列平衡) */
+/* —— 全図点阵：完整坐标（原教旨 pokédex） —— */
+function renderMatrixFull() {
+  var el = document.getElementById('matrix');
+  el.className = 'matrix full';
   var html = '<div class="mcorner" lang="ja">前項 ＼ 後項</div>';
   COLS.forEach(function (c) {
     html += '<div class="mcol" data-col="' + c.id + '">' + c.name + '</div>';
@@ -1364,6 +1615,24 @@ function renderMatrix() {
     });
   });
   el.innerHTML = html;
+}
+/* —— 未収蔵系条带：没有词的系不占地图，降级为细条带 —— */
+function renderBareBand() {
+  var el = document.getElementById('bare-band');
+  var chips = document.getElementById('bare-chips');
+  if (!el || !chips) return;
+  var bare = ROWS.filter(function (r) { return wordsInRow(r.id).length === 0; })
+    .concat(COLS.filter(function (c) { return wordsInCol(c.id).length === 0; }));
+  if (!bare.length) { el.style.display = 'none'; return; }
+  el.style.display = '';
+  chips.innerHTML = bare.map(function (a) {
+    return '<span class="bare-chip" lang="ja">' + a.name + ' · 原〈' + a.proto + '〉</span>';
+  }).join('');
+}
+function renderMatrix() {
+  if (state.mode === 'lit') renderMatrixLit();
+  else renderMatrixFull();
+  renderBareBand();
   applyFilter();
   markCurrent();
 }
@@ -1406,11 +1675,14 @@ function markCurrent() {
     var w = WORDS[state.word];
     if (w && w.row) {
       var cell = m.querySelector('.cell[data-word="' + w.id + '"]');
-      if (cell) cell.classList.add('current');
-      var row = m.querySelector('.mrow[data-row="' + w.row + '"]');
-      if (row) row.classList.add('hl');
-      var col = m.querySelector('.mcol[data-col="' + w.col + '"]');
-      if (col) col.classList.add('hl');
+      if (cell) {
+        cell.classList.add('current');
+        var scope = cell.closest('.vol-page') || m;
+        var row = scope.querySelector('.mrow[data-row="' + w.row + '"]');
+        if (row) row.classList.add('hl');
+        var col = scope.querySelector('.mcol[data-col="' + w.col + '"]');
+        if (col) col.classList.add('hl');
+      }
     }
   }
 }
@@ -1460,6 +1732,7 @@ function specimenHTML(w) {
     '</div>' +
     '<section class="spec-sec" data-od-id="etymology-' + w.id + '">' +
       '<p class="sec-label">語源解剖 <span class="zh">构词解剖</span></p>' +
+      '<p class="core-img" lang="zh-CN">' + w.core + '</p>' +
       '<div class="eq">' +
         '<div class="term"><span class="term-role">前項</span><div class="term-word" lang="ja">' + eq.front + '<small>〈' + eq.frontSrc.replace(/[〈〉]/g, '') + '〉</small></div><p class="term-note" lang="zh-CN">' + eq.frontNote + '</p></div>' +
         '<div class="op">+</div>' +
@@ -1467,7 +1740,6 @@ function specimenHTML(w) {
         '<div class="op">=</div>' +
         '<div class="term result"><span class="term-role">複合語</span><div class="term-word" lang="ja">' + eq.result + '</div><p class="term-note" lang="zh-CN">' + eq.resultNote + '</p>' + (eq.resultShift ? '<div class="shift">' + eq.resultShift + '</div>' : '') + '</div>' +
       '</div>' +
-      '<p class="core-img" lang="zh-CN">' + w.core + '</p>' +
     '</section>' +
     '<section class="spec-sec" data-od-id="related-family-' + w.id + '">' +
       '<p class="sec-label">近縁種 <span class="zh">近亲词族</span></p>' +
@@ -1475,11 +1747,8 @@ function specimenHTML(w) {
       '<p class="intersect" lang="zh-CN">' + w.intersect + '</p>' +
     '</section>' +
     '<section class="spec-sec" data-od-id="usage-notes-' + w.id + '">' +
-      '<p class="sec-label">観察記録 <span class="zh">实际用例</span></p>' +
+      '<p class="sec-label">観察記録 <span class="zh">实际用例 · 语感记忆</span></p>' +
       '<div class="habitat-grid">' + usage(w.usages.biz, 'ビジネス環境', '商务场景') + usage(w.usages.it, 'IT環境', 'IT 场景') + '</div>' +
-    '</section>' +
-    '<section class="spec-sec" data-od-id="mnemonic-note-' + w.id + '">' +
-      '<p class="sec-label">語感ノート <span class="zh">语感记忆</span></p>' +
       '<div class="note"><p class="note-label">覚え方 · 瞬间口诀</p><p class="note-ja" lang="zh-CN">' + w.note + '</p><p class="note-zh" lang="zh-CN">' + w.noteZh + '</p></div>' +
     '</section>' +
   '</article>';
@@ -1518,28 +1787,82 @@ function pendingHTML(w) {
 function rowName(id) { for (var i = 0; i < ROWS.length; i++) if (ROWS[i].id === id) return ROWS[i].name; return id; }
 function colName(id) { for (var i = 0; i < COLS.length; i++) if (COLS[i].id === id) return COLS[i].name; return id; }
 
+/* —— 収蔵棚：词按系分架（主目录） —— */
+function shelfHTML(kind, axis) {
+  var members = kind === 'row' ? wordsInRow(axis.id) : wordsInCol(axis.id);
+  var counts = seriesCounts(kind, axis.id);
+  var total = counts.collected + counts.known;
+  var pct = total ? Math.round(counts.collected / total * 100) : 0;
+  var chips = members.map(function (w) {
+    var cls = w.status === 'collected' ? ' honshu' : ' plain';
+    var dot = w.status === 'collected' ? '<span class="fdot" title="収蔵済"></span>' : '';
+    var cn = w.status === 'collected'
+      ? (w.eq ? w.eq.resultNote : w.gloss)
+      : w.gloss;
+    return '<span class="fw-chip' + cls + '" data-word="' + w.id + '" title="' + w.word + ' · ' + (w.gloss || '') + '"><span class="fgw" lang="ja">' + w.word + '</span><span class="fgg">' + cn + '</span>' + dot + '</span>';
+  }).join('');
+  return '<div class="shelf" data-od-id="shelf-' + axis.id + '">' +
+    '<div class="shelf-head" data-series="' + axis.id + '" title="点系名看系総覧">' +
+      '<span class="sh-name" lang="ja">' + seriesName(axis.id) + '</span>' +
+      '<span class="sh-proto">原 〈' + axis.proto + '〉</span>' +
+      '<span class="sh-kan" lang="zh-CN">' + axis.kan + '</span>' +
+      '<span class="sh-bar"><i style="width:' + pct + '%"></i></span>' +
+      '<span class="sh-count">収蔵 <b>' + counts.collected + '</b> · ' + counts.known + ' 既知</span>' +
+    '</div>' +
+    '<div class="shelf-words">' + chips + '</div>' +
+  '</div>';
+}
+function shelvesHTML() {
+  var rowBins = ROWS.filter(function (r) { return wordsInRow(r.id).length > 0; })
+    .sort(function (a, b) { return wordsInRow(b.id).length - wordsInRow(a.id).length; });
+  var colBins = COLS.filter(function (c) { return wordsInCol(c.id).length > 0; })
+    .sort(function (a, b) { return wordsInCol(b.id).length - wordsInCol(a.id).length; });
+  var yugoMembers = wordsInSeries('yugo');
+  var bare = ROWS.filter(function (r) { return wordsInRow(r.id).length === 0; })
+    .concat(COLS.filter(function (c) { return wordsInCol(c.id).length === 0; }));
+  var yugoChips = yugoMembers.map(function (w) {
+    return '<span class="fw-chip plain" data-word="' + w.id + '" title="' + w.word + ' · ' + w.gloss + '（既知 · 标本卡予定）"><span class="fgw" lang="ja">' + w.word + '</span><span class="fgg">' + w.gloss + '</span></span>';
+  }).join('');
+  var bareHTML = bare.length
+    ? '<div class="shelf-bare" data-od-id="shelf-bare">' +
+      '<span class="bare-label">未収蔵系 <small>—— 还没有词的系，不占架，点它预览空轴，等新词来开架</small></span>' +
+      '<span class="bare-chips">' + bare.map(function (a) {
+        return '<span class="bare-chip" data-series="' + a.id + '" lang="ja">' + a.name + ' · 原〈' + a.proto + '〉</span>';
+      }).join('') + '</span></div>'
+    : '';
+  return '' +
+  '<section data-od-id="shelf-intro">' +
+    '<p class="eyebrow">収蔵棚 <span class="zh">主目录 —— 词按系分架</span></p>' +
+    '<h2 class="sec-title" lang="ja">系は棚、詞は標本</h2>' +
+    '<p class="sec-sub" lang="zh-CN">同一词有两套归属，于是有两套架子：<b>前項棚</b>（词根家族）与 <b>後項棚</b>（语法骨架）—— 点架头看系総覧，点词看词卡；棚 / 卡片摆法右上角一键切换。</p>' +
+  '</section>' +
+  '<div class="shelf-bin" data-od-id="shelf-zenko">' +
+    '<p class="eyebrow">前項棚 <span class="zh">词根家族 —— 词的左半</span></p>' +
+    '<h2 class="sec-title" lang="ja">前項系 · ' + rowBins.length + ' 架</h2>' +
+    '<p class="sec-sub" lang="zh-CN">按「前项」归架：同根的词放一起，一眼看全一个家族（取り〜 目前 11 词一架）。</p>' +
+    rowBins.map(function (r) { return shelfHTML('row', r); }).join('') +
+  '</div>' +
+  '<div class="shelf-bin" data-od-id="shelf-kogo">' +
+    '<p class="eyebrow">後項棚 <span class="zh">语法骨架 —— 词的右半</span></p>' +
+    '<h2 class="sec-title" lang="ja">後項系 · ' + colBins.length + ' 架</h2>' +
+    '<p class="sec-sub" lang="zh-CN">按「后项」归架：后项是有限的语法轴，词再多架子总数也封顶 —— 这是未来的主骨架。学到一个「〜込む」词，就放进这一架。</p>' +
+    colBins.map(function (c) { return shelfHTML('col', c); }).join('') +
+  '</div>' +
+  '<div class="shelf-bin" data-od-id="shelf-yugo">' +
+    '<p class="eyebrow">融合・特殊棚 <span class="zh">不走格子的词</span></p>' +
+    '<h2 class="sec-title" lang="ja">融合系 ⑤</h2>' +
+    '<p class="sec-sub" lang="zh-CN">前项后项已长成一个整体，无法拆开 —— 词义整体记忆。</p>' +
+    '<div class="shelf"><div class="shelf-head" data-series="yugo" title="点系名看系総覧"><span class="sh-name" lang="ja">融合系</span><span class="sh-proto">原 〈融合〉</span><span class="sh-kan" lang="zh-CN">前后项已长成一个整体，词义必须整体记忆 —— 不能拆开解释。</span><span class="sh-count">収蔵 <b>0</b> · ' + yugoMembers.length + ' 既知</span></div><div class="shelf-words">' + yugoChips + '</div></div>' +
+  '</div>' +
+  bareHTML;
+}
+
 /* —— 首页：图鉴读法 —— */
 function homeHTML() {
   return '' +
   '<section data-od-id="home-howto">' +
     '<p class="eyebrow">図鑑の見方 <span class="zh">图鉴读法</span></p>' +
-    '<h2 class="sec-title" lang="ja">この図鑑の三つの記号</h2>' +
-    '<div class="howto-grid">' +
-      '<div class="ht"><span class="ht-mark seal-mini">惜</span><b>朱印</b><span lang="zh-CN">每张标本卡一字，取自核心词义。图上有朱点的格子 = 已収蔵，点它直接看卡。</span></div>' +
-      '<div class="ht"><span class="ht-mark stars-mini">★★★☆☆</span><b>可導出性</b><span lang="zh-CN">从前项＋后项能否推出词义的程度（★1–5）。星越少越需要整体记忆。</span></div>' +
-      '<div class="ht"><span class="ht-mark cls-mini">分類 ①②③④⑤</span><b>構詞分類</b><span lang="zh-CN">五种构词类型。顶部过滤条可只点亮某一类的格子。</span></div>' +
-      '<div class="ht"><span class="ht-mark">前項×後項</span><b>组合地図</b><span lang="zh-CN">行 = 前项系，列 = 后项系。一格 = 一个组合，交点就是词。</span></div>' +
-      '<div class="ht"><span class="ht-mark">観察記録</span><b>用例</b><span lang="zh-CN">标本卡里有商务 / IT 两种「栖息环境」的实际例句。</span></div>' +
-      '<div class="ht"><span class="ht-mark">暗格 ？</span><b>空槽暗格</b><span lang="zh-CN">还没遇见的坐标。以后认识新词，就在对应格子点亮一格 —— 这就是图鉴的无限扩展。</span></div>' +
-    '</div>' +
-  '</section>' +
-  '<section data-od-id="home-tour">' +
-    '<p class="eyebrow">使い方 <span class="zh">怎么用</span></p>' +
-    '<h2 class="sec-title" lang="ja">二つの動線</h2>' +
-    '<div class="conf-pair">' +
-      '<div class="conf-card"><div class="conf-header"><span class="conf-jp">点格子</span><span class="conf-em">看单词</span></div><p class="conf-cn" lang="zh-CN">在地図里点任意实格 / 淡格，下方展示区原地切换成那个词的卡片 —— 不跳网页。</p><p class="conf-note" lang="zh-CN">収蔵済 → 完整标本卡（语源解剖 · 近缘种 · 用例 · 口诀）；既知 → 未収蔵占位卡。</p></div>' +
-      '<div class="conf-card"><div class="conf-header"><span class="conf-jp">点系別</span><span class="conf-em">看线 · 家族</span></div><p class="conf-cn" lang="zh-CN">顶部导航切到「系別」——那是与「词」不同的领域：线。按 前項系 / 後項系 / 融合・特殊 三仓组织。</p><p class="conf-note" lang="zh-CN">点开任一系：系名片（原型 · 语感 · 収蔵进度）、系内小地图、成员墙一屏展开；原来 tori / kaesu / komu 三个分页的内容都在各自的系总览里。</p></div>' +
-    '</div>' +
+    '<p class="sec-sub" lang="zh-CN">标本卡上的记号：<b>朱印</b> = 本种一字之印 · <b>★</b> = 可导出性（星越少越需整体记忆）· <b>分類 ①–⑤</b> = 构词类型（顶部过滤条可点亮）。图上的三种格态见上方「凡例」。</p>' +
   '</section>';
 }
 
@@ -1615,9 +1938,9 @@ function seriesLibHTML() {
   var colCards = COLS.map(function (c) { return scardHTML('col', c); }).join('');
   return '' +
   '<section data-od-id="slib-intro">' +
-    '<p class="eyebrow">系別図鑑 <span class="zh">线的领域</span></p>' +
+    '<p class="eyebrow">収蔵棚 · 卡片表示 <span class="zh">线的领域 —— 系是线、词是点</span></p>' +
     '<h2 class="sec-title" lang="ja">系は「線」、詞は「点」</h2>' +
-    '<p class="sec-sub" lang="zh-CN">系是线、词是点：総索引的格子图是「看词」，系别是「看线」——一整行（前项系）或一整列（后项系）的家族全景。点开任一系：看它的原型、语感、収蔵进度、成员墙和系内小地图。小地图里的朱点实格 = 已収蔵，淡格 = 既知，暗格 = 空槽。</p>' +
+    '<p class="sec-sub" lang="zh-CN">収蔵棚的另一种摆法：每系一张卡 —— 系名 · 原型 · 语感 · 収蔵进度 · 空槽计数，点卡片看系総覧。</p>' +
   '</section>' +
   '<div class="slib-bin" data-od-id="slib-zenko">' +
     '<p class="eyebrow">前項系 <span class="zh">词的左半 —— 行</span></p>' +
@@ -1966,37 +2289,45 @@ function wcard(jp, cat, catLabel, cn, intuition, ex) {
  * 视图切换
  * ═══════════════════════════════════════════════ */
 function inSeriesDomain() {
-  return state.view === 'serieslib' || state.view === 'series' ||
-    (state.view === 'word' && state.origin && state.origin.indexOf('series') === 0);
+  return state.view === 'series' || (state.view === 'word' && state.backSeries);
 }
 function setModeClass() {
   document.body.classList.toggle('in-series', inSeriesDomain());
+  document.body.classList.toggle('map-view', state.domain === 'map' && !inSeriesDomain());
+  updateShelfSwitch();
+}
+function updateShelfSwitch() {
+  var sw = document.getElementById('shelf-switch');
+  if (!sw) return;
+  var show = state.domain === 'shelf' && state.view === 'shelf';
+  sw.style.display = show ? '' : 'none';
+  document.querySelectorAll('[data-shelf-mode]').forEach(function (b) {
+    b.classList.toggle('on', b.dataset.shelfMode === state.shelfMode);
+  });
 }
 function setNav() {
   document.querySelectorAll('.nav button').forEach(function (b) {
-    var on = false;
-    if (b.dataset.act === 'home') on = !inSeriesDomain();
-    if (b.dataset.act === 'serieslib') on = inSeriesDomain();
+    var on = b.dataset.act === 'map' ? state.domain === 'map' : (b.dataset.act === 'shelf' ? state.domain === 'shelf' : false);
     b.classList.toggle('cur', on);
   });
 }
 function setCrumb(text) {
   document.getElementById('sb-crumb').textContent = text;
   var back = document.getElementById('sb-back');
-  var show = !(state.view === 'home' || state.view === 'serieslib');
+  var show = !(state.view === 'shelf' || state.view === 'map');
   back.style.display = show ? '' : 'none';
   if (show) {
-    var label = '← 回到地図';
-    if (state.view === 'series') label = '← 回到系別';
-    else if (state.view === 'word' && state.origin && state.origin.indexOf('series:') === 0) label = '← 回到系総覧';
+    var dom = state.domain === 'map' ? '交差点図' : '収蔵棚';
+    var label = state.view === 'word' && state.backSeries ? '← 回到系総覧' : '← 回到' + dom;
     back.textContent = label;
   }
 }
-function openWord(id, origin) {
+function openWord(id) {
   var w = WORDS[id];
   if (!w) return;
+  var fromSeries = state.view === 'series' || (state.view === 'word' && state.backSeries);
   state.view = 'word'; state.word = id; state.series = null;
-  state.origin = origin || 'home';
+  if (!fromSeries) state.backSeries = null;
   var root = document.getElementById('view-root');
   root.innerHTML = w.status === 'collected' ? specimenHTML(w) : pendingHTML(w);
   setCrumb('詞目 · ' + w.word);
@@ -2005,28 +2336,26 @@ function openWord(id, origin) {
   scrollToStage();
 }
 function openSeries(id) {
-  state.view = 'series'; state.series = id; state.word = null;
-  state.origin = null;
+  state.view = 'series'; state.series = id; state.word = null; state.backSeries = null;
   document.getElementById('view-root').innerHTML = seriesHTML(id);
   setCrumb('系総覧 · ' + seriesName(id));
   setNav(); markCurrent(); setModeClass();
   history.replaceState(null, '', '#series-' + id);
   scrollToStage();
 }
-function openSeriesLib() {
-  state.view = 'serieslib'; state.series = null; state.word = null; state.origin = null;
-  document.getElementById('view-root').innerHTML = seriesLibHTML();
-  setCrumb('系別図鑑');
-  setNav(); markCurrent(); setModeClass();
-  history.replaceState(null, '', '#serieslib');
-  scrollToStage();
-}
-function openHome() {
-  state.view = 'home'; state.word = null; state.series = null; state.origin = null;
-  document.getElementById('view-root').innerHTML = homeHTML();
-  setCrumb('総索引');
+function openShelves() {
+  state.view = 'shelf'; state.domain = 'shelf'; state.word = null; state.series = null; state.backSeries = null;
+  document.getElementById('view-root').innerHTML = state.shelfMode === 'cards' ? seriesLibHTML() : shelvesHTML();
+  setCrumb(state.shelfMode === 'cards' ? '収蔵棚 · 卡片表示' : '収蔵棚');
   setNav(); markCurrent(); setModeClass();
   history.replaceState(null, '', '#');
+}
+function openMap() {
+  state.view = 'map'; state.domain = 'map'; state.word = null; state.series = null; state.backSeries = null;
+  document.getElementById('view-root').innerHTML = homeHTML();
+  setCrumb('交差点図');
+  setNav(); markCurrent(); setModeClass();
+  history.replaceState(null, '', '#map');
 }
 function scrollToStage() {
   var el = document.getElementById('view-root');
@@ -2041,30 +2370,57 @@ document.addEventListener('click', function (e) {
   var t = e.target.closest('#sb-back');
   if (t) {
     if (state.view === 'word') {
-      if (state.origin && state.origin.indexOf('series:') === 0) openSeries(state.origin.slice(7));
-      else if (state.origin === 'serieslib') openSeriesLib();
-      else openHome();
-    } else if (state.view === 'series') openSeriesLib();
+      if (state.backSeries) openSeries(state.backSeries);
+      else if (state.domain === 'map') openMap();
+      else openShelves();
+    } else if (state.view === 'series') {
+      if (state.domain === 'map') openMap();
+      else openShelves();
+    }
+    return;
+  }
+  t = e.target.closest('#legend-toggle');
+  if (t) {
+    var lrow = document.getElementById('legend-row');
+    if (!lrow) return;
+    var show = lrow.hidden;
+    lrow.hidden = !show;
+    t.setAttribute('aria-expanded', show ? 'true' : 'false');
+    var caret = t.querySelector('.lg-toggle-caret');
+    if (caret) caret.textContent = show ? '▾' : '▸';
+    return;
+  }
+  t = e.target.closest('[data-vol-page]');
+  if (t) {
+    var vols = VOLUMES.filter(function (v) { return volRows(v).length > 0; });
+    var d = t.dataset.volPage;
+    var n = d === '-1' ? state.volIdx - 1 : (d === '+1' ? state.volIdx + 1 : parseInt(d, 10));
+    if (n < 0 || n >= vols.length || n === state.volIdx) return;
+    state.volDir = n < state.volIdx ? 'prev' : 'next';
+    state.volIdx = n;
+    renderMatrix();
     return;
   }
   t = e.target.closest('[data-word]');
-  if (t && t.dataset.word) {
-    var origin = 'home';
-    if (state.view === 'series') origin = 'series:' + state.series;
-    else if (state.view === 'serieslib') origin = 'serieslib';
-    else if (state.view === 'word' && state.origin && state.origin.indexOf('series') === 0) origin = state.origin;
-    openWord(t.dataset.word, origin);
-    return;
-  }
+  if (t && t.dataset.word) { openWord(t.dataset.word); return; }
   t = e.target.closest('[data-series]');
   if (t && t.dataset.series) { openSeries(t.dataset.series); return; }
-  t = e.target.closest('[data-act="home"]');
-  if (t) { openHome(); return; }
-  t = e.target.closest('[data-act="serieslib"]');
-  if (t) { openSeriesLib(); return; }
+  t = e.target.closest('[data-act="shelf"]');
+  if (t) { openShelves(); return; }
+  t = e.target.closest('[data-act="map"]');
+  if (t) { openMap(); return; }
+  t = e.target.closest('[data-shelf-mode]');
+  if (t) { state.shelfMode = t.dataset.shelfMode; openShelves(); return; }
   t = e.target.closest('.fbtn');
   if (t) {
-    document.querySelectorAll('.fbtn').forEach(function (b) { b.classList.toggle('on', b === t); });
+    if (t.dataset.mode) {
+      document.querySelectorAll('[data-mode]').forEach(function (b) { b.classList.toggle('on', b === t); });
+      state.mode = t.dataset.mode;
+      renderStats();
+      renderMatrix();
+      return;
+    }
+    document.querySelectorAll('[data-cls]').forEach(function (b) { b.classList.toggle('on', b === t); });
     state.cls = t.dataset.cls;
     applyFilter();
   }
@@ -2081,14 +2437,28 @@ function renderStats() {
     else known++;
     if (w.row && w.col) inGrid++;
   }
-  var totalCells = ROWS.length * COLS.length;
-  var empty = totalCells - inGrid;
   var chips = document.getElementById('stat-chips');
-  chips.innerHTML =
-    '<span class="chip">収蔵 <b>' + collected + '</b> 種</span>' +
-    '<span class="chip">既知 <small>' + known + ' 語</small></span>' +
-    '<span class="chip">空槽 <small>' + empty + ' 格</small></span>' +
-    '<span class="chip">系 <small>' + ROWS.length + ' 前項 × ' + COLS.length + ' 後項</small></span>';
+  if (state.domain !== 'map') {
+    var rs = ROWS.filter(function (r) { return wordsInRow(r.id).length > 0; }).length;
+    var cs = COLS.filter(function (c) { return wordsInCol(c.id).length > 0; }).length;
+    chips.innerHTML =
+      '<span class="chip">収蔵 <b>' + collected + '</b> 種</span>' +
+      '<span class="chip">既知 <small>' + known + ' 語</small></span>' +
+      '<span class="chip">前項架 <small>' + rs + '</small></span>' +
+      '<span class="chip">後項架 <small>' + cs + '</small></span>';
+  } else if (state.mode === 'lit') {
+    chips.innerHTML =
+      '<span class="chip">収蔵 <b>' + collected + '</b> 種</span>' +
+      '<span class="chip">既知 <small>' + known + ' 語</small></span>' +
+      '<span class="chip">已点亮 <small>' + inGrid + ' 格 · ' + VOLUMES.length + ' 巻</small></span>';
+  } else {
+    var empty = ROWS.length * COLS.length - inGrid;
+    chips.innerHTML =
+      '<span class="chip">収蔵 <b>' + collected + '</b> 種</span>' +
+      '<span class="chip">既知 <small>' + known + ' 語</small></span>' +
+      '<span class="chip">空槽 <small>' + empty + ' 格</small></span>' +
+      '<span class="chip">系 <small>' + ROWS.length + ' 前項 × ' + COLS.length + ' 後項</small></span>';
+  }
 }
 
 /* ═══════════════════════════════════════════════
@@ -2096,11 +2466,11 @@ function renderStats() {
  * ═══════════════════════════════════════════════ */
 renderStats();
 renderMatrix();
-openHome();
+openShelves();
 var h = location.hash;
 if (h) {
   var key = h.replace(/^#/, '');
-  if (key === 'serieslib') { openSeriesLib(); }
+  if (key === 'map') { openMap(); }
   else if (key.indexOf('series-') === 0) { openSeries(key.slice(7)); }
   else if (WORDS[key]) { openWord(key); }
 }

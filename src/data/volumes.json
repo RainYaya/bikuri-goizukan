@@ -1,0 +1,65 @@
+[
+  {
+    "id": "v1",
+    "no": "壱",
+    "name": "取出・移動",
+    "kan": "向外拿出 · 拔起 · 移除 · 巡回 —— 获取与移动的原点动作。",
+    "cols": ["dasu", "nuku", "nozoku", "toru", "mawaru"]
+  },
+  {
+    "id": "v2",
+    "no": "弐",
+    "name": "進入・没頭",
+    "kan": "塞进去出不来 —— 深入 · 沉浸 · 受容。",
+    "cols": ["komu", "ireru"]
+  },
+  {
+    "id": "v3",
+    "no": "参",
+    "name": "折返・復元",
+    "kan": "走到头折返 · 回到原状 · 重新做一遍。",
+    "cols": ["kaesu", "modosu", "naosu", "kaeru"]
+  },
+  {
+    "id": "v4",
+    "no": "肆",
+    "name": "処理・統合",
+    "kan": "消除 · 完成 · 经办 · 收拢 —— 把事处置干净。",
+    "cols": ["kesu", "ageru", "atsukau", "matomeru"]
+  },
+  {
+    "id": "v5",
+    "no": "伍",
+    "name": "心理・態度",
+    "kan": "惜着不给 · 磨蹭 · 敞开坦白 —— 心的态度。",
+    "cols": ["oshimu", "shiburu", "akeru"]
+  },
+  {
+    "id": "v6",
+    "no": "陸",
+    "name": "圧・強調",
+    "kan": "战胜 · 按住 · 分配 · 施加 —— 外来的力。",
+    "cols": ["katsu", "osaeru", "ateru", "kakeru"]
+  },
+  {
+    "id": "v7",
+    "no": "漆",
+    "name": "体・程度",
+    "kan": "开始 · 继续 · 结束 · 过度 —— 动作的体相与程度（后项接尾辞化 ④）。",
+    "cols": ["hajimeru", "tsuzukeru", "owaru", "sugiru", "kiru"]
+  },
+  {
+    "id": "v8",
+    "no": "捌",
+    "name": "相互・合一",
+    "kan": "互相动作 · 合在一起 —— 相互、碰头、合力。",
+    "cols": ["au", "awaseru", "kumu"]
+  },
+  {
+    "id": "v9",
+    "no": "玖",
+    "name": "収受・残余",
+    "kan": "承接 · 留下 —— 接受过来、剩下来。",
+    "cols": ["ukeru", "nokosu"]
+  }
+]

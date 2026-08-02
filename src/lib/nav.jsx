@@ -11,8 +11,7 @@ export function useNav() {
   return useContext(NavContext);
 }
 
-/* 是否处于「系別域」：此时 cover 与 grid-map 会被 body.in-series 隐藏 */
+/* 是否处于「系別域」：此时 cover 会被 body.in-series 隐藏 */
 export function inSeriesDomain(state) {
-  return state.view === 'serieslib' || state.view === 'series' ||
-    (state.view === 'word' && state.origin && state.origin.indexOf('series') === 0);
+  return state.view === 'series' || (state.view === 'word' && state.backSeries);
 }

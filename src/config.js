@@ -7,7 +7,7 @@
 export const site = {
   title: '複合動詞図鑑',
   eyebrowZh: '交互图鉴',           // 封面 eyebrow 的中文副标
-  coverSub: '前項 × 後項 の組み合わせ地図——格子就是目录，词卡就在格子下面。',
+  coverSub: '複合動詞を「系」ごとに棚へ——同じ言葉、二つの見方。',
   footer: [
     '複合動詞図鑑 · React 版',
     '紙と朱の標本台紙 · デザイン: Arc tokens',

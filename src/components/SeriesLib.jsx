@@ -35,9 +35,9 @@ export default function SeriesLib() {
   return (
     <>
       <section>
-        <p className="eyebrow">系別図鑑 <span className="zh">线的领域</span></p>
+        <p className="eyebrow">収蔵棚 · 卡片表示 <span className="zh">线的领域 —— 系是线、词是点</span></p>
         <h2 className="sec-title" lang="ja">系は「線」、詞は「点」</h2>
-        <p className="sec-sub" lang="zh-CN">系是线、词是点：総索引的格子图是「看词」，系别是「看线」——一整行（前项系）或一整列（后项系）的家族全景。点开任一系：看它的原型、语感、収蔵进度、成员墙和系内小地图。小地图里的朱点实格 = 已収蔵，淡格 = 既知，暗格 = 空槽。</p>
+        <p className="sec-sub" lang="zh-CN">収蔵棚的另一种摆法：每个系一张卡片 —— 系名 · 原型 · 语感 · 収蔵进度 · 空槽计数。点卡片看系総覧（系名片 + 系内小地图 + 成员墙）。与「棚表示」同一份词库、同一批词 —— 棚看词、卡片看系，右上角一键切换。</p>
       </section>
 
       <div className="slib-bin">
