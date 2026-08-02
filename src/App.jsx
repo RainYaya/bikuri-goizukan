@@ -20,15 +20,16 @@ import Nav from './components/Nav.jsx';
 import Cover from './components/Cover.jsx';
 import GridMap from './components/GridMap.jsx';
 import Stage from './components/Stage.jsx';
-import DonateModal from './components/DonateModal.jsx';
-import { site } from './config.js';
+import TourOverlay from './components/TourOverlay.jsx';
+import { site, tour } from './config.js';
 
-const BASE = { view: 'shelf', domain: 'shelf', word: null, series: null, backSeries: null, cls: 'all', mode: 'lit', shelfMode: 'shelves' };
+const BASE = { view: 'shelf', domain: 'shelf', word: null, series: null, backSeries: null, cls: 'all', mode: 'lit', shelfMode: 'shelves', tourStep: -1 };
 
 function parseHash(h) {
   const key = (h || '').replace(/^#/, '');
   if (!key) return { ...BASE };
   if (key === 'map') return { ...BASE, view: 'map', domain: 'map' };
+  if (key === 'sponsor') return { ...BASE, view: 'sponsor' };
   if (key.indexOf('series-') === 0) return { ...BASE, view: 'series', series: key.slice(7) };
   if (WORDS[key]) return { ...BASE, view: 'word', word: key };
   return { ...BASE };
@@ -36,6 +37,7 @@ function parseHash(h) {
 
 function hashFor(state) {
   if (state.view === 'map') return '#map';
+  if (state.view === 'sponsor') return '#sponsor';
   if (state.view === 'series') return '#series-' + state.series;
   if (state.view === 'word') return '#' + state.word;
   return '';
@@ -94,6 +96,50 @@ export default function App() {
     setState((prev) => ({ ...prev, shelfMode }));
   }, []);
 
+  const openSponsor = useCallback(() => {
+    navigate({ view: 'sponsor', word: null, series: null, backSeries: null });
+  }, [navigate]);
+
+  /* Tour */
+  const startTour = useCallback(() => {
+    setState((prev) => ({ ...prev, tourStep: 0 }));
+  }, []);
+  const nextTour = useCallback(() => {
+    setState((prev) => {
+      const n = prev.tourStep + 1;
+      if (n >= tour.steps.length) {
+        /* 最后一步：跳赞助页再结束 */
+        try { localStorage.setItem(tour.dismissKey, '1'); } catch (e) { /* 忽略 */ }
+        openSponsor();
+        return { ...prev, tourStep: -1 };
+      }
+      return { ...prev, tourStep: n };
+    });
+  }, [openSponsor]);
+  const prevTour = useCallback(() => {
+    setState((prev) => ({ ...prev, tourStep: Math.max(0, prev.tourStep - 1) }));
+  }, []);
+  /* 自动切视图：tour 步骤的 view 字段决定当前应处于的域 */
+  useEffect(() => {
+    if (state.tourStep < 0) return;
+    const step = tour.steps[state.tourStep];
+    if (!step || !step.view) return;
+    if (step.view === 'map' && state.domain !== 'map') openMap();
+    else if (step.view === 'shelf' && state.domain !== 'shelf') openShelves();
+  }, [state.tourStep, state.domain, openMap, openShelves]);
+  const endTour = useCallback(() => {
+    try { localStorage.setItem(tour.dismissKey, '1'); } catch (e) { /* 忽略 */ }
+    setState((prev) => ({ ...prev, tourStep: -1 }));
+  }, []);
+
+  /* 首次访问自动弹出 Tour（非 hash 直达时） */
+  useEffect(() => {
+    if (!tour.autoStart) return;
+    let seen = false;
+    try { seen = !!localStorage.getItem(tour.dismissKey); } catch (e) { /* 忽略 */ }
+    if (!seen && !window.location.hash) startTour();
+  }, [startTour]);
+
   const goBack = useCallback(() => {
     if (state.view === 'word') {
       if (state.backSeries) openSeries(state.backSeries);
@@ -102,10 +148,12 @@ export default function App() {
     } else if (state.view === 'series') {
       if (state.domain === 'map') openMap();
       else openShelves();
+    } else if (state.view === 'sponsor') {
+      openShelves();
     }
   }, [state, openSeries, openMap, openShelves]);
 
-  const nav = { state, openWord, openSeries, openShelves, openMap, goBack, setCls, setMode, setShelfMode };
+  const nav = { state, openWord, openSeries, openShelves, openMap, openSponsor, startTour, goBack, setCls, setMode, setShelfMode };
 
   return (
     <NavContext.Provider value={nav}>
@@ -119,7 +167,7 @@ export default function App() {
           <span>{site.footer[1]}</span>
         </div>
       </div>
-      <DonateModal />
+      {state.tourStep >= 0 && <TourOverlay step={state.tourStep} onNext={nextTour} onPrev={prevTour} onEnd={endTour} />}
     </NavContext.Provider>
   );
 }

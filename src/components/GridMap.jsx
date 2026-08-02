@@ -86,7 +86,7 @@ export default function GridMap() {
           <div className="matrix lit" id="matrix">
             {litVols.length ? (
               <>
-                <div className="vol-nav">
+                <div className="vol-nav" data-tour="vol-nav">
                   <button className="vol-nav-arrow" aria-label="上一卷" disabled={volIdx === 0} onClick={() => goVol(volIdx - 1)}>←</button>
                   <div className="vol-tabs">
                     {litVols.map((v, i) => (

@@ -54,7 +54,7 @@ export default function Shelves() {
         <p className="sec-sub" lang="zh-CN">同一个词有两套归属，于是有两套架子：<b>前項棚</b>（词根家族 —— 一只「取り〜」的手）和 <b>後項棚</b>（语法骨架 —— 一个「〜込む」的门）。词多时棚只会变长，永远不会出现空白。架头是系名片，点它看系総覧；架上朱点 = 収蔵済，淡 chip = 既知。<b>棚表示 / 卡片表示</b> 两种摆法在右上角一键切换 —— 棚看词，卡片看系。</p>
       </section>
 
-      <div className="shelf-bin">
+      <div className="shelf-bin" data-tour="shelf-bin">
         <p className="eyebrow">前項棚 <span className="zh">词根家族 —— 词的左半</span></p>
         <h2 className="sec-title" lang="ja">前項系 · {rowBins.length} 架</h2>
         <p className="sec-sub" lang="zh-CN">按「前项」归架：同根的词放一起，一眼看全一个家族。</p>
