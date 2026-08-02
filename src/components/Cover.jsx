@@ -38,6 +38,11 @@ function statChips(state) {
 
 export default function Cover() {
   const { state } = useNav();
+  /* 封面印章：収蔵编号范围（从数据算，随新标本卡自动更新） */
+  const coll = Object.values(WORDS).filter((w) => w.status === 'collected');
+  const nos = coll.map((w) => parseInt(w.no || '0', 10)).filter((n) => !Number.isNaN(n)).sort((a, b) => a - b);
+  const yugoPending = Object.values(WORDS).some((w) => w.series === 'yugo' && w.status === 'known');
+  const stampRange = nos.length ? String(nos[0]).padStart(2, '0') + '–' + String(nos[nos.length - 1]).padStart(2, '0') : '—';
   return (
     <header className="cover">
       <div className="cover-grid">
@@ -51,7 +56,7 @@ export default function Cover() {
         </div>
         <div className="cover-seal">
           <div className="seal seal-lg">図鑑</div>
-          <p className="stamp">収蔵 No.01–04<br />融合系 05 予定</p>
+          <p className="stamp">収蔵 No.{stampRange}<br />{yugoPending ? '融合系 · 落ち着く 待収蔵' : '全系収蔵進行中'}</p>
         </div>
       </div>
       <div className="rule-double"></div>
