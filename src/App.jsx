@@ -23,7 +23,7 @@ import Stage from './components/Stage.jsx';
 import TourOverlay from './components/TourOverlay.jsx';
 import { site, tour } from './config.js';
 
-const BASE = { view: 'shelf', domain: 'shelf', word: null, series: null, backSeries: null, cls: 'all', mode: 'lit', shelfMode: 'shelves', tourStep: -1 };
+const BASE = { view: 'shelf', domain: 'shelf', word: null, series: null, backSeries: null, cls: 'all', mode: 'lit', shelfMode: 'shelves', tourStep: -1, _gotoSponsor: false };
 
 function parseHash(h) {
   const key = (h || '').replace(/^#/, '');
@@ -108,14 +108,20 @@ export default function App() {
     setState((prev) => {
       const n = prev.tourStep + 1;
       if (n >= tour.steps.length) {
-        /* 最后一步：跳赞助页再结束 */
         try { localStorage.setItem(tour.dismissKey, '1'); } catch (e) { /* 忽略 */ }
-        openSponsor();
-        return { ...prev, tourStep: -1 };
+        /* 先结束 Tour（移除遮罩），再通过 effect 跳赞助页——不在 updater 内调 navigate */
+        return { ...prev, tourStep: -1, _gotoSponsor: true };
       }
-      return { ...prev, tourStep: n };
+      return { ...prev, tourStep: n, _gotoSponsor: false };
     });
-  }, [openSponsor]);
+  }, []);
+  /* 最后一步「去看看」→ 遮罩移除后跳赞助页 */
+  useEffect(() => {
+    if (state._gotoSponsor) {
+      setState((prev) => ({ ...prev, _gotoSponsor: false }));
+      openSponsor();
+    }
+  }, [state._gotoSponsor, openSponsor]);
   const prevTour = useCallback(() => {
     setState((prev) => ({ ...prev, tourStep: Math.max(0, prev.tourStep - 1) }));
   }, []);
