@@ -1315,28 +1315,7 @@ body.in-series .cover { display: none; }
   padding: 6px 10px; font-size: 12px;
 }
 
-/* 赞助页（非弹窗，.sp-page-grid 内嵌在 Stage 里） */
-.sp-page-grid {
-  display: grid; grid-template-columns: minmax(220px, 280px) 1fr;
-  gap: var(--space-6);
-  align-items: start;
-  margin-top: var(--space-4);
-}
-.sp-pg-photo {
-  position: relative;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  min-height: 280px;
-  background: var(--surface-warm);
-  border: 1px solid var(--border);
-}
-.sp-pg-photo > img { display: block; width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
-.sp-pg-body { display: flex; flex-direction: column; gap: 14px; padding-top: 4px; }
-
 @media (max-width: 640px) {
-  .sp-page-grid { grid-template-columns: 1fr; }
-  .sp-pg-photo { min-height: 200px; }
-  .sp-pg-body { padding-top: 0; }
   .sp-grid { grid-template-columns: 1fr; }
   .sp-photo { min-height: 180px; }
   .sp-polaroid { display: none; }
