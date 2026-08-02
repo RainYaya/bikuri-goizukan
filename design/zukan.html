@@ -1,0 +1,2109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>複合動詞図鑑 — 单文件交互图鉴</title>
+<style>
+/* ─────────────────────────────────────────────────────────────
+ * design-systems/arc/tokens.css — 令牌逐字绑定（奶油和纸底 / 珊瑚朱印 / 衬线展示）
+ * ─────────────────────────────────────────────────────────── */
+:root {
+  --bg: #fdf3ec;             /* Peach Cream — 和纸底 */
+  --surface: #ffffff;        /* Frosted Pane */
+  --surface-warm: #fff4ea;   /* Warm Inset */
+  --fg: #1a1a1f;             /* Ink Primary */
+  --fg-2: #54545a;           /* Ink Secondary */
+  --muted: #8c8c93;          /* Ink Muted */
+  --meta: var(--muted);
+  --border: #ece5db;         /* Warm hairline */
+  --border-soft: #f6f0e8;
+  --accent: #ff5f5f;
+  --accent-on: #ffffff;
+  --accent-hover: color-mix(in oklab, var(--accent), black 8%);
+  --accent-active: color-mix(in oklab, var(--accent), black 14%);
+  --success: #48bb78;
+  --warn: #f6ad55;
+  --danger: #f56565;
+  --font-display: "Argent CF", "Source Serif Pro", Georgia, serif;
+  --font-body: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "Berkeley Mono", ui-monospace, Menlo, Consolas, monospace;
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 32px;
+  --text-3xl: 40px;
+  --text-4xl: 72px;
+  --leading-body: 1.55;
+  --leading-tight: 1.05;
+  --tracking-display: -0.03em;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --section-y-desktop: 96px;
+  --section-y-tablet: 64px;
+  --section-y-phone: 48px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+  --elev-flat: none;
+  --elev-ring: 0 0 0 1px var(--border);
+  --elev-raised: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --focus-ring: 0 0 0 4px color-mix(in oklab, var(--accent), transparent 80%);
+  --motion-fast: 200ms;
+  --motion-base: 320ms;
+  --ease-standard: cubic-bezier(0.32, 0.72, 0, 1);
+  --container-max: 1200px;
+  --container-gutter-desktop: 32px;
+  --container-gutter-tablet: 24px;
+  --container-gutter-phone: 16px;
+}
+
+/* ─────────────── base ─────────────── */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body), "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", "Meiryo", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+/* 和纸颗粒 */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  z-index: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='140' height='140' filter='url(%23n)' opacity='0.5'/></svg>");
+  background-size: 140px 140px;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+}
+.wrap {
+  position: relative; z-index: 1;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-gutter-desktop);
+}
+a { color: inherit; text-decoration: none; border-bottom: 1px solid color-mix(in oklab, var(--fg), transparent 70%); }
+a:hover { color: var(--accent-hover); border-color: var(--accent-hover); }
+a:focus-visible, button:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: 2px; }
+::selection { background: color-mix(in oklab, var(--accent), transparent 75%); }
+button { font-family: inherit; cursor: pointer; }
+
+/* ─────────────── 导航 ─────────────── */
+.nav { display: flex; flex-wrap: wrap; gap: var(--space-2); padding-top: 24px; }
+.nav button {
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: color-mix(in oklab, var(--surface), transparent 30%);
+  font-size: var(--text-sm); font-weight: 500;
+  color: var(--fg);
+  transition: all var(--motion-fast) var(--ease-standard);
+}
+.nav button:hover { color: var(--accent-hover); border-color: var(--accent-hover); }
+.nav button.cur {
+  background: color-mix(in oklab, var(--accent), black 12%);
+  color: var(--accent-on);
+  border-color: transparent;
+  font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif;
+  font-weight: 600;
+}
+.nav .nav-hint { align-self: center; font-size: var(--text-xs); color: var(--muted); margin-left: auto; }
+
+/* ─────────────── 字体层级 ─────────────── */
+h1, h2, h3, h4, .word, .term-word, .seal, .st-no, .wc-jp, .ti-jp, .conf-jp, .prac-jp, .mg-w-jp, .pat-formula, .meta-title, .branch-label, .f-word {
+  font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", "Songti SC", "SimSun", Georgia, serif;
+  font-weight: 600;
+  margin: 0;
+}
+.mono, .reading, .no, .stamp, .coord { font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, "MS Gothic", monospace; }
+.eyebrow {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+  margin: 0 0 var(--space-2);
+}
+.eyebrow .zh { text-transform: none; letter-spacing: 0.04em; color: var(--muted); margin-left: 8px; font-weight: 500; }
+.sec-title {
+  font-size: clamp(24px, 3.2vw, 34px);
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin: 0 0 var(--space-2);
+}
+.sec-sub { color: var(--fg-2); margin: 0 0 var(--space-6); max-width: 60ch; }
+section { padding: var(--section-y-phone) 0; }
+section + section { border-top: 1px solid var(--border-soft); }
+
+/* ─────────────── 封面（紧凑） ─────────────── */
+.cover { padding: 32px 0 40px; }
+.cover-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: center;
+}
+.cover h1 {
+  font-size: clamp(40px, 6vw, 60px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  font-weight: 700;
+  margin: var(--space-3) 0 var(--space-4);
+}
+.cover-sub {
+  color: var(--fg-2);
+  font-size: var(--text-lg);
+  max-width: 46ch;
+  margin: 0 0 var(--space-5);
+}
+.cover-sub .zh { display: block; color: var(--muted); font-size: var(--text-sm); margin-top: 4px; }
+.seal {
+  width: 56px; height: 56px;
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--accent), black 12%);
+  color: var(--accent-on);
+  display: grid; place-items: center;
+  font-size: 30px; font-weight: 700; letter-spacing: 0;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.28),
+    0 3px 12px color-mix(in oklab, var(--accent), transparent 68%);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.12);
+}
+.seal-lg {
+  width: 96px; height: 96px;
+  border-radius: var(--radius-lg);
+  font-size: 38px;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+}
+.stamp {
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--fg-2);
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+.cover-seal { text-align: center; }
+.cover-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chip {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, var(--surface), transparent 30%);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--fg);
+}
+.chip small { color: var(--muted); font-size: var(--text-xs); }
+.chip b { color: color-mix(in oklab, var(--accent), black 14%); font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif; font-weight: 700; }
+.rule-double {
+  margin-top: 40px;
+  border-top: 1px solid var(--fg);
+  border-bottom: 1px solid var(--border);
+  height: 3px;
+  position: relative;
+}
+.rule-double::after { content:""; position:absolute; left:0; right:0; bottom:0; border-top: 1px solid var(--border); }
+
+/* ─────────────── 组合地图 ─────────────── */
+.map-head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-4) var(--space-6); }
+.map-head .grow { flex: 1; min-width: 280px; }
+.filters { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; }
+.filters .flabel { font-size: var(--text-xs); color: var(--muted); letter-spacing: 0.06em; }
+.fbtn {
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface-warm);
+  font-size: var(--text-xs); font-weight: 600;
+  color: var(--fg-2);
+  transition: all var(--motion-fast) var(--ease-standard);
+}
+.fbtn:hover { border-color: var(--accent-hover); color: var(--accent-hover); }
+.fbtn.on { background: color-mix(in oklab, var(--accent), black 12%); color: var(--accent-on); border-color: transparent; }
+.matrix-scroll { overflow-x: auto; padding-bottom: var(--space-2); -webkit-overflow-scrolling: touch; }
+.matrix {
+  display: grid;
+  grid-template-columns: 112px repeat(19, minmax(64px, auto));
+  gap: 5px;
+  min-width: 1400px;
+}
+.mcorner { text-align: center; font-size: var(--text-xs); font-weight: 600; color: var(--fg-2); letter-spacing: 0.04em; align-self: end; padding-bottom: 6px; }
+.mrow {
+  display: flex; align-items: center; justify-content: flex-end;
+  font-size: var(--text-sm); font-weight: 600;
+  font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif;
+  padding-right: 8px;
+  color: var(--fg-2);
+  white-space: nowrap;
+  transition: color var(--motion-fast) var(--ease-standard);
+}
+.mrow.hl { color: color-mix(in oklab, var(--accent), black 14%); }
+.mcol { text-align: center; font-size: var(--text-xs); color: var(--muted); letter-spacing: 0.02em; padding-top: 2px; transition: color var(--motion-fast) var(--ease-standard); }
+.mcol.hl { color: color-mix(in oklab, var(--accent), black 14%); font-weight: 600; }
+.cell {
+  min-height: 52px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 5px 4px;
+  position: relative;
+  transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard), opacity var(--motion-fast) var(--ease-standard);
+}
+.cell .w {
+  font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif;
+  font-size: 12.5px; font-weight: 600; letter-spacing: -0.01em;
+  line-height: 1.25;
+  word-break: keep-all;
+}
+/* 収蔵済 —— 朱印实格 */
+.cell.filled {
+  background: var(--surface-warm);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+.cell.filled:hover { transform: translateY(-1px); box-shadow: var(--elev-raised); }
+.cell.filled .w { color: color-mix(in oklab, var(--accent), black 16%); }
+.cell.filled .seal-dot {
+  position: absolute; top: 4px; right: 5px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45);
+}
+/* 既知 —— 淡色虚格 */
+.cell.known {
+  background: color-mix(in oklab, var(--surface), transparent 35%);
+  border: 1px dashed var(--border);
+  cursor: pointer;
+}
+.cell.known:hover { transform: translateY(-1px); box-shadow: var(--elev-raised); }
+.cell.known .w { color: var(--fg-2); }
+/* 未遇见 —— 空槽暗格（pokédex） */
+.cell.empty {
+  background: color-mix(in oklab, var(--fg), transparent 96.8%);
+  border: 1px dashed color-mix(in oklab, var(--fg), transparent 89%);
+  background-image: radial-gradient(circle at center, color-mix(in oklab, var(--fg), transparent 84%) 1.4px, transparent 1.8px);
+  background-size: 14px 14px;
+  background-position: center;
+}
+.cell.empty::after { content: "？"; font-size: 11px; color: color-mix(in oklab, var(--fg), transparent 76%); font-family: var(--font-display), Georgia, serif; }
+/* 当前选中 */
+.cell.current {
+  outline: 2px solid color-mix(in oklab, var(--accent), black 10%);
+  outline-offset: 1px;
+}
+/* 分类过滤 */
+.matrix.dim .cell:not(.on) { opacity: 0.16; }
+.matrix.dim .mcol:not(.on), .matrix.dim .mrow:not(.on) { opacity: 0.35; }
+/* 融合带 */
+.yugo-band {
+  margin-top: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--surface), transparent 25%);
+  padding: var(--space-3) var(--space-4);
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3);
+  font-size: var(--text-xs); color: var(--fg-2);
+}
+.yugo-band .ylabel { font-weight: 600; letter-spacing: 0.06em; color: var(--fg-2); text-transform: uppercase; }
+.yugo-band .yword {
+  font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif;
+  font-weight: 600; font-size: 14px; color: var(--fg);
+  border-bottom: 1px dashed var(--border); cursor: pointer;
+}
+.yugo-band .yword:hover { color: var(--accent-hover); border-color: var(--accent-hover); }
+.yugo-band .ynote { color: var(--muted); }
+/* 图例 */
+.legend-row {
+  display: flex; flex-wrap: wrap; gap: var(--space-4);
+  margin-top: var(--space-4);
+  font-size: var(--text-xs); color: var(--fg-2);
+  align-items: center;
+}
+.legend-row .lg-item { display: inline-flex; align-items: center; gap: 7px; }
+.lg-swatch {
+  display: inline-block;
+  width: 30px; height: 18px;
+  border-radius: 5px;
+  position: relative;
+}
+.lg-swatch.filled { background: var(--surface-warm); border: 1px solid var(--border); }
+.lg-swatch.filled::after { content:""; position:absolute; top:3px; right:4px; width:6px; height:6px; border-radius:50%; background: var(--accent); }
+.lg-swatch.known { background: color-mix(in oklab, var(--surface), transparent 35%); border: 1px dashed var(--border); }
+.lg-swatch.empty { background: color-mix(in oklab, var(--fg), transparent 96.8%); border: 1px dashed color-mix(in oklab, var(--fg), transparent 89%); }
+.lg-swatch.empty::after { content:"？"; position:absolute; inset:0; display:grid; place-items:center; font-size:9px; color: color-mix(in oklab, var(--fg), transparent 72%); }
+
+/* ─────────────── 展示区 ─────────────── */
+.stage {
+  margin-top: var(--space-6);
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-6);
+}
+.stage-bar {
+  display: flex; align-items: center; gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+}
+.stage-bar .sb-label { font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.stage-bar .sb-crumb { font-size: var(--text-xs); color: var(--fg-2); }
+.stage-bar .sb-back {
+  margin-left: auto;
+  font-size: var(--text-xs); font-weight: 500; color: var(--fg-2);
+  padding: 4px 12px; border: 1px solid var(--border); border-radius: var(--radius-pill);
+  background: var(--surface-warm);
+}
+.stage-bar .sb-back:hover { color: var(--accent-hover); border-color: var(--accent-hover); }
+.view { animation: fadeUp 320ms var(--ease-standard) both; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ─────────────── 系列语感横幅 ─────────────── */
+.insight {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--elev-raised);
+  padding: 28px 32px;
+  text-align: center;
+}
+.insight-label {
+  font-size: var(--text-xs); font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: var(--space-3);
+}
+.insight-text {
+  font-size: var(--text-lg); line-height: 1.75;
+  max-width: 48ch; margin: 0 auto; color: var(--fg-2);
+}
+.insight-text b { color: var(--fg); font-weight: 600; }
+
+/* ─────────────── 语义树 ─────────────── */
+.tree {
+  display: flex; gap: 28px; align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elev-raised);
+  padding: 28px;
+}
+.tree-root {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-size: 30px; font-weight: 700;
+  color: var(--accent-on);
+  background: color-mix(in oklab, var(--accent), black 12%);
+  border-radius: var(--radius-md);
+  padding: 18px 12px; letter-spacing: 0.04em;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.28),
+    0 3px 12px color-mix(in oklab, var(--accent), transparent 68%);
+  text-shadow: 0 1px 0 rgba(0,0,0,0.12);
+}
+.tree-branches { display: flex; gap: 20px; flex: 1; min-width: 0; }
+.tree-branch { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.branch-label {
+  align-self: flex-start;
+  font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.06em;
+  padding: 4px 12px; border-radius: var(--radius-pill);
+  color: var(--fg-2); background: var(--surface-warm); border: 1px solid var(--border);
+}
+.bl-get { color: color-mix(in oklab, var(--success), black 25%); background: color-mix(in oklab, var(--success), transparent 88%); border-color: transparent; }
+.bl-handle { color: color-mix(in oklab, var(--warn), black 30%); background: color-mix(in oklab, var(--warn), transparent 86%); border-color: transparent; }
+.tree-items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.tree-items li {
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 9px 12px; border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklab, var(--surface), transparent 40%);
+  cursor: pointer;
+  transition: all var(--motion-fast) var(--ease-standard);
+}
+.tree-items li:hover { border-color: color-mix(in oklab, var(--accent), transparent 55%); }
+.ti-cn { font-size: 12px; color: var(--muted); flex-shrink: 0; min-width: 3.4em; }
+.ti-jp { font-size: 16px; font-weight: 600; }
+.ti-stars { margin-left: auto; font-size: 11px; letter-spacing: 1px; color: var(--accent); flex-shrink: 0; }
+
+/* ─────────────── 隐喻双面板 ─────────────── */
+.meta-pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); align-items: stretch; }
+.meta-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elev-raised);
+  padding: var(--space-6);
+  position: relative;
+  overflow: hidden;
+}
+.meta-panel::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.meta-panel.bounce::before { background: color-mix(in oklab, var(--accent), black 8%); }
+.meta-panel.flip::before { background: var(--fg); }
+.meta-title { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
+.meta-panel.bounce .meta-title { color: color-mix(in oklab, var(--accent), black 14%); }
+.meta-subtitle { font-size: var(--text-xs); color: var(--muted); letter-spacing: 0.04em; margin-top: 2px; }
+.meta-core {
+  font-size: var(--text-sm); color: var(--fg-2);
+  margin: var(--space-3) 0 var(--space-5);
+  border-left: 2px solid var(--border);
+  padding-left: var(--space-3);
+  line-height: 1.6;
+}
+.meta-group { margin-bottom: var(--space-5); }
+.meta-group:last-child { margin-bottom: 0; }
+.mg-label {
+  font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.06em;
+  padding: 3px 12px; border-radius: var(--radius-pill);
+  display: inline-block; margin-bottom: 8px;
+}
+.meta-panel.bounce .mg-label { color: color-mix(in oklab, var(--accent), black 18%); background: color-mix(in oklab, var(--accent), transparent 90%); }
+.meta-panel.flip .mg-label { color: var(--fg-2); background: color-mix(in oklab, var(--fg), transparent 94%); }
+.mg-desc { font-size: var(--text-xs); color: var(--muted); margin: 0 0 var(--space-2); line-height: 1.5; }
+.mg-words { display: flex; flex-direction: column; gap: var(--space-2); }
+.mg-word {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 9px 12px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: color-mix(in oklab, var(--surface), transparent 40%);
+}
+.mg-w-jp { font-size: 16px; font-weight: 600; flex-shrink: 0; min-width: 5.5em; }
+.mg-w-cn { font-size: 12.5px; color: var(--muted); flex-shrink: 0; }
+.mg-w-intuition { margin-left: auto; text-align: right; font-size: 11.5px; color: var(--fg-2); opacity: .75; line-height: 1.45; }
+
+/* ─────────────── 口诀横幅 ─────────────── */
+.mnemonic {
+  display: flex; align-items: center; gap: var(--space-4);
+  flex-wrap: wrap;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--elev-raised);
+}
+.mn-pill {
+  flex-shrink: 0;
+  font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.08em;
+  color: var(--accent-on);
+  background: color-mix(in oklab, var(--accent), black 12%);
+  padding: 4px 14px; border-radius: var(--radius-pill);
+}
+.mn-text { font-size: var(--text-base); line-height: 1.6; color: var(--fg-2); flex: 1; min-width: 260px; }
+.mn-text b { font-weight: 700; color: var(--fg); font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif; }
+
+/* ─────────────── 构词规律 + 场景频度 ─────────────── */
+.pat-grid { display: flex; flex-direction: column; gap: 4px; max-width: 560px; }
+.pat-item { display: flex; align-items: baseline; gap: 10px; padding: 6px 0; border-bottom: 1px dashed var(--border); font-size: var(--text-sm); }
+.pat-item:last-child { border-bottom: none; }
+.pat-formula { font-weight: 600; font-size: 15px; }
+.pat-arrow { color: var(--muted); }
+.pat-result { color: var(--fg-2); }
+.pat-note { font-size: var(--text-xs); color: var(--muted); margin-top: 6px; line-height: 1.6; }
+.scene-head { font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.06em; color: var(--muted); margin: var(--space-5) 0 var(--space-2); }
+.tag-row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.tag {
+  font-size: var(--text-xs); padding: 4px 12px;
+  border-radius: var(--radius-pill); font-weight: 500;
+  border: 1px solid var(--border); background: var(--surface-warm);
+  color: var(--fg-2);
+}
+.tag b { font-weight: 600; font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif; }
+.tag-biz { color: color-mix(in oklab, var(--accent), black 18%); background: color-mix(in oklab, var(--accent), transparent 90%); border-color: transparent; }
+.tag-it { color: var(--fg-2); background: color-mix(in oklab, var(--fg), transparent 94%); border-color: transparent; }
+
+/* ─────────────── 构词 5 分类 ─────────────── */
+.struct-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-3); }
+.st {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--surface), transparent 20%);
+  padding: var(--space-4);
+}
+.st-no { font-size: 22px; color: var(--fg-2); display: block; margin-bottom: var(--space-2); }
+.st b { font-size: 14px; display: block; margin-bottom: 2px; font-weight: 600; }
+.st .zh { font-size: 12px; color: var(--muted); display: block; margin-bottom: 6px; }
+.st .ex { font-size: 13px; color: var(--fg-2); }
+.st.lit { border-color: color-mix(in oklab, var(--accent), transparent 45%); background: color-mix(in oklab, var(--surface-warm), var(--accent) 4%); }
+.st.lit .st-no { color: color-mix(in oklab, var(--accent), black 14%); }
+.struct-note { margin-top: var(--space-4); font-size: var(--text-xs); color: var(--muted); max-width: 72ch; }
+
+/* ─────────────── 词卡网格 ─────────────── */
+.wgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3); }
+.wcard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex; flex-direction: column; gap: 4px;
+  transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard);
+}
+.wcard:hover { transform: translateY(-2px); box-shadow: var(--elev-raised); }
+.wcard.honshu { border-color: color-mix(in oklab, var(--accent), transparent 50%); background: color-mix(in oklab, var(--surface-warm), var(--accent) 3%); }
+.wc-top { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
+.wc-jp { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+.wc-cat {
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.04em;
+  padding: 2px 8px; border-radius: var(--radius-pill); white-space: nowrap;
+}
+.cat-get { color: color-mix(in oklab, var(--success), black 22%); background: color-mix(in oklab, var(--success), transparent 88%); }
+.cat-handle { color: color-mix(in oklab, var(--warn), black 28%); background: color-mix(in oklab, var(--warn), transparent 86%); }
+.cat-biz { color: color-mix(in oklab, var(--accent), black 18%); background: color-mix(in oklab, var(--accent), transparent 90%); }
+.cat-it { color: var(--fg-2); background: color-mix(in oklab, var(--fg), transparent 94%); }
+.cat-immerse { color: color-mix(in oklab, var(--success), black 22%); background: color-mix(in oklab, var(--success), transparent 88%); }
+.cat-enter { color: var(--fg-2); background: color-mix(in oklab, var(--fg), transparent 94%); }
+.cat-state { color: color-mix(in oklab, var(--warn), black 28%); background: color-mix(in oklab, var(--warn), transparent 86%); }
+.cat-idiom { color: color-mix(in oklab, var(--accent), black 18%); background: color-mix(in oklab, var(--accent), transparent 90%); }
+.tag-bounce { color: color-mix(in oklab, var(--accent), black 18%); background: color-mix(in oklab, var(--accent), transparent 90%); }
+.tag-flip { color: var(--fg-2); background: color-mix(in oklab, var(--fg), transparent 94%); }
+.wc-cn { font-size: 12.5px; color: var(--fg-2); line-height: 1.4; }
+.wc-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; }
+.wc-stars { font-size: 11px; letter-spacing: 1px; color: var(--accent); }
+.wc-stars.muted { color: color-mix(in oklab, var(--fg), transparent 72%); }
+.wc-type { font-size: 10.5px; color: var(--muted); letter-spacing: 0.02em; }
+.wc-intuition { font-size: 11.5px; color: var(--fg-2); opacity: .8; line-height: 1.5; border-top: 1px dashed var(--border); padding-top: 8px; margin-top: 6px; }
+.wc-intuition .arr { color: var(--muted); margin: 0 3px; }
+.wc-ex { font-size: 11px; color: var(--muted); line-height: 1.5; font-family: var(--font-body), "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", "Meiryo", sans-serif; }
+.wc-ex b { font-weight: 600; color: var(--muted); }
+.wc-add {
+  border: 1px dashed var(--border);
+  background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: var(--text-xs);
+  min-height: 96px; cursor: default;
+}
+
+/* ─────────────── 易混淆 ─────────────── */
+.conf-pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); align-items: stretch; }
+.conf-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-5); }
+.conf-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; gap: 8px; flex-wrap: wrap; }
+.conf-jp { font-size: 22px; font-weight: 700; }
+.conf-em {
+  font-size: var(--text-xs); font-weight: 600;
+  color: color-mix(in oklab, var(--accent), black 18%);
+  background: color-mix(in oklab, var(--accent), transparent 90%);
+  padding: 2px 10px; border-radius: var(--radius-pill); white-space: nowrap;
+}
+.conf-cn { font-size: var(--text-sm); color: var(--fg-2); margin-bottom: 4px; }
+.conf-note { font-size: var(--text-xs); color: var(--fg-2); line-height: 1.6; border-top: 1px dashed var(--border); padding-top: 10px; margin-top: 10px; }
+
+/* ─────────────── 实战练习 ─────────────── */
+.prac-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+.prac-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex; flex-direction: column; gap: 4px;
+  transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard);
+}
+.prac-item:hover { transform: translateY(-2px); box-shadow: var(--elev-raised); }
+.prac-jp { font-size: 17px; font-weight: 600; }
+.prac-cn { font-size: var(--text-xs); color: var(--fg-2); }
+.prac-hint { font-size: var(--text-xs); color: var(--muted); line-height: 1.55; border-top: 1px dashed var(--border); padding-top: 8px; margin-top: 6px; }
+
+/* ─────────────── 标本卡 ─────────────── */
+.specimen {
+  background-color: var(--surface);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 31px, color-mix(in oklab, var(--fg), transparent 96.5%) 31px 32px),
+    repeating-linear-gradient(90deg, transparent 0 31px, color-mix(in oklab, var(--fg), transparent 96.5%) 31px 32px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elev-raised);
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+.specimen::before {
+  content: "";
+  position: absolute; top: 10px; left: 10px;
+  width: 12px; height: 12px;
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--fg), transparent 70%), color-mix(in oklab, var(--fg), transparent 70%)),
+    linear-gradient(color-mix(in oklab, var(--fg), transparent 70%), color-mix(in oklab, var(--fg), transparent 70%));
+  background-size: 100% 1px, 1px 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+}
+.label-bar {
+  display: flex; flex-wrap: wrap; gap: 8px 20px;
+  align-items: baseline;
+  background: var(--surface-warm);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 28px;
+  font-size: var(--text-xs);
+  color: var(--fg-2);
+  letter-spacing: 0.04em;
+}
+.label-bar b { font-weight: 600; color: var(--fg); }
+.label-bar .sep { color: var(--border); }
+.spec-main {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 32px;
+  align-items: center;
+  padding: 40px 48px 36px;
+}
+.lemma .word {
+  font-size: clamp(54px, 8vw, 84px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.reading { margin-top: var(--space-2); font-size: var(--text-sm); color: var(--fg-2); letter-spacing: 0.04em; }
+.reading span { color: var(--muted); margin-left: 6px; }
+.tagline { margin-top: var(--space-4); font-size: var(--text-lg); color: var(--fg-2); max-width: 34ch; }
+.tagline b { color: var(--fg); font-weight: 600; }
+.meta-col { display: flex; flex-direction: column; gap: var(--space-4); align-items: flex-end; }
+.meta-cell { text-align: right; }
+.meta-cell .mlabel { font-size: var(--text-xs); color: var(--muted); letter-spacing: 0.04em; margin-bottom: 4px; }
+.stars { font-size: 22px; letter-spacing: 3px; color: var(--accent); line-height: 1; }
+.stars .off { color: color-mix(in oklab, var(--fg), transparent 78%); }
+.type-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface-warm);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+}
+.type-badge small { color: var(--muted); font-weight: 500; }
+.spec-sec { border-top: 1px solid var(--border-soft); padding: 32px 48px; }
+.spec-sec .sec-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: var(--space-4);
+}
+.spec-sec .sec-label .zh { text-transform: none; letter-spacing: 0.04em; margin-left: 8px; color: var(--muted); opacity: .8; }
+.eq { display: flex; align-items: stretch; justify-content: center; flex-wrap: wrap; gap: var(--space-3); }
+.term {
+  flex: 1 1 200px; max-width: 300px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--surface), transparent 30%);
+  padding: var(--space-4);
+  position: relative;
+}
+.term.back { background: var(--surface-warm); }
+.term.result { border: 2px solid var(--fg); box-shadow: inset 0 0 0 1px var(--surface); background: var(--surface); }
+.term-role { font-size: var(--text-xs); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: var(--space-2); }
+.term-word { font-size: 30px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
+.term-word small { font-size: 15px; font-weight: 600; color: var(--muted); margin-left: 4px; }
+.term-note { margin: var(--space-2) 0 0; font-size: 13px; color: var(--fg-2); }
+.shift {
+  margin-top: var(--space-3);
+  border: 1px dashed color-mix(in oklab, var(--fg), transparent 65%);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 12.5px;
+  color: var(--fg-2);
+  background: color-mix(in oklab, var(--surface), transparent 40%);
+}
+.shift b { font-weight: 600; color: var(--fg); }
+.op { align-self: center; font-family: var(--font-display), Georgia, serif; font-size: 26px; color: var(--fg-2); padding: 0 2px; }
+.core-img { margin: var(--space-6) 0 0; text-align: center; font-size: var(--text-sm); color: var(--fg-2); letter-spacing: 0.02em; }
+.core-img b { color: var(--fg); font-weight: 600; }
+.family-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+.family {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--surface), transparent 25%);
+  padding: var(--space-5);
+}
+.family h4 { font-size: var(--text-lg); letter-spacing: -0.01em; margin-bottom: 2px; }
+.family .fsub { font-size: var(--text-xs); color: var(--muted); margin-bottom: var(--space-4); }
+.fam-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.fam-item {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.fam-item.this { border: 1px solid var(--border); background: var(--surface-warm); }
+.fam-item .f-word { font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif; font-weight: 600; font-size: 16px; }
+.fam-item .f-gloss { font-size: 12.5px; color: var(--fg-2); }
+.fam-item .f-flag { margin-left: auto; font-size: 11px; color: var(--fg-2); letter-spacing: 0.04em; white-space: nowrap; }
+.fam-item.this .f-flag { color: var(--fg); font-weight: 600; }
+.intersect {
+  margin: var(--space-4) 0 0;
+  padding: 12px 16px;
+  border-left: 2px solid var(--fg);
+  background: var(--surface-warm);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: var(--text-sm);
+  color: var(--fg-2);
+}
+.intersect b { color: var(--fg); }
+.habitat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+.habitat { border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); padding: var(--space-5) var(--space-5) var(--space-4); }
+.habitat h4 { font-size: var(--text-lg); margin-bottom: 2px; }
+.habitat .hsub { font-size: var(--text-xs); color: var(--muted); margin-bottom: var(--space-4); }
+.usage-list {
+  list-style: none; margin: 0; padding: 0;
+  background-image: repeating-linear-gradient(transparent 0 43px, color-mix(in oklab, var(--fg), transparent 92%) 43px 44px);
+}
+.usage { padding: 4px 2px 10px; }
+.usage .no { display: inline-block; font-size: 11px; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 2px; }
+.usage .ja { margin: 0 0 2px; font-size: 14px; line-height: 1.6; }
+.usage .zh { margin: 0; font-size: 12.5px; color: var(--muted); }
+.note {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-image: repeating-linear-gradient(transparent 0 30px, color-mix(in oklab, var(--fg), transparent 90%) 30px 31px);
+  padding: var(--space-5) var(--space-6);
+  max-width: 640px;
+}
+.note-label { font-size: var(--text-xs); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+.note-ja {
+  font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", "Songti SC", "SimSun", Georgia, serif;
+  font-size: 24px; font-style: italic;
+  margin: var(--space-3) 0 var(--space-2);
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+.note-zh { font-size: var(--text-sm); color: var(--fg-2); margin: 0; }
+
+/* ─────────────── 未収蔵占位卡 ─────────────── */
+.pending {
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-lg);
+  background: color-mix(in oklab, var(--surface), transparent 20%);
+  padding: 0;
+  overflow: hidden;
+}
+.pending-main { display: grid; grid-template-columns: auto 1fr auto; gap: 28px; align-items: center; padding: 32px 40px 28px; }
+.seal-hollow {
+  width: 56px; height: 56px;
+  border-radius: var(--radius-md);
+  border: 2px dashed var(--muted);
+  color: var(--muted);
+  display: grid; place-items: center;
+  font-size: 28px; font-weight: 700;
+  font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif;
+}
+.pending .word { font-size: clamp(40px, 6vw, 60px); font-weight: 700; letter-spacing: -0.02em; line-height: 1.05; }
+.pending .p-gloss { font-size: var(--text-lg); color: var(--fg-2); margin-top: var(--space-2); }
+.pending .p-where { margin-top: var(--space-3); font-size: var(--text-xs); color: var(--muted); }
+.pending .p-where b { color: var(--fg-2); font-weight: 600; }
+.pending-foot {
+  border-top: 1px dashed var(--border);
+  padding: 14px 40px;
+  display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center;
+  font-size: var(--text-xs); color: var(--fg-2);
+  background: color-mix(in oklab, var(--surface-warm), transparent 30%);
+}
+.pending-foot .pf-label { font-weight: 600; letter-spacing: 0.06em; color: var(--muted); text-transform: uppercase; }
+.pending-foot .pf-tag {
+  padding: 3px 10px; border-radius: var(--radius-pill);
+  border: 1px solid var(--border); background: var(--surface);
+  font-size: 11.5px;
+}
+.pending-foot .pf-hint { margin-left: auto; color: var(--muted); }
+
+/* ─────────────── 图鉴读法 / 首页 ─────────────── */
+.howto-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+.ht {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--surface), transparent 20%);
+  padding: var(--space-4);
+}
+.ht b { display: block; font-size: 14px; margin-bottom: 2px; font-weight: 600; }
+.ht span { font-size: 12.5px; color: var(--fg-2); line-height: 1.6; }
+.ht .ht-mark {
+  display: inline-block; margin-bottom: var(--space-3);
+  font-size: var(--text-xs); color: var(--fg);
+  padding: 4px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface); white-space: nowrap;
+}
+.ht .ht-mark.seal-mini {
+  background: color-mix(in oklab, var(--accent), black 12%);
+  color: var(--accent-on); border-color: transparent;
+  font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif;
+  font-weight: 700; font-size: 13px; padding: 3px 9px;
+}
+.ht .ht-mark.stars-mini { color: var(--accent); border-color: transparent; background: transparent; font-size: 14px; letter-spacing: 2px; padding: 0; }
+.ht .ht-mark.cls-mini { color: color-mix(in oklab, var(--accent), black 16%); border-color: color-mix(in oklab, var(--accent), transparent 60%); }
+
+/* ─────────────── 词条条带 ─────────────── */
+.chip-row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.fw-chip {
+  display: inline-flex; align-items: baseline; gap: 8px;
+  padding: 6px 12px;
+  background: var(--surface-warm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all var(--motion-fast) var(--ease-standard);
+}
+.fw-chip:hover { border-color: color-mix(in oklab, var(--accent), transparent 55%); }
+.fw-chip .fgw { font-weight: 600; font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif; }
+.fw-chip .fgg { font-size: 12px; color: var(--muted); }
+.fw-chip.honshu { border-color: color-mix(in oklab, var(--accent), transparent 60%); }
+.fw-chip.honshu .fgw { color: color-mix(in oklab, var(--accent), black 14%); }
+
+/* ─────────────── 归档 ─────────────── */
+.archive-bar {
+  display: flex; align-items: baseline; gap: var(--space-4); flex-wrap: wrap;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--surface), transparent 25%);
+  padding: var(--space-4) var(--space-5);
+}
+.archive-label { font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.archive-chip {
+  font-size: var(--text-xs); padding: 4px 12px; border-radius: var(--radius-pill);
+  border: 1px solid var(--border); background: var(--surface-warm); color: var(--fg-2);
+}
+
+/* ─────────────── 系別域（线与点分离） ─────────────── */
+body.in-series .cover, body.in-series #grid-map { display: none; }
+
+/* 系别库（三仓） */
+.slib-bin { margin-top: var(--space-8); }
+.scard-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3); }
+.scard {
+  display: flex; flex-direction: column; gap: 8px;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  cursor: pointer;
+  transition: transform var(--motion-fast) var(--ease-standard), box-shadow var(--motion-fast) var(--ease-standard), border-color var(--motion-fast) var(--ease-standard);
+}
+.scard:hover { transform: translateY(-2px); box-shadow: var(--elev-raised); border-color: color-mix(in oklab, var(--accent), transparent 55%); }
+.sc-top { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
+.sc-name { font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", "Songti SC", Georgia, serif; font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+.sc-proto { font-size: 11px; color: var(--muted); font-family: var(--font-mono), ui-monospace, Menlo, Consolas, monospace; white-space: nowrap; }
+.sc-kan { font-size: 12.5px; color: var(--fg-2); line-height: 1.55; min-height: 39px; }
+.sc-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; }
+.sc-counts { font-size: 11px; color: var(--muted); letter-spacing: 0.02em; }
+.sc-counts b { color: color-mix(in oklab, var(--accent), black 14%); font-weight: 600; }
+.sc-badge { font-size: 10.5px; font-weight: 600; letter-spacing: 0.03em; padding: 3px 9px; border-radius: var(--radius-pill); background: var(--surface-warm); border: 1px solid var(--border); color: var(--fg-2); white-space: nowrap; }
+.sc-badge.rich { color: var(--accent-on); background: color-mix(in oklab, var(--accent), black 12%); border-color: transparent; }
+.sc-bar { height: 3px; border-radius: 99px; background: var(--border-soft); overflow: hidden; }
+.sc-bar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, color-mix(in oklab, var(--accent), white 12%), var(--accent)); }
+.yugo-grid { grid-template-columns: 1fr; }
+.yugo-grid .scard { flex-direction: row; align-items: center; gap: 20px; }
+.yugo-grid .sc-kan { flex: 1; min-height: 0; }
+.yugo-grid .sc-foot { margin-top: 0; }
+
+/* 系名片 */
+.series-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 24px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elev-raised);
+  padding: 28px 32px;
+  margin-bottom: var(--space-5);
+}
+.series-head .sh-eyebrow { margin-bottom: 6px; }
+.series-head .sec-title { margin: 0 0 6px; }
+.sh-proto { font-family: var(--font-mono), ui-monospace, Menlo, Consolas, monospace; font-size: 15px; font-weight: 600; color: var(--fg-2); margin-left: 10px; letter-spacing: 0; }
+.sh-kan { font-size: var(--text-sm); color: var(--fg-2); margin: 0; max-width: 52ch; line-height: 1.65; }
+.sh-kan b { color: var(--fg); font-weight: 600; }
+.sh-stats { display: flex; gap: var(--space-5); }
+.sh-stat { text-align: center; }
+.sh-stat b { display: block; font-size: 26px; font-family: var(--font-mono), ui-monospace, Menlo, Consolas, monospace; font-weight: 700; line-height: 1.15; }
+.sh-stat.collect b { color: color-mix(in oklab, var(--accent), black 12%); }
+.sh-stat span { font-size: 11px; color: var(--muted); letter-spacing: 0.03em; }
+
+/* 系内小地图 */
+.minimap-wrap { margin-bottom: var(--space-5); }
+.mm-label { font-size: var(--text-xs); font-weight: 600; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 var(--space-2); }
+.minimap { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; -webkit-overflow-scrolling: touch; }
+.mcell {
+  flex-shrink: 0;
+  width: 88px; min-height: 46px;
+  border-radius: 8px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  position: relative;
+  padding: 5px 4px;
+}
+.mcell .mw { font-family: var(--font-display), "Yu Mincho", "Hiragino Mincho ProN", "MS PMincho", "Noto Serif JP", Georgia, serif; font-size: 12.5px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; word-break: keep-all; }
+.mcell .mc { font-size: 10px; color: var(--muted); letter-spacing: 0.02em; white-space: nowrap; }
+.mcell.filled { background: var(--surface-warm); border: 1px solid var(--border); cursor: pointer; }
+.mcell.filled:hover { box-shadow: var(--elev-raised); }
+.mcell.filled .mw { color: color-mix(in oklab, var(--accent), black 16%); }
+.mcell.filled .seal-dot { position: absolute; top: 3px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.45); }
+.mcell.known { background: color-mix(in oklab, var(--surface), transparent 35%); border: 1px dashed var(--border); cursor: pointer; }
+.mcell.known:hover { box-shadow: var(--elev-raised); }
+.mcell.known .mw { color: var(--fg-2); }
+.mcell.empty { background: color-mix(in oklab, var(--fg), transparent 96.8%); border: 1px dashed color-mix(in oklab, var(--fg), transparent 89%); }
+.mcell.empty .mw { color: color-mix(in oklab, var(--fg), transparent 72%); font-size: 11px; }
+
+/* 成员墙卡片可点击 */
+.wcard[data-word] { cursor: pointer; }
+.mcard-coord { font-size: 11px; color: var(--muted); letter-spacing: 0.02em; margin: 0; }
+.wc-stars .off { color: color-mix(in oklab, var(--fg), transparent 78%); }
+
+/* ─────────────── 页脚 ─────────────── */
+.footer {
+  padding: 40px 0 56px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: var(--text-xs); color: var(--muted);
+  flex-wrap: wrap; gap: 8px;
+}
+
+/* ─────────────── 响应式 ─────────────── */
+@media (max-width: 960px) {
+  .wrap { padding: 0 var(--container-gutter-tablet); }
+  .cover-grid { grid-template-columns: 1fr; gap: 32px; }
+  .cover-seal { display: none; }
+  .struct-grid { grid-template-columns: repeat(2, 1fr); }
+  .howto-grid { grid-template-columns: 1fr; }
+  .wgrid { grid-template-columns: repeat(2, 1fr); }
+  .spec-main { grid-template-columns: auto 1fr; padding: 32px 28px 28px; }
+  .meta-col { grid-column: 1 / -1; flex-direction: row; align-items: center; justify-content: flex-start; gap: 24px; }
+  .meta-cell { text-align: left; }
+  .spec-sec { padding: 28px; }
+  .pending-main { grid-template-columns: auto 1fr; }
+  .nav .nav-hint { display: none; }
+  .scard-grid { grid-template-columns: repeat(2, 1fr); }
+  .series-head { grid-template-columns: 1fr; gap: 18px; }
+  .sh-stats { justify-content: flex-start; }
+}
+@media (max-width: 640px) {
+  section { padding: var(--section-y-phone) 0; }
+  .cover { padding-top: 24px; }
+  .family-grid, .habitat-grid, .conf-pair, .meta-pair { grid-template-columns: 1fr; }
+  .struct-grid { grid-template-columns: 1fr; }
+  .wgrid { grid-template-columns: 1fr; }
+  .prac-grid { grid-template-columns: 1fr; }
+  .tree { flex-direction: column; }
+  .tree-root { writing-mode: horizontal-tb; text-orientation: mixed; align-self: flex-start; padding: 10px 18px; font-size: 24px; }
+  .tree-branches { flex-direction: column; }
+  .spec-main { grid-template-columns: 1fr; text-align: center; }
+  .seal { margin: 0 auto; }
+  .meta-col { justify-content: center; }
+  .label-bar { padding: 10px 16px; }
+  .eq { gap: var(--space-2); }
+  .term { flex-basis: 160px; }
+  .pending-main { grid-template-columns: 1fr; text-align: center; }
+  .seal-hollow { margin: 0 auto; }
+  .pending-foot { padding: 12px 20px; }
+  .pending-foot .pf-hint { margin-left: 0; width: 100%; }
+  .insight { padding: 24px 20px; }
+  .scard-grid { grid-template-columns: 1fr; }
+  .series-head .seal { display: none; }
+  .series-head { padding: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ═══ 导航 ═══ -->
+  <nav class="nav" data-od-id="page-nav" aria-label="图鉴导航">
+    <button class="cur" data-act="home">総索引</button>
+    <button data-act="serieslib">系別</button>
+    <span class="nav-hint">総索引看词（格子图）· 系別看线（家族图景）</span>
+  </nav>
+
+  <!-- ═══ 封面（紧凑） ═══ -->
+  <header class="cover" data-od-id="cover-hero">
+    <div class="cover-grid">
+      <div>
+        <p class="eyebrow">和語複合動詞 · 収蔵図鑑 <span class="zh">单文件交互图鉴</span></p>
+        <h1 lang="ja">複合動詞図鑑</h1>
+        <p class="cover-sub" lang="zh-CN">前項 × 後項 の組み合わせ地図——格子就是目录，词卡就在格子下面。
+          <span class="zh" lang="zh-CN">横轴后项系 × 纵轴前项系：朱印 = 已収蔵，淡格 = 已认识，暗格 = 等待新种。</span>
+        </p>
+        <div class="cover-chips" id="stat-chips"></div>
+      </div>
+      <div class="cover-seal">
+        <div class="seal seal-lg">図鑑</div>
+        <p class="stamp" id="stat-line">収蔵 No.01–04<br>融合系 05 予定</p>
+      </div>
+    </div>
+    <div class="rule-double"></div>
+  </header>
+
+  <!-- ═══ 组合地图 ═══ -->
+  <section id="grid-map" data-od-id="series-map">
+    <div class="map-head">
+      <div class="grow">
+        <p class="eyebrow">系列分布図 <span class="zh">组合地图</span></p>
+        <h2 class="sec-title" lang="ja">前項 × 後項 —— 組み合わせ地図</h2>
+        <p class="sec-sub" lang="zh-CN">一格 = 一个词。点「实格（収蔵済）」直接看标本卡，点「淡格（已认识）」看未収蔵占位，空槽暗格留待未来新词。加新词 = 在地图点亮一格。</p>
+      </div>
+      <div class="filters" data-od-id="class-filter" aria-label="构词分类过滤">
+        <span class="flabel">構詞分類</span>
+        <button class="fbtn on" data-cls="all">全部</button>
+        <button class="fbtn" data-cls="①">① 前項修飾</button>
+        <button class="fbtn" data-cls="②">② 後項修飾</button>
+        <button class="fbtn" data-cls="③">③ 前項接頭辞化</button>
+        <button class="fbtn" data-cls="④">④ 後項接尾辞化</button>
+        <button class="fbtn" data-cls="⑤">⑤ 融合</button>
+      </div>
+    </div>
+
+    <div class="matrix-scroll">
+      <div class="matrix" id="matrix" data-od-id="matrix-grid"></div>
+    </div>
+
+    <div class="yugo-band" data-od-id="yugo-band">
+      <span class="ylabel">融合帯 ⑤</span>
+      <span class="ynote">前后项已融合成一个整体，不能再拆 ——</span>
+      <span class="yword" data-word="ochitsuku">落ち着く</span>
+      <span class="ynote">（既知 · 标本卡予定）</span>
+    </div>
+
+    <div class="legend-row" data-od-id="matrix-legend">
+      <span class="lg-item"><span class="lg-swatch filled"></span>収蔵済 —— 有标本卡，点格查看</span>
+      <span class="lg-item"><span class="lg-swatch known"></span>既知 —— 认识，标本卡待制作</span>
+      <span class="lg-item"><span class="lg-swatch empty"></span>未遇见 —— 空槽暗格，等你点亮</span>
+      <span class="lg-item">分类过滤：按构词类型 ①–⑤ 只点亮对应格子</span>
+    </div>
+  </section>
+
+  <!-- ═══ 展示区（原地切换） ═══ -->
+  <div class="stage" data-od-id="view-stage">
+    <div class="stage-bar">
+      <span class="sb-label">展示区</span>
+      <span class="sb-crumb" id="sb-crumb">総索引</span>
+      <button class="sb-back" data-act="back" id="sb-back" style="display:none;">← 回到地図</button>
+    </div>
+    <div id="view-root" class="view"></div>
+  </div>
+
+  <div class="footer">
+    <span>複合動詞図鑑 · 单文件交互版</span>
+    <span>紙と朱の標本台紙 · デザイン: Arc tokens</span>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+ * 数据层 —— 加新词 = 在 WORDS 里加一条记录，格子自动多一格
+ * ═══════════════════════════════════════════════ */
+var ROWS = [
+  { id: 'tori',   name: '取り〜', proto: '取る',   kan: '一只手：伸手 → 抓住 → 拿过来。获取 · 処理 · 受容三枝。', rich: 'tori' },
+  { id: 'dashi',  name: '出し〜', proto: '出す',   kan: '往外拿 · 提供 · 给出去 —— 動作系。', rich: 'dashi' },
+  { id: 'kangae', name: '考え〜', proto: '考える', kan: '想 · 思索 —— 想的动作做前缀。' },
+  { id: 'mi',     name: '見〜',   proto: '見る',   kan: '看 · 查看。' },
+  { id: 'oshi',   name: '押し〜', proto: '押す',   kan: '推 · 压 —— 前项修饰后项的代表（①）。' },
+  { id: 'furi',   name: '振り〜', proto: '振る',   kan: '摇 · 撒 · 挥动。' },
+  { id: 'uchi',   name: '打ち〜', proto: '打つ',   kan: '打 —— 有时前缀化，词义变淡（③）。' },
+  { id: 'sashi',  name: '差し〜', proto: '差す',   kan: '伸出 —— 多为强调性前缀（③）。' }
+];
+var COLS = [
+  { id: 'dasu',    name: '〜出す',     proto: '出す',     kan: '向外 · 出来。' },
+  { id: 'komu',    name: '〜込む',     proto: '込む',     kan: '进去出不来 —— 深 · 彻底 · 沉浸。', rich: 'komu' },
+  { id: 'kaesu',   name: '〜返す',     proto: '返す',     kan: '弹回去 · 折返重来 · 翻面。', rich: 'kaesu' },
+  { id: 'modosu',  name: '〜戻す',     proto: '戻す',     kan: '回到原状。' },
+  { id: 'kesu',    name: '〜消す',     proto: '消す',     kan: '抹掉 · 消除。' },
+  { id: 'ageru',   name: '〜上げる',   proto: '上げる',   kan: '往上 · 完成。' },
+  { id: 'ireru',   name: '〜入れる',   proto: '入れる',   kan: '放进去 · 接纳。' },
+  { id: 'nuku',    name: '〜抜く',     proto: '抜く',     kan: '拔出去 · 超越。' },
+  { id: 'shiburu', name: '〜渋る',     proto: '渋る',     kan: '磨蹭 · 不肯。' },
+  { id: 'oshimu',  name: '〜惜しむ',   proto: '惜しむ',   kan: '舍不得 · 惜着不给 —— 心理系。', rich: 'oshimu' },
+  { id: 'kakeru',  name: '〜掛ける',   proto: '掛ける',   kan: '挂上 · 施加。' },
+  { id: 'ateru',   name: '〜当てる',   proto: '当てる',   kan: '朝向 · 分配（后项修饰前项 ②）。' },
+  { id: 'katsu',   name: '〜勝つ',     proto: '勝つ',     kan: '战胜。' },
+  { id: 'akeru',   name: '〜明ける',   proto: '明ける',   kan: '敞开 · 坦白。' },
+  { id: 'osaeru',  name: '〜押さえる', proto: '押さえる', kan: '按住 · 查封。' },
+  { id: 'nozoku',  name: '〜除く',     proto: '除く',     kan: '除去。' },
+  { id: 'atsukau', name: '〜扱う',     proto: '扱う',     kan: '经办 · 处理。' },
+  { id: 'matomeru', name: '〜まとめる', proto: 'まとめる', kan: '汇总 · 收拢。' },
+  { id: 'naosu',   name: '〜直す',     proto: '直す',     kan: '重来一遍。' }
+];
+var SERIES_NAME = { tori: '取り〜系', kaesu: '〜返す系', komu: '〜込む系', dashi: '出し〜系', oshimu: '〜惜しむ系', yugo: '融合系' };
+
+/* —— 収蔵済（有完整标本卡）—— */
+var WORDS = {
+  /* ═══ 標本 №01 取り出す · 获取原型 · 分類① ═══ */
+  toridasu: {
+    id: 'toridasu', word: '取り出す', reading: 'とりだす', romaji: 'tori-dasu',
+    row: 'tori', col: 'dasu', status: 'collected', series: 'tori',
+    no: '01', seal: '取', stars: 5, cls: '①', clsNote: '前項が後項を修飾',
+    genus: '取り〜系 · 获取', pos: '五段動詞',
+    tagline: '手伸进去，把东西拿出来 —— <b>获取的原型动作</b>',
+    core: '核心イメージ：<b>手伸进容器 / 数据里，把东西拿出来</b> —— 获取系的原型。',
+    eq: {
+      front: '取り', frontSrc: '〈取る〉', frontNote: '用手拿取',
+      back: '出す', backRole: '後項', backNote: '向外 · 出来',
+      result: '取り出す', resultNote: '取出 · 提取'
+    },
+    families: [
+      { title: '同系列 · 获取方向', sub: '往自己这边拿', items: [
+        ['取り戻す', '恢复 · 夺回'], ['取り返す', '挽回 · 夺回'], ['取り入れる', '引进 · 采纳'], ['取り出す', '取出 · 提取', true]
+      ]},
+      { title: '同系列 · 処理・撤去方向', sub: '拿起来处置掉', items: [
+        ['取り上げる', '拿起 · 报道'], ['取り消す', '撤销'], ['取り除く', '移除 · 消除'], ['取り扱う', '处理 · 经办']
+      ]}
+    ],
+    intersect: '<b>系列方位：</b>本种「取り出す」是获取系的原型。越往「処理・撤去」方向走，「取り」的本义越淡，前缀化越深——「取り消す」已几乎不能拆开理解。',
+    usages: {
+      biz: [
+        ['書類棚から必要な契約書を取り出した。', '从文件柜里取出了所需的合同。'],
+        ['会議の議事録から決定事項だけを取り出して共有した。', '从会议纪要中只提取决定事项进行了共享。'],
+        ['報告書から重要な数字を取り出してグラフにした。', '从报告中取出重要数字做成了图表。']
+      ],
+      it: [
+        ['データベースから条件に合う行を取り出してCSVに出力する。', '从数据库中取出符合条件的行并输出为 CSV。'],
+        ['ログからエラーコードを取り出すスクリプトを書いた。', '写了一个从日志中提取错误代码的脚本。'],
+        ['取り出したデータは前処理をしてから保存する。', '取出的数据先做预处理再保存。']
+      ]
+    },
+    note: '「伸手进抽屉，摸到最里面，掏出来」',
+    noteZh: '取り出す = 获取的原型动作；后面所有「取り〜」词都从这只手出发。'
+  },
+
+  /* ═══ 標本 №02 見返す · 両義 · 分類② ═══ */
+  mikaesu: {
+    id: 'mikaesu', word: '見返す', reading: 'みかえす', romaji: 'mi-kaesu',
+    row: 'mi', col: 'kaesu', status: 'collected', series: 'kaesu',
+    no: '02', seal: '返', stars: 3, cls: '②', clsNote: '意味特殊化',
+    genus: '〜返す系 · 弾返し × 折返', pos: '五段動詞',
+    tagline: '看一遍不够，折返再看；或被人看低，看回去 —— <b>両義の語</b>',
+    core: '核心イメージ：<b>行到尽头折返再看</b>；被看低之后，<b>把视线看回去</b> —— 同一动作，两个方向。',
+    eq: {
+      front: '見', frontSrc: '〈見る〉', frontNote: '看',
+      back: '返す', backRole: '後項', backNote: '往回 · 折返 · 回弹',
+      result: '見返す', resultNote: '① 复查 ② 让人刮目相看',
+      resultShift: '<b>語義分岐</b> 「看到末尾 → 折返再看」<b>折返</b> / 「被看低 → 现在看回去」<b>弾返し</b>'
+    },
+    families: [
+      { title: '同後項「〜返す」· 折返系', sub: '走到头，折返重来', items: [
+        ['読み返す', '重读 · 温习'], ['思い返す', '回想 · 重新考虑'], ['繰り返す', '反复 · 循环']
+      ]},
+      { title: '同後項「〜返す」· 弾返し系', sub: '外力来了，弹回去', items: [
+        ['言い返す', '顶嘴 · 反驳'], ['やり返す', '回击 · 还手'], ['聞き返す', '反问 · 追问']
+      ]}
+    ],
+    intersect: '<b>交差点：</b>本种「見返す」同时踩在「折返」和「弾返し」两条分支上——看一遍折返再看（复查），以前被看低现在看回去（争一口气）。',
+    usages: {
+      biz: [
+        ['提出前に企画書を見返して、誤字を修正した。', '提交前重看企划书，修正了错字。'],
+        ['彼は過去の失敗を見返すことで、次の挑戦に生かしている。', '他通过回顾过去的失败，将其用在下次挑战上。'],
+        ['報告書を提出する前に、もう一度全体を見返した。', '提交报告前，又把整体重看了一遍。']
+      ],
+      it: [
+        ['デプロイ前に変更ログを見返して、問題がないか確認する。', '部署前重看变更日志，确认没有问题。'],
+        ['コードレビューでは、修正箇所を何度も見返すことが大切だ。', '代码评审时，反复重看修改处很重要。'],
+        ['要件定義書を見返したところ、仕様の抜けが見つかった。', '重看需求定义书后，发现了规格的遗漏。']
+      ]
+    },
+    note: '「读一遍，折返再读；被看低，看回去。」',
+    noteZh: '見返す = 折返与弾返し的交叉点：复查用「折返」，争气用「弹回去」。'
+  },
+
+  /* ═══ 標本 №03 考え込む · 深陷内心 · 分類④ ═══ */
+  kangaekomu: {
+    id: 'kangaekomu', word: '考え込む', reading: 'かんがえこむ', romaji: 'kangae-komu',
+    row: 'kangae', col: 'komu', status: 'collected', series: 'komu',
+    no: '03', seal: '込', stars: 4, cls: '④', clsNote: '後項の接尾辞化',
+    genus: '〜込む系 · 深陷内心', pos: '五段動詞',
+    tagline: '想着想着，整个人栽了进去 —— <b>深思 · 想得入神</b>',
+    core: '核心イメージ：<b>思考「栽」进了深处，拔不出来</b> —— 深く考える・没頭する。',
+    eq: {
+      front: '考え', frontSrc: '〈考える〉', frontNote: '思考',
+      back: '込む', backRole: '後項 · 接尾辞', backNote: '深入 · 完全 · 沉浸',
+      backShift: '<b>意味転換</b> 「进入」<b>中に入る</b> → 「彻底陷入（某个状态）」<b>すっかり没頭する</b>',
+      result: '考え込む', resultNote: '沉思 · 想得入神'
+    },
+    families: [
+      { title: '同後項「〜込む」· 深陷内心系', sub: '心思栽进去出不来', items: [
+        ['思い込む', '深信'], ['信じ込む', '深信不疑'], ['黙り込む', '沉默不语'], ['話し込む', '畅谈 · 长谈'], ['考え込む', '深思 · 入神', true]
+      ]},
+      { title: '同後項「〜込む」· 進入・渗透系', sub: '身体或液体钻进去', items: [
+        ['飛び込む', '跳入'], ['染み込む', '渗入 · 浸透'], ['溶け込む', '融入'], ['吸い込む', '吸入']
+      ]}
+    ],
+    intersect: '<b>交差点：</b>本种是「深陷内心」分支的代表；同家的「取り込む」则坐在 <b>取り〜 × 〜込む</b> 交点上（在地図「取り〜」行可以点它）。',
+    usages: {
+      biz: [
+        ['会議中、彼はしばらく考え込んでから、ようやく発言した。', '会议中他沉思了好一会儿，才终于开口发言。'],
+        ['予算の見直し案について、部長は深く考え込んでいる。', '关于预算调整方案，部长正在深深思量。'],
+        ['クライアントの要望を聞いた後、担当者は長い時間考え込んでいた。', '听完客户的要求后，负责人沉思了很长时间。']
+      ],
+      it: [
+        ['バグの原因を特定できず、開発者は画面の前で考え込んでいた。', '因为无法定位 bug 的原因，开发者在屏幕前陷入了沉思。'],
+        ['アーキテクチャの選択に悩み、チームは昼休みも考え込んでいる。', '为架构选型而纠结，团队午休时也在沉思。'],
+        ['パフォーマンス低下の原因を探るため、彼はログを見つめながら考え込んだ。', '为排查性能下降的原因，他盯着日志陷入了沉思。']
+      ]
+    },
+    note: '「想着想着，整个人栽了进去——再抬头，天都黑了」',
+    noteZh: '込む = 深く・すっかり。「考え込む」是深陷内心系的原型。'
+  },
+
+  /* ═══ 標本 №04 出し惜しみ · 交汇系 · 分類② ═══ */
+  dashi_oshimi: {
+    id: 'dashi_oshimi', word: '出し惜しみ', reading: 'だしおしみ', romaji: 'dashi-oshimi',
+    row: 'dashi', col: 'oshimu', status: 'collected', series: 'dashi',
+    no: '04', seal: '惜', stars: 3, cls: '②', clsNote: '意味特殊化',
+    genus: '出し〜系 × 〜惜しむ系', pos: '名詞（出し惜しむ 連用形）',
+    tagline: '该拿出来的东西，舍不得拿出来 —— <b>ケチる ↔ 控えめ</b>',
+    core: '核心イメージ：<b>提供・発揮をためらう</b> ／ ケチる ／ 控えめにする。',
+    eq: {
+      front: '出し', frontSrc: '〈出す〉', frontNote: '往外取 · 提供 · 发挥',
+      back: '惜しみ', backRole: '後項', backNote: '珍惜而舍不得给 · 不想给',
+      backShift: '<b>意味転換</b> 「珍视」<b>大事に思う</b> → 「不肯给」<b>出さない</b>',
+      result: '出し惜しみ', resultNote: '该拿出的东西，惜着不出'
+    },
+    families: [
+      { title: '同後項「〜惜しむ」', sub: '心理系 —— 舍不得放手', items: [
+        ['金を惜しむ', '不舍得花钱'], ['言葉を惜しむ', '惜字如金'], ['労力を惜しむ', '不肯费工夫'], ['出し惜しむ', '舍不得拿出', true]
+      ]},
+      { title: '同前項「出し〜」', sub: '動作系 —— 往外拿', items: [
+        ['出し入れる', '取出放入'], ['出し抜く', '抢先一步'], ['出し渋る', '吝于拿出'], ['出し惜しむ', '舍不得拿出', true]
+      ]}
+    ],
+    intersect: '<b>交差点：</b>本种正坐在「〜惜しむ」×「出し〜」两个家族的交叉点上 —— 既「舍不得放手」，又卡在「往外拿」的动作上。',
+    usages: {
+      biz: [
+        ['予算案では、どうしても経費の出し惜しみが目立ち、現場から不満の声が上がっている。', '预算案里对经费的吝惜格外显眼，现场的不满之声已经出现。'],
+        ['重要な情報を出し惜しみせず、チーム全体で共有することがプロジェクト成功の鍵だ。', '不吝惜重要信息、与整个团队共享，是项目成功的关键。'],
+        ['彼は自分のスキルを出し惜しみする傾向があり、本来の実力が発揮されていない。', '他倾向于对自己的技能有所保留，真正的实力没能发挥出来。']
+      ],
+      it: [
+        ['開発チームがリソースを出し惜しみした結果、テスト期間が十分に確保できなかった。', '开发团队在资源上过于吝惜，结果测试期没能得到充分保障。'],
+        ['セキュリティ情報を出し惜しみすると、インシデント対応が遅れるリスクがある。', '若对安全信息有所保留，就有延误事件应对的风险。'],
+        ['パフォーマンス改善のための計算リソースを出し惜しみしたため、ユーザー体験が低下した。', '因为对性能优化的计算资源过于吝惜，用户体验下降了。']
+      ]
+    },
+    note: '「手伸进口袋要拿东西，又缩了回来」',
+    noteZh: '出すのをためらう —— ケチる・控えめの心理。'
+  },
+
+  /* ═══ 既知 —— 认识但标本卡待制作 ═══ */
+  torimodosu:   { id: 'torimodosu', word: '取り戻す', reading: 'とりもどす', row: 'tori', col: 'modosu', status: 'known', series: 'tori', stars: 5, cls: '③', gloss: '恢复 · 夺回', cat: '获取', note: '前項接頭辞化 —— 「取」的本义仍可辨识，重点是「回到原来的状态」。' },
+  torikaesu:    { id: 'torikaesu', word: '取り返す', reading: 'とりかえす', row: 'tori', col: 'kaesu', status: 'known', series: 'tori', stars: 4, cls: '③', gloss: '挽回 · 夺回', cat: '获取', note: '侧重复原路上「夺」的主动行为，常与「取り戻す」混淆（见取り系总览）。' },
+  toriireru:    { id: 'toriireru', word: '取り入れる', reading: 'とりいれる', row: 'tori', col: 'ireru', status: 'known', series: 'tori', stars: 4, cls: '③', gloss: '引进 · 采纳', cat: '受容', note: '把外来的东西拿进自己体系 —— 从「拿进来」到「采纳」。' },
+  toriageru:    { id: 'toriageru', word: '取り上げる', reading: 'とりあげる', row: 'tori', col: 'ageru', status: 'known', series: 'tori', stars: 3, cls: '③', gloss: '拿起 · 提及 · 报道', cat: '処理', note: '从「拿起来」扩展到「提上议题 / 没收」。' },
+  torikesu:     { id: 'torikesu', word: '取り消す', reading: 'とりけす', row: 'tori', col: 'kesu', status: 'known', series: 'tori', stars: 2, cls: '③', gloss: '撤销 · 取消', cat: '処理', note: '前缀化最深 —— 无法拆成「拿走并消除」，需要整体记忆。' },
+  torikomu:     { id: 'torikomu', word: '取り込む', reading: 'とりこむ', row: 'tori', col: 'komu', status: 'known', series: 'komu', stars: 3, cls: '④', gloss: '导入 · 加载', cat: '交点', note: '坐在 取り〜 × 〜込む 交点：把数据「拿进」系统里。' },
+  torimatomeru: { id: 'torimatomeru', word: '取りまとめる', reading: 'とりまとめる', row: 'tori', col: 'matomeru', status: 'known', series: 'tori', stars: null, cls: '③', gloss: '汇总 · 归纳', cat: '商务', note: '把分散的东西「拿到一起」——商务高频。' },
+  toriatsukau:  { id: 'toriatsukau', word: '取り扱う', reading: 'とりあつかう', row: 'tori', col: 'atsukau', status: 'known', series: 'tori', stars: null, cls: '③', gloss: '处理 · 经办', cat: '商务/IT', note: '「拿起来摆弄」→ 处理、经手、经营。' },
+  torinozoku:   { id: 'torinozoku', word: '取り除く', reading: 'とりのぞく', row: 'tori', col: 'nozoku', status: 'known', series: 'tori', stars: null, cls: '③', gloss: '移除 · 消除', cat: 'IT', note: '把碍事的东西「拿开」——IT 高频。' },
+  torinaosu:    { id: 'torinaosu', word: '取り直す', reading: 'とりなおす', row: 'tori', col: 'naosu', status: 'known', series: 'tori', stars: null, cls: '③', gloss: '重来一次', cat: '已归档', note: '「重新拿一次」——拍摄、比赛中的重来一遍。' },
+  dashiireru:   { id: 'dashiireru', word: '出し入れる', reading: 'だしいれる', row: 'dashi', col: 'ireru', status: 'known', series: 'dashi', stars: null, cls: '①', gloss: '取出放入', cat: '動作系', note: '出して入れる —— 放进去又拿出来。' },
+  dashinuku:    { id: 'dashinuku', word: '出し抜く', reading: 'だしぬく', row: 'dashi', col: 'nuku', status: 'known', series: 'dashi', stars: null, cls: '③', gloss: '抢先一步', cat: '動作系', note: '抢在别人前面「先出手」——词义已固定。' },
+  dashishiburu: { id: 'dashishiburu', word: '出し渋る', reading: 'だししぶる', row: 'dashi', col: 'shiburu', status: 'known', series: 'dashi', stars: 3, cls: '①', gloss: '吝于拿出', cat: '心理系', note: '拿出时磨磨蹭蹭 —— 与「出し惜しみ」同属舍不得给的心理。' },
+  oshidasu:     { id: 'oshidasu', word: '押し出す', reading: 'おしだす', row: 'oshi', col: 'dasu', status: 'known', series: null, stars: null, cls: '①', gloss: '推出', cat: '構詞①', note: '前項修饰后項 —— 你的五分类里的「押し出す」。' },
+  furikakeru:   { id: 'furikakeru', word: '振り掛ける', reading: 'ふりかける', row: 'furi', col: 'kakeru', status: 'known', series: null, stars: null, cls: '①', gloss: '撒上 · 洒上', cat: '構詞①', note: '前項修饰后項 —— 「振り掛ける」。' },
+  furiateru:    { id: 'furiateru', word: '振り当てる', reading: 'ふりあてる', row: 'furi', col: 'ateru', status: 'known', series: null, stars: null, cls: '②', gloss: '分配 · 摊派', cat: '構詞②', note: '后項修饰前項 —— 後項「当てる」决定动作指向。' },
+  uchikatsu:    { id: 'uchikatsu', word: '打ち勝つ', reading: 'うちかつ', row: 'uchi', col: 'katsu', status: 'known', series: null, stars: null, cls: '②', gloss: '战胜', cat: '構詞②', note: '后項修饰前項 —— 以「打」的方式取胜。' },
+  uchiakeru:    { id: 'uchiakeru', word: '打ち明ける', reading: 'うちあける', row: 'uchi', col: 'akeru', status: 'known', series: null, stars: null, cls: '③', gloss: '坦白 · 倾诉', cat: '構詞③', note: '前項前缀化 —— 「打ち」几乎不贡献词义，只是前缀。' },
+  sashiosaeru:  { id: 'sashiosaeru', word: '差し押さえる', reading: 'さしおさえる', row: 'sashi', col: 'osaeru', status: 'known', series: null, stars: null, cls: '③', gloss: '扣押 · 查封', cat: '構詞③', note: '前項前缀化 —— 「差し」是强调性前缀。' },
+  ochitsuku:    { id: 'ochitsuku', word: '落ち着く', reading: 'おちつく', row: null, col: null, status: 'known', series: 'yugo', stars: null, cls: '⑤', gloss: '沉着 · 安定 · 平静', cat: '融合', note: '前后项已融合成一个整体 —— 「落ち」与「着く」都不能单独解释，需整体记忆。' }
+};
+
+/* ═══════════════════════════════════════════════
+ * 状态
+ * ═══════════════════════════════════════════════ */
+var state = { view: 'home', word: null, series: null, cls: 'all', origin: null };
+/* 词面 → id 查找表：近缘种面板里可点击钻取 */
+var BYNAME = {};
+(function () { for (var k in WORDS) BYNAME[WORDS[k].word] = WORDS[k].id; })();
+
+/* ═══════════════════════════════════════════════
+ * 渲染：格子地图
+ * ═══════════════════════════════════════════════ */
+function gridAt(rowId, colId) {
+  for (var k in WORDS) {
+    var w = WORDS[k];
+    if (w.row === rowId && w.col === colId) return w;
+  }
+  return null;
+}
+function starsHTML(stars) {
+  if (stars == null) return '';
+  var on = '';
+  for (var i = 0; i < 5; i++) on += (i < stars ? '★' : '☆');
+  return '<span class="ti-stars" aria-label="可导出性 ' + stars + '/5">' + on + '</span>';
+}
+function cellHTML(w) {
+  if (!w) {
+    return '<div class="cell empty"></div>';
+  }
+  if (w.status === 'collected') {
+    return '<button class="cell filled" data-word="' + w.id + '" title="' + w.word + ' — ' + w.reading + ' · ' + (w.tagline.replace(/<[^>]+>/g, '')) + '"><span class="seal-dot"></span><span class="w">' + w.word + '</span></button>';
+  }
+  return '<button class="cell known" data-word="' + w.id + '" title="' + w.word + ' — ' + w.reading + ' · ' + w.gloss + '（既知）"><span class="w">' + w.word + '</span></button>';
+}
+function renderMatrix() {
+  var el = document.getElementById('matrix');
+  var html = '<div class="mcorner" lang="ja">前項 ＼ 後項</div>';
+  COLS.forEach(function (c) {
+    html += '<div class="mcol" data-col="' + c.id + '">' + c.name + '</div>';
+  });
+  ROWS.forEach(function (r) {
+    html += '<div class="mrow" data-row="' + r.id + '">' + r.name + '</div>';
+    COLS.forEach(function (c) {
+      html += cellHTML(gridAt(r.id, c.id));
+    });
+  });
+  el.innerHTML = html;
+  applyFilter();
+  markCurrent();
+}
+function applyFilter() {
+  var m = document.getElementById('matrix');
+  var cls = state.cls;
+  if (cls === 'all') { m.classList.remove('dim'); return; }
+  m.classList.add('dim');
+  var cells = m.querySelectorAll('.cell');
+  cells.forEach(function (c) {
+    var w = c.dataset.word ? WORDS[c.dataset.word] : null;
+    c.classList.toggle('on', !!w && w.cls === cls);
+  });
+  var rows = m.querySelectorAll('.mrow');
+  rows.forEach(function (r) {
+    var has = ROWS.length && ROWS.some(function (rr) { return rr.id === r.dataset.row; }) && wordsInRow(r.dataset.row).some(function (w) { return w.cls === cls; });
+    r.classList.toggle('on', has);
+  });
+  var cols = m.querySelectorAll('.mcol');
+  cols.forEach(function (c) {
+    var has = wordsInCol(c.dataset.col).some(function (w) { return w.cls === cls; });
+    c.classList.toggle('on', has);
+  });
+}
+function wordsInRow(rowId) {
+  var out = [];
+  for (var k in WORDS) { if (WORDS[k].row === rowId) out.push(WORDS[k]); }
+  return out;
+}
+function wordsInCol(colId) {
+  var out = [];
+  for (var k in WORDS) { if (WORDS[k].col === colId) out.push(WORDS[k]); }
+  return out;
+}
+function markCurrent() {
+  var m = document.getElementById('matrix');
+  var prev = m.querySelectorAll('.cell.current, .mrow.hl, .mcol.hl');
+  prev.forEach(function (n) { n.classList.remove('current', 'hl'); });
+  if (state.word) {
+    var w = WORDS[state.word];
+    if (w && w.row) {
+      var cell = m.querySelector('.cell[data-word="' + w.id + '"]');
+      if (cell) cell.classList.add('current');
+      var row = m.querySelector('.mrow[data-row="' + w.row + '"]');
+      if (row) row.classList.add('hl');
+      var col = m.querySelector('.mcol[data-col="' + w.col + '"]');
+      if (col) col.classList.add('hl');
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════
+ * 渲染：展示区视图
+ * ═══════════════════════════════════════════════ */
+function esc(s) { return String(s); }
+
+function specimenHTML(w) {
+  var eq = w.eq;
+  var fam = w.families.map(function (f) {
+    var items = f.items.map(function (it) {
+      var cls = it[2] ? ' class="fam-item this"' : ' class="fam-item"';
+      var flag = it[2] ? '<span class="f-flag">★ 本種</span>' : '';
+      var wid = BYNAME[it[0]];
+      var dw = wid && wid !== w.id ? ' data-word="' + wid + '"' : '';
+      var tip = wid && wid !== w.id ? ' title="点此看词卡"' : '';
+      return '<li' + cls + dw + tip + ' data-od-id="family-' + w.id + '"><span class="f-word" lang="ja">' + it[0] + '</span><span class="f-gloss">' + it[1] + '</span>' + flag + '</li>';
+    }).join('');
+    return '<div class="family"><h4 lang="ja">' + f.title + '</h4><p class="fsub">' + f.sub + '</p><ul class="fam-list">' + items + '</ul></div>';
+  }).join('');
+  var usage = function (env, title, sub) {
+    var lis = env.map(function (u, i) {
+      return '<li class="usage" data-od-id="usage-' + w.id + '-' + (i + 1) + '"><span class="no">№' + (i + 1) + '</span><p class="ja" lang="ja">' + u[0] + '</p><p class="zh" lang="zh-CN">' + u[1] + '</p></li>';
+    }).join('');
+    return '<div class="habitat"><h4 lang="ja">' + title + '</h4><p class="hsub">' + sub + '</p><ol class="usage-list">' + lis + '</ol></div>';
+  };
+  return '' +
+  '<article class="specimen" data-od-id="specimen-' + w.id + '">' +
+    '<div class="label-bar">' +
+      '<span><b>標本 № ' + w.no + '</b></span><span class="sep">·</span>' +
+      '<span>属 <b lang="ja">' + w.genus + '</b></span><span class="sep">·</span>' +
+      '<span>品詞 <b lang="ja">' + w.pos + '</b></span><span class="sep">·</span>' +
+      '<span>状態 収録済</span>' +
+    '</div>' +
+    '<div class="spec-main">' +
+      '<div class="seal" aria-label="本种之印：' + w.seal + '">' + w.seal + '</div>' +
+      '<div class="lemma"><h2 class="word" lang="ja">' + w.word + '</h2>' +
+        '<p class="reading" lang="ja">' + w.reading + ' <span>' + w.romaji + '</span></p>' +
+        '<p class="tagline" lang="zh-CN">' + w.tagline + '</p></div>' +
+      '<div class="meta-col">' +
+        '<div class="meta-cell"><p class="mlabel">可導出性 · 语意可推导性</p><p class="stars" aria-label="可导出性 ' + w.stars + '/5">' +
+          '<span>' + '★★★★★'.slice(0, w.stars) + '</span><span class="off">' + '☆☆☆☆☆'.slice(0, 5 - w.stars) + '</span></p></div>' +
+        '<div class="meta-cell"><p class="mlabel">構詞分類</p><span class="type-badge" lang="ja">分類 ' + w.cls + ' ' + w.clsNote + '</span></div>' +
+      '</div>' +
+    '</div>' +
+    '<section class="spec-sec" data-od-id="etymology-' + w.id + '">' +
+      '<p class="sec-label">語源解剖 <span class="zh">构词解剖</span></p>' +
+      '<div class="eq">' +
+        '<div class="term"><span class="term-role">前項</span><div class="term-word" lang="ja">' + eq.front + '<small>〈' + eq.frontSrc.replace(/[〈〉]/g, '') + '〉</small></div><p class="term-note" lang="zh-CN">' + eq.frontNote + '</p></div>' +
+        '<div class="op">+</div>' +
+        '<div class="term back"><span class="term-role">' + eq.backRole + '</span><div class="term-word" lang="ja">' + eq.back + '</div><p class="term-note" lang="zh-CN">' + eq.backNote + '</p>' + (eq.backShift ? '<div class="shift">' + eq.backShift + '</div>' : '') + '</div>' +
+        '<div class="op">=</div>' +
+        '<div class="term result"><span class="term-role">複合語</span><div class="term-word" lang="ja">' + eq.result + '</div><p class="term-note" lang="zh-CN">' + eq.resultNote + '</p>' + (eq.resultShift ? '<div class="shift">' + eq.resultShift + '</div>' : '') + '</div>' +
+      '</div>' +
+      '<p class="core-img" lang="zh-CN">' + w.core + '</p>' +
+    '</section>' +
+    '<section class="spec-sec" data-od-id="related-family-' + w.id + '">' +
+      '<p class="sec-label">近縁種 <span class="zh">近亲词族</span></p>' +
+      '<div class="family-grid">' + fam + '</div>' +
+      '<p class="intersect" lang="zh-CN">' + w.intersect + '</p>' +
+    '</section>' +
+    '<section class="spec-sec" data-od-id="usage-notes-' + w.id + '">' +
+      '<p class="sec-label">観察記録 <span class="zh">实际用例</span></p>' +
+      '<div class="habitat-grid">' + usage(w.usages.biz, 'ビジネス環境', '商务场景') + usage(w.usages.it, 'IT環境', 'IT 场景') + '</div>' +
+    '</section>' +
+    '<section class="spec-sec" data-od-id="mnemonic-note-' + w.id + '">' +
+      '<p class="sec-label">語感ノート <span class="zh">语感记忆</span></p>' +
+      '<div class="note"><p class="note-label">覚え方 · 瞬间口诀</p><p class="note-ja" lang="zh-CN">' + w.note + '</p><p class="note-zh" lang="zh-CN">' + w.noteZh + '</p></div>' +
+    '</section>' +
+  '</article>';
+}
+
+function pendingHTML(w) {
+  var where = (w.row && w.col)
+    ? '座標 <b lang="ja">' + rowName(w.row) + ' × ' + colName(w.col) + '</b>'
+    : '座標 <b lang="ja">融合帯 ⑤</b>';
+  var ser = w.series ? SERIES_NAME[w.series] : '待归档';
+  return '' +
+  '<article class="pending" data-od-id="pending-' + w.id + '">' +
+    '<div class="label-bar">' +
+      '<span><b>標本 未収蔵</b></span><span class="sep">·</span>' +
+      '<span>状態 <b>既知</b> —— 认识，标本卡待制作</span>' +
+    '</div>' +
+    '<div class="pending-main">' +
+      '<div class="seal-hollow" aria-label="未収蔵之印">未</div>' +
+      '<div class="lemma"><h2 class="word" lang="ja">' + w.word + '</h2>' +
+        '<p class="reading" lang="ja">' + w.reading + '</p>' +
+        '<p class="p-gloss" lang="zh-CN">' + w.gloss + '</p>' +
+        '<p class="p-where" lang="zh-CN">' + where + ' · 归入 <b>' + ser + '</b> · ' + w.cat + '</p></div>' +
+      '<div class="meta-col">' +
+        (w.stars != null ? '<div class="meta-cell"><p class="mlabel">可導出性</p><p class="stars">' + '★★★★★'.slice(0, w.stars) + '<span class="off">' + '☆☆☆☆☆'.slice(0, 5 - w.stars) + '</span></p></div>' : '') +
+        '<div class="meta-cell"><p class="mlabel">構詞分類</p><span class="type-badge" lang="ja">分類 ' + w.cls + '</span></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="pending-foot">' +
+      '<span class="pf-label">備忘録</span>' +
+      '<span class="pf-tag">' + w.note + '</span>' +
+      '<span class="pf-hint">补上 语源解剖 / 近缘种 / 用例 后，即可转正为标本卡</span>' +
+    '</div>' +
+  '</article>';
+}
+
+function rowName(id) { for (var i = 0; i < ROWS.length; i++) if (ROWS[i].id === id) return ROWS[i].name; return id; }
+function colName(id) { for (var i = 0; i < COLS.length; i++) if (COLS[i].id === id) return COLS[i].name; return id; }
+
+/* —— 首页：图鉴读法 —— */
+function homeHTML() {
+  return '' +
+  '<section data-od-id="home-howto">' +
+    '<p class="eyebrow">図鑑の見方 <span class="zh">图鉴读法</span></p>' +
+    '<h2 class="sec-title" lang="ja">この図鑑の三つの記号</h2>' +
+    '<div class="howto-grid">' +
+      '<div class="ht"><span class="ht-mark seal-mini">惜</span><b>朱印</b><span lang="zh-CN">每张标本卡一字，取自核心词义。图上有朱点的格子 = 已収蔵，点它直接看卡。</span></div>' +
+      '<div class="ht"><span class="ht-mark stars-mini">★★★☆☆</span><b>可導出性</b><span lang="zh-CN">从前项＋后项能否推出词义的程度（★1–5）。星越少越需要整体记忆。</span></div>' +
+      '<div class="ht"><span class="ht-mark cls-mini">分類 ①②③④⑤</span><b>構詞分類</b><span lang="zh-CN">五种构词类型。顶部过滤条可只点亮某一类的格子。</span></div>' +
+      '<div class="ht"><span class="ht-mark">前項×後項</span><b>组合地図</b><span lang="zh-CN">行 = 前项系，列 = 后项系。一格 = 一个组合，交点就是词。</span></div>' +
+      '<div class="ht"><span class="ht-mark">観察記録</span><b>用例</b><span lang="zh-CN">标本卡里有商务 / IT 两种「栖息环境」的实际例句。</span></div>' +
+      '<div class="ht"><span class="ht-mark">暗格 ？</span><b>空槽暗格</b><span lang="zh-CN">还没遇见的坐标。以后认识新词，就在对应格子点亮一格 —— 这就是图鉴的无限扩展。</span></div>' +
+    '</div>' +
+  '</section>' +
+  '<section data-od-id="home-tour">' +
+    '<p class="eyebrow">使い方 <span class="zh">怎么用</span></p>' +
+    '<h2 class="sec-title" lang="ja">二つの動線</h2>' +
+    '<div class="conf-pair">' +
+      '<div class="conf-card"><div class="conf-header"><span class="conf-jp">点格子</span><span class="conf-em">看单词</span></div><p class="conf-cn" lang="zh-CN">在地図里点任意实格 / 淡格，下方展示区原地切换成那个词的卡片 —— 不跳网页。</p><p class="conf-note" lang="zh-CN">収蔵済 → 完整标本卡（语源解剖 · 近缘种 · 用例 · 口诀）；既知 → 未収蔵占位卡。</p></div>' +
+      '<div class="conf-card"><div class="conf-header"><span class="conf-jp">点系別</span><span class="conf-em">看线 · 家族</span></div><p class="conf-cn" lang="zh-CN">顶部导航切到「系別」——那是与「词」不同的领域：线。按 前項系 / 後項系 / 融合・特殊 三仓组织。</p><p class="conf-note" lang="zh-CN">点开任一系：系名片（原型 · 语感 · 収蔵进度）、系内小地图、成员墙一屏展开；原来 tori / kaesu / komu 三个分页的内容都在各自的系总览里。</p></div>' +
+    '</div>' +
+  '</section>';
+}
+
+/* —— 系总览 —— */
+function seriesHTML(id) {
+  if (id === 'tori') return toriHTML();
+  if (id === 'kaesu') return kaesuHTML();
+  if (id === 'komu') return komuHTML();
+  if (id === 'dashi') return dashiHTML();
+  if (id === 'oshimu') return oshimuHTML();
+  if (id === 'yugo') return yugoHTML();
+  if (rowSeries(id)) return genericSeriesHTML('row', id);
+  if (colSeries(id)) return genericSeriesHTML('col', id);
+  return homeHTML();
+}
+function rowSeries(id) { for (var i = 0; i < ROWS.length; i++) if (ROWS[i].id === id) return ROWS[i]; return null; }
+function colSeries(id) { for (var i = 0; i < COLS.length; i++) if (COLS[i].id === id) return COLS[i]; return null; }
+function seriesName(id) {
+  if (SERIES_NAME[id]) return SERIES_NAME[id];
+  var r = rowSeries(id); if (r) return r.name + '系';
+  var c = colSeries(id); if (c) return c.name + '系';
+  return id;
+}
+function wordsInSeries(id) {
+  var out = [];
+  for (var k in WORDS) { if (WORDS[k].series === id) out.push(WORDS[k]); }
+  return out;
+}
+function seriesCounts(kind, id) {
+  if (kind === 'yugo') {
+    return { collected: 0, known: wordsInSeries('yugo').length, empty: null };
+  }
+  var members = kind === 'row' ? wordsInRow(id) : wordsInCol(id);
+  var collected = 0;
+  members.forEach(function (w) { if (w.status === 'collected') collected++; });
+  var total = kind === 'row' ? COLS.length : ROWS.length;
+  return { collected: collected, known: members.length - collected, empty: total - members.length };
+}
+function seriesDominantCls(kind, id) {
+  var members = kind === 'row' ? wordsInRow(id) : wordsInCol(id);
+  var m = {};
+  members.forEach(function (w) { if (w.cls) m[w.cls] = (m[w.cls] || 0) + 1; });
+  var best = null, bn = 0;
+  for (var k in m) { if (m[k] > bn) { bn = m[k]; best = k; } }
+  return best;
+}
+
+/* —— 系别库（三仓：前项系 / 后项系 / 融合・特殊） —— */
+function scardHTML(kind, axis) {
+  var id = kind === 'yugo' ? 'yugo' : axis.id;
+  var name = seriesName(id);
+  var counts = seriesCounts(kind, id);
+  var total = counts.empty == null ? counts.collected + counts.known : counts.collected + counts.known + counts.empty;
+  var pct = total ? Math.round(counts.collected / total * 100) : 0;
+  var proto = kind === 'yugo' ? '融合' : axis.proto;
+  var kan = kind === 'yugo' ? '前后项已长成一个整体，词义必须整体记忆 —— 不能拆开解释。' : axis.kan;
+  var badge = '';
+  if (kind === 'yugo') badge = '<span class="sc-badge rich">⑤ 融合</span>';
+  else if (axis.rich) badge = '<span class="sc-badge rich">総覧</span>';
+  else { var cl = seriesDominantCls(kind, id); badge = '<span class="sc-badge">' + (cl || '—') + '</span>'; }
+  var countTxt = counts.empty == null
+    ? '収蔵 <b>' + counts.collected + '</b> · 既知 ' + counts.known
+    : '収蔵 <b>' + counts.collected + '</b> · 既知 ' + counts.known + ' · 空 ' + counts.empty;
+  return '<button class="scard" data-series="' + id + '" data-od-id="scard-' + id + '">' +
+    '<span class="sc-top"><span class="sc-name" lang="ja">' + name + '</span><span class="sc-proto">原 〈' + proto + '〉</span></span>' +
+    '<span class="sc-kan" lang="zh-CN">' + kan + '</span>' +
+    '<span class="sc-bar"><i style="width:' + pct + '%"></i></span>' +
+    '<span class="sc-foot"><span class="sc-counts">' + countTxt + '</span>' + badge + '</span>' +
+  '</button>';
+}
+function seriesLibHTML() {
+  var rowCards = ROWS.map(function (r) { return scardHTML('row', r); }).join('');
+  var colCards = COLS.map(function (c) { return scardHTML('col', c); }).join('');
+  return '' +
+  '<section data-od-id="slib-intro">' +
+    '<p class="eyebrow">系別図鑑 <span class="zh">线的领域</span></p>' +
+    '<h2 class="sec-title" lang="ja">系は「線」、詞は「点」</h2>' +
+    '<p class="sec-sub" lang="zh-CN">系是线、词是点：総索引的格子图是「看词」，系别是「看线」——一整行（前项系）或一整列（后项系）的家族全景。点开任一系：看它的原型、语感、収蔵进度、成员墙和系内小地图。小地图里的朱点实格 = 已収蔵，淡格 = 既知，暗格 = 空槽。</p>' +
+  '</section>' +
+  '<div class="slib-bin" data-od-id="slib-zenko">' +
+    '<p class="eyebrow">前項系 <span class="zh">词的左半 —— 行</span></p>' +
+    '<div class="scard-grid">' + rowCards + '</div>' +
+  '</div>' +
+  '<div class="slib-bin" data-od-id="slib-kogo">' +
+    '<p class="eyebrow">後項系 <span class="zh">词的右半 —— 列</span></p>' +
+    '<div class="scard-grid">' + colCards + '</div>' +
+  '</div>' +
+  '<div class="slib-bin" data-od-id="slib-yugo">' +
+    '<p class="eyebrow">融合・特殊 <span class="zh">不走格子的词</span></p>' +
+    '<div class="scard-grid yugo-grid">' + scardHTML('yugo', null) + '</div>' +
+  '</div>';
+}
+
+/* —— 系名片 + 系内小地图 —— */
+function minimapHTML(kind, id) {
+  if (kind === 'yugo') return '';
+  var list = kind === 'row' ? COLS : ROWS;
+  var cells = list.map(function (a) {
+    var w = kind === 'row' ? gridAt(id, a.id) : gridAt(a.id, id);
+    if (w) {
+      var cls = w.status === 'collected' ? 'filled' : 'known';
+      var dot = w.status === 'collected' ? '<span class="seal-dot"></span>' : '';
+      return '<button class="mcell ' + cls + '" data-word="' + w.id + '" title="' + w.word + '"><span class="mw" lang="ja">' + w.word + '</span><span class="mc" lang="ja">' + a.name + '</span>' + dot + '</button>';
+    }
+    return '<div class="mcell empty"><span class="mw">？</span><span class="mc" lang="ja">' + a.name + '</span></div>';
+  }).join('');
+  return '<div class="minimap-wrap" data-od-id="minimap-' + id + '">' +
+    '<p class="mm-label">系内小地図 <span style="font-weight:400;color:var(--muted);">' + (kind === 'row' ? '· 本系 × 各後項系' : '· 本系 × 各前項系') + '</span></p>' +
+    '<div class="minimap">' + cells + '</div></div>';
+}
+function seriesHeadHTML(kind, id) {
+  var axis = kind === 'row' ? rowSeries(id) : (kind === 'col' ? colSeries(id) : null);
+  var name = seriesName(id);
+  var proto = axis ? axis.proto : '融合';
+  var kan = axis ? axis.kan : '前后项已长成一个整体，词义必须整体记忆。';
+  var seal = kind === 'yugo' ? '融' : proto.charAt(0);
+  var counts = seriesCounts(kind, id);
+  return '<div class="series-head" data-od-id="series-head-' + id + '">' +
+    '<div class="seal" aria-label="系印：' + seal + '">' + seal + '</div>' +
+    '<div class="sh-main"><p class="eyebrow sh-eyebrow">系名片 <span class="zh">线 · 家族图景</span></p>' +
+    '<h2 class="sec-title" lang="ja">' + name + '</h2>' +
+    '<p class="sh-kan" lang="zh-CN"><b>原型</b> 〈<span lang="ja">' + proto + '</span>〉 · <span lang="zh-CN">' + kan + '</span></p></div>' +
+    '<div class="sh-stats">' +
+      '<div class="sh-stat collect"><b>' + counts.collected + '</b><span>収蔵済</span></div>' +
+      '<div class="sh-stat"><b>' + counts.known + '</b><span>既知</span></div>' +
+      (counts.empty == null ? '' : '<div class="sh-stat"><b>' + counts.empty + '</b><span>空槽</span></div>') +
+    '</div></div>' + minimapHTML(kind, id);
+}
+
+/* —— 成员墙（通用） —— */
+function memberWall(kind, id) {
+  var members = kind === 'row' ? wordsInRow(id) : wordsInCol(id);
+  return members.map(function (w) {
+    var clsBadge = w.status === 'collected'
+      ? '<span class="wc-cat cat-biz">収蔵済</span>'
+      : '<span class="wc-cat cat-it">既知</span>';
+    var stars = w.stars != null
+      ? '★★★★★'.slice(0, w.stars) + '<span class="off">' + '☆☆☆☆☆'.slice(0, 5 - w.stars) + '</span>'
+      : '<span class="muted">—</span>';
+    var coord = kind === 'row' ? colName(w.col) : rowName(w.row);
+    return '<div class="wcard' + (w.status === 'collected' ? ' honshu' : '') + '" data-word="' + w.id + '" data-od-id="mcard-' + w.id + '">' +
+      '<div class="wc-top"><span class="wc-jp" lang="ja">' + w.word + '</span>' + clsBadge + '</div>' +
+      '<span class="wc-cn" lang="zh-CN">' + (w.gloss || '') + '</span>' +
+      '<div class="wc-foot"><span class="wc-stars">' + stars + '</span><span class="wc-type">' + w.cls + ' · ' + coord + '</span></div>' +
+      (w.note ? '<p class="mcard-coord" lang="zh-CN">' + w.note + '</p>' : '') +
+    '</div>';
+  }).join('');
+}
+
+/* —— 通用系总览（无专属页的系） —— */
+function genericSeriesHTML(kind, id) {
+  var axis = kind === 'row' ? rowSeries(id) : colSeries(id);
+  var members = kind === 'row' ? wordsInRow(id) : wordsInCol(id);
+  var crossList = kind === 'row' ? COLS : ROWS;
+  var crossName = kind === 'row' ? '後項' : '前項';
+  var coord = kind === 'row' ? colName : rowName;
+  var chips = members.map(function (w) {
+    return '<span class="fw-chip' + (w.status === 'collected' ? ' honshu' : '') + '" data-word="' + w.id + '"><span class="fgw" lang="ja">' + w.word + '</span><span class="fgg">' + coord(w.col || w.row) + ' · ' + w.cls + '</span></span>';
+  }).join('');
+  var crossNote = members.length
+    ? '<p class="intersect" lang="zh-CN"><b>交叉点：</b>本系目前点亮 <b>' + members.length + '</b> 个坐标，全部列在这里 —— ' + (kind === 'row' ? '每个词都是「' + axis.name + '」与对应后項系的交点。' : '每个词都是「' + axis.name + '」与对应前項系的交点。') + '</p>'
+    : '';
+  return seriesHeadHTML(kind, id) +
+  '<section data-od-id="series-' + id + '-words">' +
+    '<p class="eyebrow">詞目一覧 <span class="zh">成员墙 —— 点击看词卡</span></p>' +
+    '<h2 class="sec-title" lang="ja">' + seriesName(id) + ' · ' + members.length + ' 語</h2>' +
+    (members.length ? '<div class="chip-row">' + chips + '</div>' : '<p class="sec-sub">本系还没有成员词 —— 遇到第一个「' + axis.name + '」词就点亮这里。</p>') +
+  '</section>' +
+  '<section data-od-id="series-' + id + '-cross">' +
+    '<p class="eyebrow">空槽 <span class="zh">等待新词</span></p>' +
+    crossNote +
+    '<p class="sec-sub" lang="zh-CN">本系（' + axis.name + '）共 ' + crossList.length + ' 个 ' + crossName + ' 坐标，已点亮 ' + members.length + '，还有 <b>' + (crossList.length - members.length) + ' 个空槽</b>。学到新词 → 回総索引格子图对应坐标点亮一格。</p>' +
+  '</section>';
+}
+function toriHTML() {
+  return seriesHeadHTML('row', 'tori') + '' +
+  '<section data-od-id="series-tori-insight">' +
+    '<div class="insight"><p class="insight-label">覚え方の原型 · 一只手</p>' +
+    '<p class="insight-text" lang="zh-CN">看到 <b>取り〜</b>，先想到一只手：伸手 → 抓住 → 拿过来。往自己这边拿 = <b>获取</b>，往别处处置 = <b>处理</b>，拿进自己心里 = <b>接受</b>。唯一的例外是「取り消す」——它已整体固定为「撤销」。</p></div>' +
+  '</section>' +
+  '<section data-od-id="series-tori-tree">' +
+    '<p class="eyebrow">語義拡張樹 <span class="zh">语义扩展树</span></p>' +
+    '<h2 class="sec-title" lang="ja">取り〜 の三つの枝</h2>' +
+    '<div class="tree">' +
+      '<div class="tree-root" lang="ja">取り〜</div>' +
+      '<div class="tree-branches">' +
+        '<div class="tree-branch"><span class="branch-label bl-get" lang="ja">获取</span><ul class="tree-items">' +
+          '<li data-word="toridasu"><span class="ti-cn">取出来</span><span class="ti-jp" lang="ja">取り出す</span>' + starsHTML(5) + '</li>' +
+          '<li data-word="torimodosu"><span class="ti-cn">收回来</span><span class="ti-jp" lang="ja">取り戻す</span>' + starsHTML(5) + '</li>' +
+          '<li data-word="torikaesu"><span class="ti-cn">夺回来</span><span class="ti-jp" lang="ja">取り返す</span>' + starsHTML(4) + '</li>' +
+        '</ul></div>' +
+        '<div class="tree-branch"><span class="branch-label bl-handle" lang="ja">処理</span><ul class="tree-items">' +
+          '<li data-word="toriageru"><span class="ti-cn">拿起·报道</span><span class="ti-jp" lang="ja">取り上げる</span>' + starsHTML(3) + '</li>' +
+          '<li data-word="torikesu"><span class="ti-cn">撤销</span><span class="ti-jp" lang="ja">取り消す</span>' + starsHTML(2) + '</li>' +
+        '</ul></div>' +
+        '<div class="tree-branch"><span class="branch-label bl-get" lang="ja">受容</span><ul class="tree-items">' +
+          '<li data-word="toriireru"><span class="ti-cn">引进·采纳</span><span class="ti-jp" lang="ja">取り入れる</span>' + starsHTML(4) + '</li>' +
+        '</ul></div>' +
+      '</div>' +
+    '</div>' +
+  '</section>' +
+  '<section data-od-id="series-tori-patterns">' +
+    '<p class="eyebrow">構詞規律 <span class="zh">构词规律</span></p>' +
+    '<h2 class="sec-title" lang="ja">取り + 後項 → 語義</h2>' +
+    '<div class="pat-grid">' +
+      '<div class="pat-item"><span class="pat-formula" lang="ja">取り + 出す</span><span class="pat-arrow">→</span><span class="pat-result" lang="zh-CN">取出</span></div>' +
+      '<div class="pat-item"><span class="pat-formula" lang="ja">取り + 戻す</span><span class="pat-arrow">→</span><span class="pat-result" lang="zh-CN">取回 / 恢复</span></div>' +
+      '<div class="pat-item"><span class="pat-formula" lang="ja">取り + 消す</span><span class="pat-arrow">→</span><span class="pat-result" lang="zh-CN">撤销</span></div>' +
+      '<p class="pat-note" lang="zh-CN">「取り消す」无法简单解释为「拿走并消除」——前缀化已部分进行，需整体记忆。</p>' +
+    '</div>' +
+    '<p class="scene-head" lang="ja">場景頻度 · 商务高频</p><div class="tag-row">' +
+      '<span class="tag tag-biz"><b lang="ja">取り消す</b> · 撤销</span><span class="tag tag-biz"><b lang="ja">取り入れる</b> · 引进</span><span class="tag tag-biz"><b lang="ja">取りまとめる</b> · 汇总</span><span class="tag tag-biz"><b lang="ja">取り扱う</b> · 处理</span>' +
+    '</div>' +
+    '<p class="scene-head" lang="ja">場景頻度 · IT 高频</p><div class="tag-row">' +
+      '<span class="tag tag-it"><b lang="ja">取り込む</b> · 导入</span><span class="tag tag-it"><b lang="ja">取り出す</b> · 提取</span><span class="tag tag-it"><b lang="ja">取り扱う</b> · 处理</span><span class="tag tag-it"><b lang="ja">取り除く</b> · 移除</span>' +
+    '</div>' +
+  '</section>' +
+  '<section data-od-id="series-tori-confusables">' +
+    '<p class="eyebrow">紛らわしい対 <span class="zh">易混淆词对比</span></p>' +
+    '<h2 class="sec-title" lang="ja">取り返す vs 取り戻す</h2>' +
+    '<div class="conf-pair">' +
+      '<div class="conf-card" data-od-id="conf-torikaesu"><div class="conf-header"><span class="conf-jp" lang="ja">取り返す</span><span class="conf-em">强调夺回动作</span></div><p class="conf-cn" lang="zh-CN">夺回来 / 抢回来 / 挽回来</p><p class="conf-note" lang="zh-CN">侧重「夺」这一主动行为——把失去的东西通过自身努力夺回手中。常用于比赛翻盘、金钱挽回等场景。</p></div>' +
+      '<div class="conf-card" data-od-id="conf-torimodosu"><div class="conf-header"><span class="conf-jp" lang="ja">取り戻す</span><span class="conf-em">强调恢复结果</span></div><p class="conf-cn" lang="zh-CN">恢复原状 / 找回</p><p class="conf-note" lang="zh-CN">侧重「回到原来状态」的结果——不一定是主动夺回，也可以自然恢复。常用于健康恢复、信用恢复等场景。</p></div>' +
+    '</div>' +
+  '</section>' +
+  '<section data-od-id="series-tori-words">' +
+    '<p class="eyebrow">詞目一覧 <span class="zh">全系词卡（点击可看词卡）</span></p>' +
+    '<h2 class="sec-title" lang="ja">取り〜系 · 収蔵 11 語</h2>' +
+    '<div class="chip-row">' +
+      wordChip('toridasu', '取出·提取', true) + wordChip('torimodosu', '恢复·夺回') + wordChip('torikaesu', '挽回·夺回') +
+      wordChip('toriireru', '引进·采纳') + wordChip('toriageru', '拿起·报道') + wordChip('torikesu', '撤销') +
+      wordChip('torikomu', '导入·加载') + wordChip('torimatomeru', '汇总') + wordChip('toriatsukau', '处理') +
+      wordChip('torinozoku', '移除') + wordChip('torinaosu', '重来一次') +
+    '</div>' +
+    '<div class="archive-bar" style="margin-top:var(--space-4);">' +
+      '<span class="archive-label">归档区</span><span class="archive-chip" lang="ja">取り直す — 收回类 — 重来一次 — 已归档</span>' +
+      '<span style="font-size:var(--text-xs);color:var(--muted);">新词先放这里，确认分类后点亮地图格子</span>' +
+    '</div>' +
+  '</section>';
+}
+function kaesuHTML() {
+  return seriesHeadHTML('col', 'kaesu') + '' +
+  '<section data-od-id="series-kaesu-insight">' +
+    '<div class="insight"><p class="insight-label">二つの物理画面</p>' +
+    '<p class="insight-text" lang="zh-CN">看到 <b>〜返す</b>，脑中闪过两个画面：<b>乒乓球撞墙弹回来</b>，或 <b>煎饼翻个面</b>——要么是「弹回去 / 折返重来」，要么是「彻底翻过来」。</p></div>' +
+  '</section>' +
+  '<section data-od-id="series-kaesu-metaphors">' +
+    '<p class="eyebrow">比喩パネル <span class="zh">隐喻面板</span></p>' +
+    '<h2 class="sec-title" lang="ja">返す の二つの顔</h2>' +
+    '<div class="meta-pair">' +
+      '<div class="meta-panel bounce"><div class="meta-title" lang="ja">反弹 · 折返</div><p class="meta-subtitle" lang="zh-CN">乒乓球与墙壁</p><p class="meta-core" lang="zh-CN">施加一个动作 → 碰到「墙壁」→ 原路弹回来</p>' +
+        '<div class="meta-group"><span class="mg-label" lang="ja">弹回去</span><p class="mg-desc" lang="zh-CN">外力对你施加动作 → 你沿原路弹回去</p><div class="mg-words">' +
+          '<div class="mg-word"><span class="mg-w-jp" lang="ja">言い返す</span><span class="mg-w-cn">顶嘴 · 反驳</span><span class="mg-w-intuition">对方说 → 你说回去</span></div>' +
+          '<div class="mg-word"><span class="mg-w-jp" lang="ja">やり返す</span><span class="mg-w-cn">回击 · 还手</span><span class="mg-w-intuition">被打 → 打回去</span></div>' +
+          '<div class="mg-word"><span class="mg-w-jp" lang="ja">聞き返す</span><span class="mg-w-cn">反问 · 追问</span><span class="mg-w-intuition">被问 → 问回去</span></div>' +
+        '</div></div>' +
+        '<div class="meta-group"><span class="mg-label" lang="ja">折返重来</span><p class="mg-desc" lang="zh-CN">自己动作到达终点 → 折返起点重新走一遍</p><div class="mg-words">' +
+          '<div class="mg-word"><span class="mg-w-jp" lang="ja">繰り返す</span><span class="mg-w-cn">反复 · 循环</span><span class="mg-w-intuition">线轮转到底 → 折返不断重复</span></div>' +
+          '<div class="mg-word"><span class="mg-w-jp" lang="ja">読み返す</span><span class="mg-w-cn">重读 · 温习</span><span class="mg-w-intuition">读到结尾 → 折返回开头</span></div>' +
+          '<div class="mg-word"><span class="mg-w-jp" lang="ja">思い返す</span><span class="mg-w-cn">回想 · 重新考虑</span><span class="mg-w-intuition">思路走远 → 折返回去重想</span></div>' +
+        '</div></div>' +
+      '</div>' +
+      '<div class="meta-panel flip"><div class="meta-title" lang="ja">翻面 · 颠覆</div><p class="meta-subtitle" lang="zh-CN">煎饼翻面</p><p class="meta-core" lang="zh-CN">原本的状态 → 180 度翻转 → 彻底颠倒</p>' +
+        '<div class="meta-group"><span class="mg-label" lang="ja">翻过来</span><p class="mg-desc" lang="zh-CN">把物体的正反面颠倒</p><div class="mg-words">' +
+          '<div class="mg-word"><span class="mg-w-jp" lang="ja">裏返す</span><span class="mg-w-cn">翻过来</span><span class="mg-w-intuition">背面翻到正面</span></div>' +
+        '</div></div>' +
+        '<div class="meta-group"><span class="mg-label" lang="ja">彻底颠覆</span><p class="mg-desc" lang="zh-CN">抽象状态的 180 度翻转 —— 推翻结论、逆转颓势</p><div class="mg-words">' +
+          '<div class="mg-word"><span class="mg-w-jp" lang="ja">ひっくり返す</span><span class="mg-w-cn">推翻 · 弄翻</span><span class="mg-w-intuition">整个掀翻 → 上下颠倒</span></div>' +
+          '<div class="mg-word"><span class="mg-w-jp" lang="ja">持ち返す</span><span class="mg-w-cn">好转 · 起死回生</span><span class="mg-w-intuition">跌 → 翻转往上挺住</span></div>' +
+        '</div></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="mnemonic" data-od-id="mnemonic-kaesu"><span class="mn-pill">瞬間口訣</span><p class="mn-text" lang="zh-CN">看到 <b>「〜返す」</b>，不用思考语法分类——要么是 <b>弹回去 / 重新来一遍</b>，要么是 <b>翻个面</b>。</p></div>' +
+  '</section>' +
+  '<section data-od-id="series-kaesu-words">' +
+    '<p class="eyebrow">精選詞条 <span class="zh">物理直觉详解</span></p>' +
+    '<h2 class="sec-title" lang="ja">〜返す系 · 収蔵 8 語</h2>' +
+    '<div class="wgrid">' +
+      wcard('言い返す', 'tag-bounce', '弹回去', '顶嘴 · 反驳', '对方说一句 → 你把话弹回去', '彼はすぐ言い返す。／他马上回嘴。') +
+      wcard('やり返す', 'tag-bounce', '弹回去', '回击 · 还手', '对方打你一下 → 动作弹回去', 'やられたらやり返す。／以牙还牙。') +
+      wcard('繰り返す', 'tag-bounce', '折返重来', '反复 · 循环', '线轮转到底 → 折返起点不断重复', '失敗を繰り返す。／反复失败。') +
+      wcard('読み返す', 'tag-bounce', '折返重来', '重读 · 温习', '读到结尾 → 折返回开头再读一遍', '手紙を何度も読み返す。／反复重读来信。') +
+      wcard('裏返す', 'tag-flip', '翻过来', '翻过来 · 翻转', '背面 → 翻到正面', '服を裏返して干す。／把衣服翻过来晾。') +
+      wcard('ひっくり返す', 'tag-flip', '颠覆', '推翻 · 弄翻', '整桌东西 → 彻底掀翻上下颠倒', '結論をひっくり返す。／推翻结论。') +
+      wcard('持ち返す', 'tag-flip', '颠覆', '好转 · 起死回生', '一直在跌 → 翻转往上挺住', '株価が持ち返す。／股价起死回生。') +
+      '<div class="wcard honshu" data-od-id="card-mikaesu"><div class="wc-top"><span class="wc-jp" lang="ja">見返す</span><span class="wc-cat tag-bounce">両義</span></div><span class="wc-cn">复查 / 让人刮目相看</span><p class="wc-intuition">①看到最后折返重看 ②以前被看低 → 现在看回去</p><p class="wc-ex" lang="ja"><b>例</b> 答案を見返す。／复查答案。<br>成功して見返す。／成功后让人刮目相看。</p></div>' +
+    '</div>' +
+  '</section>' +
+  '<section data-od-id="series-kaesu-practice">' +
+    '<p class="eyebrow">実戦連想 <span class="zh">实战联想练习</span></p>' +
+    '<h2 class="sec-title" lang="ja">自分で物理直觉を作る</h2>' +
+    '<div class="prac-grid">' +
+      '<div class="prac-item"><span class="prac-jp" lang="ja">照り返す</span><span class="prac-cn">反射 · 折射</span><p class="prac-hint" lang="zh-CN">阳光照到地面 → 像球撞墙弹回来</p></div>' +
+      '<div class="prac-item"><span class="prac-jp" lang="ja">見返す</span><span class="prac-cn">复查 / 争一口气</span><p class="prac-hint" lang="zh-CN">检查试卷到末尾折返重看 · 以前被看不起现在看回去</p></div>' +
+      '<div class="prac-item"><span class="prac-jp" lang="ja">ひっくり返す</span><span class="prac-cn">推翻 / 掀翻</span><p class="prac-hint" lang="zh-CN">把一整桌东西彻底翻个面 → 推翻结论 / 桌子</p></div>' +
+    '</div>' +
+  '</section>';
+}
+function komuHTML() {
+  var four = [
+    ['深入沉溺', 'cat-immerse', [['考え込む', '深思 · 想得入神', true], ['思い込む', '深信'], ['信じ込む', '深信不疑'], ['黙り込む', '沉默不语'], ['話し込む', '畅谈 · 长谈'], ['読み込む', '研读 · 加载']]],
+    ['進入 · 渗透', 'cat-enter', [['飛び込む', '跳入'], ['染み込む', '渗入 · 浸透'], ['溶け込む', '融入'], ['吸い込む', '吸入'], ['潜り込む', '潜入']]],
+    ['状態変動', 'cat-state', [['冷え込む', '骤冷 · 气温骤降'], ['落ち込む', '消沉 · 凹陷'], ['弱り込む', '病弱 · 衰弱']]],
+    ['慣用', 'cat-idiom', [['申し込む', '申请 · 报名'], ['取り込む', '导入 · 加载']]]
+  ];
+  var grid = four.map(function (f) {
+    return f[2].map(function (it) {
+      var h = it[2] ? ' honshu' : '';
+      var foot = it[2]
+        ? '<div class="wc-foot"><span class="wc-stars">★★★★☆</span><span class="wc-type">分類④ · ★本種</span></div>'
+        : (it[0] === '飛び込む' || it[0] === '染み込む' || it[0] === '吸い込む'
+          ? '<div class="wc-foot"><span class="wc-stars muted">★★★★★</span><span class="wc-type">进入系原型</span></div>'
+          : '<div class="wc-foot"><span class="wc-stars muted">—</span><span class="wc-type">後項接尾辞化</span></div>');
+      return '<div class="wcard' + h + '" data-od-id="card-' + it[0] + '"><div class="wc-top"><span class="wc-jp" lang="ja">' + it[0] + '</span><span class="wc-cat ' + f[1] + '">' + f[0] + '</span></div><span class="wc-cn">' + it[1] + '</span>' + foot + '</div>';
+    }).join('');
+  }).join('');
+  return seriesHeadHTML('col', 'komu') + '' +
+  '<section data-od-id="series-komu-insight">' +
+    '<div class="insight"><p class="insight-label">一つの動き · 入って出てこない</p>' +
+    '<p class="insight-text" lang="zh-CN"><b>〜込む</b> 的核心是「进去就出不来」：身体跳进去 = <b>飛び込む</b>；水渗进去 = <b>染み込む</b>；温度掉进去 = <b>冷え込む</b>；想问题想进去 = <b>考え込む</b>。</p></div>' +
+  '</section>' +
+  '<section data-od-id="series-komu-structure">' +
+    '<p class="eyebrow">構詞構造定位 <span class="zh">构词分类定位</span></p>' +
+    '<div class="struct-grid">' +
+      '<div class="st"><span class="st-no">①</span><b lang="ja">前項が後項を修飾</b><span class="zh">前项修饰后项</span><span class="ex" lang="ja">押し出す</span></div>' +
+      '<div class="st"><span class="st-no">②</span><b lang="ja">後項が前項を修飾</b><span class="zh">后项修饰前项</span><span class="ex" lang="ja">振り当てる</span></div>' +
+      '<div class="st"><span class="st-no">③</span><b lang="ja">前項の接頭辞化</b><span class="zh">前项前缀化</span><span class="ex" lang="ja">打ち明ける</span></div>' +
+      '<div class="st lit"><span class="st-no">④</span><b lang="ja">後項の接尾辞化</b><span class="zh">后项后缀化 ★ 本種</span><span class="ex" lang="ja">考え込む</span></div>' +
+      '<div class="st"><span class="st-no">⑤</span><b lang="ja">前後項の融合</b><span class="zh">前后项融合</span><span class="ex" lang="ja">落ち着く</span></div>' +
+    '</div>' +
+    '<p class="struct-note" lang="zh-CN">※ 本种「考え込む」是分類 ④「後項の接尾辞化」的标本词：「込む」失去「进入」的实义，转为表示「深・彻底・沉浸」的接尾辞。</p>' +
+  '</section>' +
+  '<section data-od-id="series-komu-words">' +
+    '<p class="eyebrow">詞目一覧 <span class="zh">全系词卡</span></p>' +
+    '<h2 class="sec-title" lang="ja">〜込む系 · 収蔵 16 語</h2>' +
+    '<div class="wgrid">' + grid + '</div>' +
+  '</section>' +
+  '<section data-od-id="series-komu-archive">' +
+    '<div class="archive-bar">' +
+      '<span class="archive-label">归档区</span>' +
+      '<span class="archive-chip" lang="ja">差し込む — 插入 — 待分类</span>' +
+      '<span class="archive-chip" lang="ja">書き込む — 写入 — 待分类</span>' +
+      '<span style="font-size:var(--text-xs);color:var(--muted);">新词先放这里，确认分支后点亮地图格子</span>' +
+    '</div>' +
+  '</section>';
+}
+function dashiHTML() {
+  return seriesHeadHTML('row', 'dashi') +
+  '<section data-od-id="series-dashi-insight">' +
+    '<div class="insight"><p class="insight-label">動作系 · 往外拿</p>' +
+    '<p class="insight-text" lang="zh-CN"><b>出し〜</b> 的核心是「往外拿」的动作轴：放进去又拿出来 = <b>出し入れる</b>，抢在前头出手 = <b>出し抜く</b>，拿出时磨磨蹭蹭 = <b>出し渋る</b>，该拿出的却舍不得 = <b>出し惜しみ</b>。</p></div>' +
+  '</section>' +
+  '<section data-od-id="series-dashi-words">' +
+    '<p class="eyebrow">詞目一覧 <span class="zh">成员墙 —— 点击看词卡</span></p>' +
+    '<h2 class="sec-title" lang="ja">出し〜系 · 4 語</h2>' +
+    '<div class="wgrid">' + memberWall('row', 'dashi') + '</div>' +
+  '</section>' +
+  '<section data-od-id="series-dashi-intersect">' +
+    '<p class="eyebrow">交差点 <span class="zh">与其他系的交叉</span></p>' +
+    '<p class="intersect" lang="zh-CN"><b>出し惜しみ</b> 是「出し〜」与「〜惜しむ」的<b>交汇词</b>（分類② 意味特殊化）：既卡在「往外拿」的动作上，又「舍不得放手」。完整标本卡 → 回総索引点地图里的「出し惜しみ」格子。</p>' +
+  '</section>' +
+  '<section data-od-id="series-dashi-archive">' +
+    '<div class="archive-bar">' +
+      '<span class="archive-label">待分类区</span>' +
+      '<span style="font-size:var(--text-xs);color:var(--muted);">以后学到新的「出し〜」词先放这里 —— 确认分类后点亮地图格子。</span>' +
+    '</div>' +
+  '</section>';
+}
+function oshimuHTML() {
+  return seriesHeadHTML('col', 'oshimu') +
+  '<section data-od-id="series-oshimu-insight">' +
+    '<div class="insight"><p class="insight-label">心理系 · 舍不得放手</p>' +
+    '<p class="insight-text" lang="zh-CN"><b>〜惜しむ</b> 从「珍惜」转出「舍不得给」：<b>金を惜しむ</b>（不舍得花钱）· <b>言葉を惜しむ</b>（惜字如金）· <b>労力を惜しむ</b>（不肯费工夫）—— 全系目前只収蔵了它与「出し〜」交汇出的 <b>出し惜しみ</b> 一个标本。</p></div>' +
+  '</section>' +
+  '<section data-od-id="series-oshimu-words">' +
+    '<p class="eyebrow">詞目一覧 <span class="zh">成员墙 —— 点击看词卡</span></p>' +
+    '<h2 class="sec-title" lang="ja">〜惜しむ系 · 収蔵 1 語</h2>' +
+    '<div class="wgrid">' + memberWall('col', 'oshimu') + '</div>' +
+  '</section>' +
+  '<section data-od-id="series-oshimu-intersect">' +
+    '<p class="eyebrow">交差点 <span class="zh">与其他系的交叉</span></p>' +
+    '<p class="intersect" lang="zh-CN"><b>出し惜しみ</b> 是「〜惜しむ」与「出し〜」的<b>交汇词</b>——心理系（舍不得）撞上动作系（往外拿）。剩余 7 个前項坐标仍是空槽，等新的「〜惜しむ」词来点亮。</p>' +
+  '</section>' +
+  '<section data-od-id="series-oshimu-note">' +
+    '<div class="mnemonic"><span class="mn-pill">瞬間口訣</span><p class="mn-text" lang="zh-CN">「手伸进口袋要拿东西，又缩了回来」——<b>出すのをためらう</b>。</p></div>' +
+  '</section>';
+}
+function yugoHTML() {
+  return seriesHeadHTML('yugo', 'yugo') + '' +
+  '<section data-od-id="series-yugo-insight">' +
+    '<div class="insight"><p class="insight-label">融合系 ⑤ · 前後項の融合</p>' +
+    '<p class="insight-text" lang="zh-CN">这一类词，<b>前项和后项已经长成一个整体</b>：既不能「前项修饰后项」，也不能拆开解释。词义必须整体记忆 —— 就像「落ち着く」不是「落下 + 到达」，而是「沉着・安定」。</p></div>' +
+  '</section>' +
+  '<section data-od-id="series-yugo-words">' +
+    '<p class="eyebrow">収蔵予定 <span class="zh">收藏预定</span></p>' +
+    '<h2 class="sec-title" lang="ja">落ち着く —— 標本 №05 予定</h2>' +
+    '<div class="conf-pair">' +
+      '<div class="conf-card"><div class="conf-header"><span class="conf-jp" lang="ja">落ち着く</span><span class="conf-em">融合 ⑤</span></div><p class="conf-cn" lang="zh-CN">沉着 · 安定 · 平静 · 冷静下来</p><p class="conf-note" lang="zh-CN">「落ち」与「着く」都已失去独立解释力，融合后整体表「安定下来」。是五种构词类型里最「不可推导」的一类。</p></div>' +
+      '<div class="conf-card"><div class="conf-header"><span class="conf-jp">待収蔵</span><span class="conf-em">下一步</span></div><p class="conf-cn" lang="zh-CN">融合系其他候选词：考え抜く（彻头彻尾地想）等，遇到后收入归档区。</p><p class="conf-note" lang="zh-CN">点下方「落ち着く」可看未収蔵占位卡；制作标本卡时，重点记录它的「整体记忆」路径。</p></div>' +
+    '</div>' +
+    '<div class="chip-row" style="margin-top:var(--space-4);">' +
+      '<span class="fw-chip honshu" data-word="ochitsuku"><span class="fgw" lang="ja">落ち着く</span><span class="fgg">沉着 · 安定</span></span>' +
+    '</div>' +
+  '</section>' +
+  '<section data-od-id="series-yugo-archive">' +
+    '<div class="archive-bar">' +
+      '<span class="archive-label">待分类区</span>' +
+      '<span style="font-size:var(--text-xs);color:var(--muted);">以后遇到的新词先放这里 —— 先判断是哪个系（同前项 / 同后项），再点亮地图格子；融合词直接归入本系。</span>' +
+    '</div>' +
+  '</section>';
+}
+
+/* —— 词条小 chip —— */
+function wordChip(id, gloss, isThis) {
+  var w = WORDS[id];
+  return '<span class="fw-chip' + (isThis ? ' honshu' : '') + '" data-word="' + id + '"><span class="fgw" lang="ja">' + w.word + '</span><span class="fgg">' + gloss + '</span></span>';
+}
+/* —— 返す系词卡 —— */
+function wcard(jp, cat, catLabel, cn, intuition, ex) {
+  return '<div class="wcard"><div class="wc-top"><span class="wc-jp" lang="ja">' + jp + '</span><span class="wc-cat ' + cat + '">' + catLabel + '</span></div><span class="wc-cn">' + cn + '</span><p class="wc-intuition">' + intuition.replace(/→/g, '<span class="arr">→</span>') + '</p><p class="wc-ex" lang="ja"><b>例</b> ' + ex + '</p></div>';
+}
+
+/* ═══════════════════════════════════════════════
+ * 视图切换
+ * ═══════════════════════════════════════════════ */
+function inSeriesDomain() {
+  return state.view === 'serieslib' || state.view === 'series' ||
+    (state.view === 'word' && state.origin && state.origin.indexOf('series') === 0);
+}
+function setModeClass() {
+  document.body.classList.toggle('in-series', inSeriesDomain());
+}
+function setNav() {
+  document.querySelectorAll('.nav button').forEach(function (b) {
+    var on = false;
+    if (b.dataset.act === 'home') on = !inSeriesDomain();
+    if (b.dataset.act === 'serieslib') on = inSeriesDomain();
+    b.classList.toggle('cur', on);
+  });
+}
+function setCrumb(text) {
+  document.getElementById('sb-crumb').textContent = text;
+  var back = document.getElementById('sb-back');
+  var show = !(state.view === 'home' || state.view === 'serieslib');
+  back.style.display = show ? '' : 'none';
+  if (show) {
+    var label = '← 回到地図';
+    if (state.view === 'series') label = '← 回到系別';
+    else if (state.view === 'word' && state.origin && state.origin.indexOf('series:') === 0) label = '← 回到系総覧';
+    back.textContent = label;
+  }
+}
+function openWord(id, origin) {
+  var w = WORDS[id];
+  if (!w) return;
+  state.view = 'word'; state.word = id; state.series = null;
+  state.origin = origin || 'home';
+  var root = document.getElementById('view-root');
+  root.innerHTML = w.status === 'collected' ? specimenHTML(w) : pendingHTML(w);
+  setCrumb('詞目 · ' + w.word);
+  setNav(); markCurrent(); setModeClass();
+  history.replaceState(null, '', '#' + id);
+  scrollToStage();
+}
+function openSeries(id) {
+  state.view = 'series'; state.series = id; state.word = null;
+  state.origin = null;
+  document.getElementById('view-root').innerHTML = seriesHTML(id);
+  setCrumb('系総覧 · ' + seriesName(id));
+  setNav(); markCurrent(); setModeClass();
+  history.replaceState(null, '', '#series-' + id);
+  scrollToStage();
+}
+function openSeriesLib() {
+  state.view = 'serieslib'; state.series = null; state.word = null; state.origin = null;
+  document.getElementById('view-root').innerHTML = seriesLibHTML();
+  setCrumb('系別図鑑');
+  setNav(); markCurrent(); setModeClass();
+  history.replaceState(null, '', '#serieslib');
+  scrollToStage();
+}
+function openHome() {
+  state.view = 'home'; state.word = null; state.series = null; state.origin = null;
+  document.getElementById('view-root').innerHTML = homeHTML();
+  setCrumb('総索引');
+  setNav(); markCurrent(); setModeClass();
+  history.replaceState(null, '', '#');
+}
+function scrollToStage() {
+  var el = document.getElementById('view-root');
+  var top = el.getBoundingClientRect().top + window.pageYOffset - 80;
+  window.scrollTo({ top: top, behavior: 'smooth' });
+}
+
+/* ═══════════════════════════════════════════════
+ * 事件绑定
+ * ═══════════════════════════════════════════════ */
+document.addEventListener('click', function (e) {
+  var t = e.target.closest('#sb-back');
+  if (t) {
+    if (state.view === 'word') {
+      if (state.origin && state.origin.indexOf('series:') === 0) openSeries(state.origin.slice(7));
+      else if (state.origin === 'serieslib') openSeriesLib();
+      else openHome();
+    } else if (state.view === 'series') openSeriesLib();
+    return;
+  }
+  t = e.target.closest('[data-word]');
+  if (t && t.dataset.word) {
+    var origin = 'home';
+    if (state.view === 'series') origin = 'series:' + state.series;
+    else if (state.view === 'serieslib') origin = 'serieslib';
+    else if (state.view === 'word' && state.origin && state.origin.indexOf('series') === 0) origin = state.origin;
+    openWord(t.dataset.word, origin);
+    return;
+  }
+  t = e.target.closest('[data-series]');
+  if (t && t.dataset.series) { openSeries(t.dataset.series); return; }
+  t = e.target.closest('[data-act="home"]');
+  if (t) { openHome(); return; }
+  t = e.target.closest('[data-act="serieslib"]');
+  if (t) { openSeriesLib(); return; }
+  t = e.target.closest('.fbtn');
+  if (t) {
+    document.querySelectorAll('.fbtn').forEach(function (b) { b.classList.toggle('on', b === t); });
+    state.cls = t.dataset.cls;
+    applyFilter();
+  }
+});
+
+/* ═══════════════════════════════════════════════
+ * 统计 chips
+ * ═══════════════════════════════════════════════ */
+function renderStats() {
+  var collected = 0, known = 0, inGrid = 0;
+  for (var k in WORDS) {
+    var w = WORDS[k];
+    if (w.status === 'collected') collected++;
+    else known++;
+    if (w.row && w.col) inGrid++;
+  }
+  var totalCells = ROWS.length * COLS.length;
+  var empty = totalCells - inGrid;
+  var chips = document.getElementById('stat-chips');
+  chips.innerHTML =
+    '<span class="chip">収蔵 <b>' + collected + '</b> 種</span>' +
+    '<span class="chip">既知 <small>' + known + ' 語</small></span>' +
+    '<span class="chip">空槽 <small>' + empty + ' 格</small></span>' +
+    '<span class="chip">系 <small>' + ROWS.length + ' 前項 × ' + COLS.length + ' 後項</small></span>';
+}
+
+/* ═══════════════════════════════════════════════
+ * 启动
+ * ═══════════════════════════════════════════════ */
+renderStats();
+renderMatrix();
+openHome();
+var h = location.hash;
+if (h) {
+  var key = h.replace(/^#/, '');
+  if (key === 'serieslib') { openSeriesLib(); }
+  else if (key.indexOf('series-') === 0) { openSeries(key.slice(7)); }
+  else if (WORDS[key]) { openWord(key); }
+}
+</script>
+</body>
+</html>

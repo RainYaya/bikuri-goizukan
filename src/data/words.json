@@ -1,0 +1,1713 @@
+{
+  "words": {
+    "toridasu": {
+      "id": "toridasu",
+      "word": "取り出す",
+      "reading": "とりだす",
+      "romaji": "tori-dasu",
+      "row": "tori",
+      "col": "dasu",
+      "status": "collected",
+      "series": "tori",
+      "no": "01",
+      "seal": "取",
+      "stars": 5,
+      "cls": "①",
+      "clsNote": "前項が後項を修飾",
+      "genus": "取り〜系 · 获取",
+      "pos": "五段動詞",
+      "tagline": "手伸进去，把东西拿出来 —— <b>获取的原型动作</b>",
+      "core": "核心イメージ：<b>手伸进容器 / 数据里，把东西拿出来</b> —— 获取系的原型。",
+      "eq": {
+        "front": "取り",
+        "frontSrc": "〈取る〉",
+        "frontNote": "用手拿取",
+        "back": "出す",
+        "backRole": "後項",
+        "backNote": "向外 · 出来",
+        "result": "取り出す",
+        "resultNote": "取出 · 提取"
+      },
+      "families": [
+        {
+          "title": "同系列 · 获取方向",
+          "sub": "往自己这边拿",
+          "items": [
+            [
+              "取り戻す",
+              "恢复 · 夺回"
+            ],
+            [
+              "取り返す",
+              "挽回 · 夺回"
+            ],
+            [
+              "取り入れる",
+              "引进 · 采纳"
+            ],
+            [
+              "取り出す",
+              "取出 · 提取",
+              true
+            ]
+          ]
+        },
+        {
+          "title": "同系列 · 処理・撤去方向",
+          "sub": "拿起来处置掉",
+          "items": [
+            [
+              "取り上げる",
+              "拿起 · 报道"
+            ],
+            [
+              "取り消す",
+              "撤销"
+            ],
+            [
+              "取り除く",
+              "移除 · 消除"
+            ],
+            [
+              "取り扱う",
+              "处理 · 经办"
+            ]
+          ]
+        }
+      ],
+      "intersect": "<b>系列方位：</b>本种「取り出す」是获取系的原型。越往「処理・撤去」方向走，「取り」的本义越淡，前缀化越深——「取り消す」已几乎不能拆开理解。",
+      "usages": {
+        "biz": [
+          [
+            "書類棚から必要な契約書を取り出した。",
+            "从文件柜里取出了所需的合同。"
+          ],
+          [
+            "会議の議事録から決定事項だけを取り出して共有した。",
+            "从会议纪要中只提取决定事项进行了共享。"
+          ],
+          [
+            "報告書から重要な数字を取り出してグラフにした。",
+            "从报告中取出重要数字做成了图表。"
+          ]
+        ],
+        "it": [
+          [
+            "データベースから条件に合う行を取り出してCSVに出力する。",
+            "从数据库中取出符合条件的行并输出为 CSV。"
+          ],
+          [
+            "ログからエラーコードを取り出すスクリプトを書いた。",
+            "写了一个从日志中提取错误代码的脚本。"
+          ],
+          [
+            "取り出したデータは前処理をしてから保存する。",
+            "取出的数据先做预处理再保存。"
+          ]
+        ]
+      },
+      "note": "「伸手进抽屉，摸到最里面，掏出来」",
+      "noteZh": "取り出す = 获取的原型动作；后面所有「取り〜」词都从这只手出发。"
+    },
+    "mikaesu": {
+      "id": "mikaesu",
+      "word": "見返す",
+      "reading": "みかえす",
+      "romaji": "mi-kaesu",
+      "row": "mi",
+      "col": "kaesu",
+      "status": "collected",
+      "series": "kaesu",
+      "no": "02",
+      "seal": "返",
+      "stars": 3,
+      "cls": "②",
+      "clsNote": "意味特殊化",
+      "genus": "〜返す系 · 弾返し × 折返",
+      "pos": "五段動詞",
+      "tagline": "看一遍不够，折返再看；或被人看低，看回去 —— <b>両義の語</b>",
+      "core": "核心イメージ：<b>行到尽头折返再看</b>；被看低之后，<b>把视线看回去</b> —— 同一动作，两个方向。",
+      "eq": {
+        "front": "見",
+        "frontSrc": "〈見る〉",
+        "frontNote": "看",
+        "back": "返す",
+        "backRole": "後項",
+        "backNote": "往回 · 折返 · 回弹",
+        "result": "見返す",
+        "resultNote": "① 复查 ② 让人刮目相看",
+        "resultShift": "<b>語義分岐</b> 「看到末尾 → 折返再看」<b>折返</b> / 「被看低 → 现在看回去」<b>弾返し</b>"
+      },
+      "families": [
+        {
+          "title": "同後項「〜返す」· 折返系",
+          "sub": "走到头，折返重来",
+          "items": [
+            [
+              "読み返す",
+              "重读 · 温习"
+            ],
+            [
+              "思い返す",
+              "回想 · 重新考虑"
+            ],
+            [
+              "繰り返す",
+              "反复 · 循环"
+            ]
+          ]
+        },
+        {
+          "title": "同後項「〜返す」· 弾返し系",
+          "sub": "外力来了，弹回去",
+          "items": [
+            [
+              "言い返す",
+              "顶嘴 · 反驳"
+            ],
+            [
+              "やり返す",
+              "回击 · 还手"
+            ],
+            [
+              "聞き返す",
+              "反问 · 追问"
+            ]
+          ]
+        }
+      ],
+      "intersect": "<b>交差点：</b>本种「見返す」同时踩在「折返」和「弾返し」两条分支上——看一遍折返再看（复查），以前被看低现在看回去（争一口气）。",
+      "usages": {
+        "biz": [
+          [
+            "提出前に企画書を見返して、誤字を修正した。",
+            "提交前重看企划书，修正了错字。"
+          ],
+          [
+            "彼は過去の失敗を見返すことで、次の挑戦に生かしている。",
+            "他通过回顾过去的失败，将其用在下次挑战上。"
+          ],
+          [
+            "報告書を提出する前に、もう一度全体を見返した。",
+            "提交报告前，又把整体重看了一遍。"
+          ]
+        ],
+        "it": [
+          [
+            "デプロイ前に変更ログを見返して、問題がないか確認する。",
+            "部署前重看变更日志，确认没有问题。"
+          ],
+          [
+            "コードレビューでは、修正箇所を何度も見返すことが大切だ。",
+            "代码评审时，反复重看修改处很重要。"
+          ],
+          [
+            "要件定義書を見返したところ、仕様の抜けが見つかった。",
+            "重看需求定义书后，发现了规格的遗漏。"
+          ]
+        ]
+      },
+      "note": "「读一遍，折返再读；被看低，看回去。」",
+      "noteZh": "見返す = 折返与弾返し的交叉点：复查用「折返」，争气用「弹回去」。"
+    },
+    "kangaekomu": {
+      "id": "kangaekomu",
+      "word": "考え込む",
+      "reading": "かんがえこむ",
+      "romaji": "kangae-komu",
+      "row": "kangae",
+      "col": "komu",
+      "status": "collected",
+      "series": "komu",
+      "no": "03",
+      "seal": "込",
+      "stars": 4,
+      "cls": "④",
+      "clsNote": "後項の接尾辞化",
+      "genus": "〜込む系 · 深陷内心",
+      "pos": "五段動詞",
+      "tagline": "想着想着，整个人栽了进去 —— <b>深思 · 想得入神</b>",
+      "core": "核心イメージ：<b>思考「栽」进了深处，拔不出来</b> —— 深く考える・没頭する。",
+      "eq": {
+        "front": "考え",
+        "frontSrc": "〈考える〉",
+        "frontNote": "思考",
+        "back": "込む",
+        "backRole": "後項 · 接尾辞",
+        "backNote": "深入 · 完全 · 沉浸",
+        "backShift": "<b>意味転換</b> 「进入」<b>中に入る</b> → 「彻底陷入（某个状态）」<b>すっかり没頭する</b>",
+        "result": "考え込む",
+        "resultNote": "沉思 · 想得入神"
+      },
+      "families": [
+        {
+          "title": "同後項「〜込む」· 深陷内心系",
+          "sub": "心思栽进去出不来",
+          "items": [
+            [
+              "思い込む",
+              "深信"
+            ],
+            [
+              "信じ込む",
+              "深信不疑"
+            ],
+            [
+              "黙り込む",
+              "沉默不语"
+            ],
+            [
+              "話し込む",
+              "畅谈 · 长谈"
+            ],
+            [
+              "考え込む",
+              "深思 · 入神",
+              true
+            ]
+          ]
+        },
+        {
+          "title": "同後項「〜込む」· 進入・渗透系",
+          "sub": "身体或液体钻进去",
+          "items": [
+            [
+              "飛び込む",
+              "跳入"
+            ],
+            [
+              "染み込む",
+              "渗入 · 浸透"
+            ],
+            [
+              "溶け込む",
+              "融入"
+            ],
+            [
+              "吸い込む",
+              "吸入"
+            ]
+          ]
+        }
+      ],
+      "intersect": "<b>交差点：</b>本种是「深陷内心」分支的代表；同家的「取り込む」则坐在 <b>取り〜 × 〜込む</b> 交点上（在地図「取り〜」行可以点它）。",
+      "usages": {
+        "biz": [
+          [
+            "会議中、彼はしばらく考え込んでから、ようやく発言した。",
+            "会议中他沉思了好一会儿，才终于开口发言。"
+          ],
+          [
+            "予算の見直し案について、部長は深く考え込んでいる。",
+            "关于预算调整方案，部长正在深深思量。"
+          ],
+          [
+            "クライアントの要望を聞いた後、担当者は長い時間考え込んでいた。",
+            "听完客户的要求后，负责人沉思了很长时间。"
+          ]
+        ],
+        "it": [
+          [
+            "バグの原因を特定できず、開発者は画面の前で考え込んでいた。",
+            "因为无法定位 bug 的原因，开发者在屏幕前陷入了沉思。"
+          ],
+          [
+            "アーキテクチャの選択に悩み、チームは昼休みも考え込んでいる。",
+            "为架构选型而纠结，团队午休时也在沉思。"
+          ],
+          [
+            "パフォーマンス低下の原因を探るため、彼はログを見つめながら考え込んだ。",
+            "为排查性能下降的原因，他盯着日志陷入了沉思。"
+          ]
+        ]
+      },
+      "note": "「想着想着，整个人栽了进去——再抬头，天都黑了」",
+      "noteZh": "込む = 深く・すっかり。「考え込む」是深陷内心系的原型。"
+    },
+    "dashi_oshimi": {
+      "id": "dashi_oshimi",
+      "word": "出し惜しみ",
+      "reading": "だしおしみ",
+      "romaji": "dashi-oshimi",
+      "row": "dashi",
+      "col": "oshimu",
+      "status": "collected",
+      "series": "dashi",
+      "no": "04",
+      "seal": "惜",
+      "stars": 3,
+      "cls": "②",
+      "clsNote": "意味特殊化",
+      "genus": "出し〜系 × 〜惜しむ系",
+      "pos": "名詞（出し惜しむ 連用形）",
+      "tagline": "该拿出来的东西，舍不得拿出来 —— <b>ケチる ↔ 控えめ</b>",
+      "core": "核心イメージ：<b>提供・発揮をためらう</b> ／ ケチる ／ 控えめにする。",
+      "eq": {
+        "front": "出し",
+        "frontSrc": "〈出す〉",
+        "frontNote": "往外取 · 提供 · 发挥",
+        "back": "惜しみ",
+        "backRole": "後項",
+        "backNote": "珍惜而舍不得给 · 不想给",
+        "backShift": "<b>意味転換</b> 「珍视」<b>大事に思う</b> → 「不肯给」<b>出さない</b>",
+        "result": "出し惜しみ",
+        "resultNote": "该拿出的东西，惜着不出"
+      },
+      "families": [
+        {
+          "title": "同後項「〜惜しむ」",
+          "sub": "心理系 —— 舍不得放手",
+          "items": [
+            [
+              "金を惜しむ",
+              "不舍得花钱"
+            ],
+            [
+              "言葉を惜しむ",
+              "惜字如金"
+            ],
+            [
+              "労力を惜しむ",
+              "不肯费工夫"
+            ],
+            [
+              "出し惜しむ",
+              "舍不得拿出",
+              true
+            ]
+          ]
+        },
+        {
+          "title": "同前項「出し〜」",
+          "sub": "動作系 —— 往外拿",
+          "items": [
+            [
+              "出し入れる",
+              "取出放入"
+            ],
+            [
+              "出し抜く",
+              "抢先一步"
+            ],
+            [
+              "出し渋る",
+              "吝于拿出"
+            ],
+            [
+              "出し惜しむ",
+              "舍不得拿出",
+              true
+            ]
+          ]
+        }
+      ],
+      "intersect": "<b>交差点：</b>本种正坐在「〜惜しむ」×「出し〜」两个家族的交叉点上 —— 既「舍不得放手」，又卡在「往外拿」的动作上。",
+      "usages": {
+        "biz": [
+          [
+            "予算案では、どうしても経費の出し惜しみが目立ち、現場から不満の声が上がっている。",
+            "预算案里对经费的吝惜格外显眼，现场的不满之声已经出现。"
+          ],
+          [
+            "重要な情報を出し惜しみせず、チーム全体で共有することがプロジェクト成功の鍵だ。",
+            "不吝惜重要信息、与整个团队共享，是项目成功的关键。"
+          ],
+          [
+            "彼は自分のスキルを出し惜しみする傾向があり、本来の実力が発揮されていない。",
+            "他倾向于对自己的技能有所保留，真正的实力没能发挥出来。"
+          ]
+        ],
+        "it": [
+          [
+            "開発チームがリソースを出し惜しみした結果、テスト期間が十分に確保できなかった。",
+            "开发团队在资源上过于吝惜，结果测试期没能得到充分保障。"
+          ],
+          [
+            "セキュリティ情報を出し惜しみすると、インシデント対応が遅れるリスクがある。",
+            "若对安全信息有所保留，就有延误事件应对的风险。"
+          ],
+          [
+            "パフォーマンス改善のための計算リソースを出し惜しみしたため、ユーザー体験が低下した。",
+            "因为对性能优化的计算资源过于吝惜，用户体验下降了。"
+          ]
+        ]
+      },
+      "note": "「手伸进口袋要拿东西，又缩了回来」",
+      "noteZh": "出すのをためらう —— ケチる・控えめの心理。"
+    },
+    "torimodosu": {
+      "id": "torimodosu",
+      "word": "取り戻す",
+      "reading": "とりもどす",
+      "row": "tori",
+      "col": "modosu",
+      "status": "known",
+      "series": "tori",
+      "stars": 5,
+      "cls": "③",
+      "gloss": "恢复 · 夺回",
+      "cat": "获取",
+      "note": "前項接頭辞化 —— 「取」的本义仍可辨识，重点是「回到原来的状态」。"
+    },
+    "torikaesu": {
+      "id": "torikaesu",
+      "word": "取り返す",
+      "reading": "とりかえす",
+      "row": "tori",
+      "col": "kaesu",
+      "status": "known",
+      "series": "tori",
+      "stars": 4,
+      "cls": "③",
+      "gloss": "挽回 · 夺回",
+      "cat": "获取",
+      "note": "侧重复原路上「夺」的主动行为，常与「取り戻す」混淆（见取り系总览）。"
+    },
+    "toriireru": {
+      "id": "toriireru",
+      "word": "取り入れる",
+      "reading": "とりいれる",
+      "row": "tori",
+      "col": "ireru",
+      "status": "known",
+      "series": "tori",
+      "stars": 4,
+      "cls": "③",
+      "gloss": "引进 · 采纳",
+      "cat": "受容",
+      "note": "把外来的东西拿进自己体系 —— 从「拿进来」到「采纳」。"
+    },
+    "toriageru": {
+      "id": "toriageru",
+      "word": "取り上げる",
+      "reading": "とりあげる",
+      "row": "tori",
+      "col": "ageru",
+      "status": "known",
+      "series": "tori",
+      "stars": 3,
+      "cls": "③",
+      "gloss": "拿起 · 提及 · 报道",
+      "cat": "処理",
+      "note": "从「拿起来」扩展到「提上议题 / 没收」。"
+    },
+    "torikesu": {
+      "id": "torikesu",
+      "word": "取り消す",
+      "reading": "とりけす",
+      "row": "tori",
+      "col": "kesu",
+      "status": "known",
+      "series": "tori",
+      "stars": 2,
+      "cls": "③",
+      "gloss": "撤销 · 取消",
+      "cat": "処理",
+      "note": "前缀化最深 —— 无法拆成「拿走并消除」，需要整体记忆。"
+    },
+    "torikomu": {
+      "id": "torikomu",
+      "word": "取り込む",
+      "reading": "とりこむ",
+      "row": "tori",
+      "col": "komu",
+      "status": "known",
+      "series": "komu",
+      "stars": 3,
+      "cls": "④",
+      "gloss": "导入 · 加载",
+      "cat": "交点",
+      "note": "坐在 取り〜 × 〜込む 交点：把数据「拿进」系统里。"
+    },
+    "torimatomeru": {
+      "id": "torimatomeru",
+      "word": "取りまとめる",
+      "reading": "とりまとめる",
+      "row": "tori",
+      "col": "matomeru",
+      "status": "known",
+      "series": "tori",
+      "stars": null,
+      "cls": "③",
+      "gloss": "汇总 · 归纳",
+      "cat": "商务",
+      "note": "把分散的东西「拿到一起」——商务高频。"
+    },
+    "toriatsukau": {
+      "id": "toriatsukau",
+      "word": "取り扱う",
+      "reading": "とりあつかう",
+      "row": "tori",
+      "col": "atsukau",
+      "status": "known",
+      "series": "tori",
+      "stars": null,
+      "cls": "③",
+      "gloss": "处理 · 经办",
+      "cat": "商务/IT",
+      "note": "「拿起来摆弄」→ 处理、经手、经营。"
+    },
+    "torinozoku": {
+      "id": "torinozoku",
+      "word": "取り除く",
+      "reading": "とりのぞく",
+      "row": "tori",
+      "col": "nozoku",
+      "status": "known",
+      "series": "tori",
+      "stars": null,
+      "cls": "③",
+      "gloss": "移除 · 消除",
+      "cat": "IT",
+      "note": "把碍事的东西「拿开」——IT 高频。"
+    },
+    "torinaosu": {
+      "id": "torinaosu",
+      "word": "取り直す",
+      "reading": "とりなおす",
+      "row": "tori",
+      "col": "naosu",
+      "status": "known",
+      "series": "tori",
+      "stars": null,
+      "cls": "③",
+      "gloss": "重来一次",
+      "cat": "已归档",
+      "note": "「重新拿一次」——拍摄、比赛中的重来一遍。"
+    },
+    "dashiireru": {
+      "id": "dashiireru",
+      "word": "出し入れる",
+      "reading": "だしいれる",
+      "row": "dashi",
+      "col": "ireru",
+      "status": "known",
+      "series": "dashi",
+      "stars": null,
+      "cls": "①",
+      "gloss": "取出放入",
+      "cat": "動作系",
+      "note": "出して入れる —— 放进去又拿出来。"
+    },
+    "dashinuku": {
+      "id": "dashinuku",
+      "word": "出し抜く",
+      "reading": "だしぬく",
+      "row": "dashi",
+      "col": "nuku",
+      "status": "known",
+      "series": "dashi",
+      "stars": null,
+      "cls": "③",
+      "gloss": "抢先一步",
+      "cat": "動作系",
+      "note": "抢在别人前面「先出手」——词义已固定。"
+    },
+    "dashishiburu": {
+      "id": "dashishiburu",
+      "word": "出し渋る",
+      "reading": "だししぶる",
+      "row": "dashi",
+      "col": "shiburu",
+      "status": "known",
+      "series": "dashi",
+      "stars": 3,
+      "cls": "①",
+      "gloss": "吝于拿出",
+      "cat": "心理系",
+      "note": "拿出时磨磨蹭蹭 —— 与「出し惜しみ」同属舍不得给的心理。"
+    },
+    "oshidasu": {
+      "id": "oshidasu",
+      "word": "押し出す",
+      "reading": "おしだす",
+      "row": "oshi",
+      "col": "dasu",
+      "status": "known",
+      "series": null,
+      "stars": null,
+      "cls": "①",
+      "gloss": "推出",
+      "cat": "構詞①",
+      "note": "前項修饰后項 —— 你的五分类里的「押し出す」。"
+    },
+    "furikakeru": {
+      "id": "furikakeru",
+      "word": "振り掛ける",
+      "reading": "ふりかける",
+      "row": "furi",
+      "col": "kakeru",
+      "status": "known",
+      "series": null,
+      "stars": null,
+      "cls": "①",
+      "gloss": "撒上 · 洒上",
+      "cat": "構詞①",
+      "note": "前項修饰后項 —— 「振り掛ける」。"
+    },
+    "furiateru": {
+      "id": "furiateru",
+      "word": "振り当てる",
+      "reading": "ふりあてる",
+      "row": "furi",
+      "col": "ateru",
+      "status": "known",
+      "series": null,
+      "stars": null,
+      "cls": "②",
+      "gloss": "分配 · 摊派",
+      "cat": "構詞②",
+      "note": "后項修饰前項 —— 後項「当てる」决定动作指向。"
+    },
+    "uchikatsu": {
+      "id": "uchikatsu",
+      "word": "打ち勝つ",
+      "reading": "うちかつ",
+      "row": "uchi",
+      "col": "katsu",
+      "status": "known",
+      "series": null,
+      "stars": null,
+      "cls": "②",
+      "gloss": "战胜",
+      "cat": "構詞②",
+      "note": "后項修饰前項 —— 以「打」的方式取胜。"
+    },
+    "uchiakeru": {
+      "id": "uchiakeru",
+      "word": "打ち明ける",
+      "reading": "うちあける",
+      "row": "uchi",
+      "col": "akeru",
+      "status": "known",
+      "series": null,
+      "stars": null,
+      "cls": "③",
+      "gloss": "坦白 · 倾诉",
+      "cat": "構詞③",
+      "note": "前項前缀化 —— 「打ち」几乎不贡献词义，只是前缀。"
+    },
+    "sashiosaeru": {
+      "id": "sashiosaeru",
+      "word": "差し押さえる",
+      "reading": "さしおさえる",
+      "row": "sashi",
+      "col": "osaeru",
+      "status": "known",
+      "series": null,
+      "stars": null,
+      "cls": "③",
+      "gloss": "扣押 · 查封",
+      "cat": "構詞③",
+      "note": "前項前缀化 —— 「差し」是强调性前缀。"
+    },
+    "ochitsuku": {
+      "id": "ochitsuku",
+      "word": "落ち着く",
+      "reading": "おちつく",
+      "row": null,
+      "col": null,
+      "status": "known",
+      "series": "yugo",
+      "stars": null,
+      "cls": "⑤",
+      "gloss": "沉着 · 安定 · 平静",
+      "cat": "融合",
+      "note": "前后项已融合成一个整体 —— 「落ち」与「着く」都不能单独解释，需整体记忆。"
+    },
+    "tachiagaru": {
+      "id": "tachiagaru",
+      "word": "立ち上がる",
+      "reading": "たちあがる",
+      "row": "tachi",
+      "col": "ageru",
+      "status": "known",
+      "series": "tachi",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "站起·起身",
+      "cat": "動作",
+      "note": "立つ+上がる字面即“站起”；引申为“振作、采取行动”，如立ち上がって改革に取り組む。"
+    },
+    "tachikomu": {
+      "id": "tachikomu",
+      "word": "立ち込む",
+      "reading": "たちこむ",
+      "row": "tachi",
+      "col": "komu",
+      "status": "known",
+      "series": "tachi",
+      "stars": 2,
+      "cls": "②",
+      "gloss": "弥漫·笼罩",
+      "cat": "状態",
+      "note": "主语不是人而是烟雾/雾/尘埃：霧が立ち込める；立つ在此已虚化。"
+    },
+    "mochiageru": {
+      "id": "mochiageru",
+      "word": "持ち上げる",
+      "reading": "もちあげる",
+      "row": "mochi",
+      "col": "ageru",
+      "status": "known",
+      "series": "mochi",
+      "stars": 5,
+      "cls": "①",
+      "gloss": "举起·抬起",
+      "cat": "動作",
+      "note": "持つ+上げる字面可推；引申“奉承、吹捧”，如持ち上げる人＝拍马屁的人。"
+    },
+    "mochikaeru": {
+      "id": "mochikaeru",
+      "word": "持ち帰る",
+      "reading": "もちかえる",
+      "row": "mochi",
+      "col": "kaesu",
+      "status": "known",
+      "series": "mochi",
+      "stars": 5,
+      "cls": "①",
+      "gloss": "带回·拿回家",
+      "cat": "動作",
+      "note": "“持ち帰り”就是外卖/打包带走；旅行买土産持ち帰る。"
+    },
+    "mochikomu": {
+      "id": "mochikomu",
+      "word": "持ち込む",
+      "reading": "もちこむ",
+      "row": "mochi",
+      "col": "komu",
+      "status": "known",
+      "series": "mochi",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "带入·提出",
+      "cat": "商务",
+      "note": "商务高频：把问题/文件带到会上讨论，会議に問題を持ち込む。"
+    },
+    "mochidasu": {
+      "id": "mochidasu",
+      "word": "持ち出す",
+      "reading": "もちだす",
+      "row": "mochi",
+      "col": "dasu",
+      "status": "known",
+      "series": "mochi",
+      "stars": 5,
+      "cls": "①",
+      "gloss": "拿出·带出",
+      "cat": "動作",
+      "note": "与持ち込む方向相反：把东西带出去/拿出来，如私物を持ち出す。"
+    },
+    "mochinaosu": {
+      "id": "mochinaosu",
+      "word": "持ち直す",
+      "reading": "もちなおす",
+      "row": "mochi",
+      "col": "naosu",
+      "status": "known",
+      "series": "mochi",
+      "stars": 3,
+      "cls": "②",
+      "gloss": "好转·恢复",
+      "cat": "状態",
+      "note": "直す在此表示“恢复到好状态”，不是“再拿一次”；景気が持ち直す＝景气回暖。"
+    },
+    "hikidasu": {
+      "id": "hikidasu",
+      "word": "引き出す",
+      "reading": "ひきだす",
+      "row": "hiki",
+      "col": "dasu",
+      "status": "known",
+      "series": "hiki",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "拉出·提取·引出",
+      "cat": "動作",
+      "note": "银行取款預金を引き出す；也可引出才能/想法（才能を引き出す）。"
+    },
+    "hikikomu": {
+      "id": "hikikomu",
+      "word": "引き込む",
+      "reading": "ひきこむ",
+      "row": "hiki",
+      "col": "komu",
+      "status": "known",
+      "series": "hiki",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "拉进·引入·吸引",
+      "cat": "動作",
+      "note": "把某人拉入话题/圈子：話に引き込む＝引人入胜；别与引きこもる（闭门不出）混。"
+    },
+    "hikiageru": {
+      "id": "hikiageru",
+      "word": "引き上げる",
+      "reading": "ひきあげる",
+      "row": "hiki",
+      "col": "ageru",
+      "status": "known",
+      "series": "hiki",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "拉起·提高·撤回",
+      "cat": "動作",
+      "note": "股价/利率引き上げる＝上调；也可指撤军、把人拉上来（遭難者を引き上げる）。"
+    },
+    "hikimodosu": {
+      "id": "hikimodosu",
+      "word": "引き戻す",
+      "reading": "ひきもどす",
+      "row": "hiki",
+      "col": "modosu",
+      "status": "known",
+      "series": "hiki",
+      "stars": 5,
+      "cls": "①",
+      "gloss": "拉回·拽回",
+      "cat": "動作",
+      "note": "字面“拉回去”：把话题/思绪拉回正轨，話題を引き戻す。"
+    },
+    "hikiukeru": {
+      "id": "hikiukeru",
+      "word": "引き受ける",
+      "reading": "ひきうける",
+      "row": "hiki",
+      "col": "ukeru",
+      "status": "known",
+      "series": "hiki",
+      "stars": 2,
+      "cls": "②",
+      "gloss": "承担·负责·接受",
+      "cat": "商务",
+      "note": "責任を引き受ける＝承担责任；词义固定化，字面“拉+接”推不出。"
+    },
+    "omoidasu": {
+      "id": "omoidasu",
+      "word": "思い出す",
+      "reading": "おもいだす",
+      "row": "omoi",
+      "col": "dasu",
+      "status": "known",
+      "series": "omoi",
+      "stars": 3,
+      "cls": "②",
+      "gloss": "想起·回忆起",
+      "cat": "心理",
+      "note": "思い出したくない＝想不起来；出す表示记忆「浮出」，整个词义已固定为「回忆」。"
+    },
+    "omoikomu": {
+      "id": "omoikomu",
+      "word": "思い込む",
+      "reading": "おもいこむ",
+      "row": "omoi",
+      "col": "komu",
+      "status": "known",
+      "series": "omoi",
+      "stars": 2,
+      "cls": "④",
+      "gloss": "深信·固执地认为",
+      "cat": "心理",
+      "note": "込む虚化为「深入心间」；思い込んでいた＝一直深信（常含误会）。"
+    },
+    "omoikiru": {
+      "id": "omoikiru",
+      "word": "思い切る",
+      "reading": "おもいきる",
+      "row": "omoi",
+      "col": "kiru",
+      "status": "known",
+      "series": "omoi",
+      "stars": 2,
+      "cls": "②",
+      "gloss": "下定决心·狠下心",
+      "cat": "心理",
+      "note": "切る＝斩断犹豫；副词形「思い切って」＝大胆地、豁出去地。"
+    },
+    "omoikaesu": {
+      "id": "omoikaesu",
+      "word": "思い返す",
+      "reading": "おもいかえす",
+      "row": "omoi",
+      "col": "kaesu",
+      "status": "known",
+      "series": "omoi",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "回想·反思",
+      "cat": "心理",
+      "note": "把思绪「翻回来」→回想过去、反省自己；与言い返す（顶嘴）别混。"
+    },
+    "iidasu": {
+      "id": "iidasu",
+      "word": "言い出す",
+      "reading": "いいだす",
+      "row": "ii",
+      "col": "dasu",
+      "status": "known",
+      "series": "ii",
+      "stars": 3,
+      "cls": "②",
+      "gloss": "开口说·提出（话题）",
+      "cat": "動作",
+      "note": "出す表示「开始/冒出来」；言い出しかねる＝难以启齿。"
+    },
+    "iikaesu": {
+      "id": "iikaesu",
+      "word": "言い返す",
+      "reading": "いいかえす",
+      "row": "ii",
+      "col": "kaesu",
+      "status": "known",
+      "series": "ii",
+      "stars": 2,
+      "cls": "②",
+      "gloss": "顶嘴·反驳",
+      "cat": "動作",
+      "note": "把话「顶回去」→回嘴；带贬义，与聞き返す（反问）要分清。"
+    },
+    "iikiru": {
+      "id": "iikiru",
+      "word": "言い切る",
+      "reading": "いいきる",
+      "row": "ii",
+      "col": "kiru",
+      "status": "known",
+      "series": "ii",
+      "stars": 3,
+      "cls": "④",
+      "gloss": "断言·斩钉截铁地说",
+      "cat": "動作",
+      "note": "切る虚化为「说到底、说尽」；与思い切る的切る（截断犹豫）语义不同。"
+    },
+    "tobikomu": {
+      "id": "tobikomu",
+      "word": "飛び込む",
+      "reading": "とびこむ",
+      "row": "tobi",
+      "col": "komu",
+      "status": "known",
+      "series": "tobi",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "跳进·冲入",
+      "cat": "動作",
+      "note": "川に飛び込む＝跳进河里；引申为「突然闯入」，如消息传入。"
+    },
+    "tobidasu": {
+      "id": "tobidasu",
+      "word": "飛び出す",
+      "reading": "とびだす",
+      "row": "tobi",
+      "col": "dasu",
+      "status": "known",
+      "series": "tobi",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "冲出·飞出来",
+      "cat": "動作",
+      "note": "部屋から飛び出す＝冲出房间；强调速度感、突然性。"
+    },
+    "tobiageru": {
+      "id": "tobiageru",
+      "word": "飛び上がる",
+      "reading": "とびあがる",
+      "row": "tobi",
+      "col": "ageru",
+      "status": "known",
+      "series": "tobi",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "跳起·飞上去",
+      "cat": "動作",
+      "note": "飛び上がるほど驚く＝吓得跳起来；常用来形容震惊程度。"
+    },
+    "tobimawaru": {
+      "id": "tobimawaru",
+      "word": "飛び回る",
+      "reading": "とびまわる",
+      "row": "tobi",
+      "col": "mawaru",
+      "status": "known",
+      "series": "tobi",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "飞来飞去·四处奔波",
+      "cat": "動作",
+      "note": "鸟虫飞来飞去；比喻人四处奔波、忙得团团转。"
+    },
+    "tsukaikiru": {
+      "id": "tsukaikiru",
+      "word": "使い切る",
+      "reading": "つかいきる",
+      "row": "tsukai",
+      "col": "kiru",
+      "status": "known",
+      "series": "tsukai",
+      "stars": 3,
+      "cls": "②",
+      "gloss": "用完·耗尽",
+      "cat": "動作",
+      "note": "切る在此表「彻底做完」，强调的是把资源用到一点不剩"
+    },
+    "tsukaikomu": {
+      "id": "tsukaikomu",
+      "word": "使い込む",
+      "reading": "つかいこむ",
+      "row": "tsukai",
+      "col": "komu",
+      "status": "known",
+      "series": "tsukai",
+      "stars": 3,
+      "cls": "④",
+      "gloss": "用得熟练·挪用",
+      "cat": "動作",
+      "note": "込む表「彻底」：东西用得久了变顺手（惯用），也可引申为私自挪用（公款）"
+    },
+    "tsukaihajimeru": {
+      "id": "tsukaihajimeru",
+      "word": "使い始める",
+      "reading": "つかいはじめる",
+      "row": "tsukai",
+      "col": "hajimeru",
+      "status": "known",
+      "series": "hajimeru",
+      "stars": 5,
+      "cls": "④",
+      "gloss": "开始使用",
+      "cat": "動作",
+      "note": "始める是典型的体接尾辞，只加「动作开始」这一层含义"
+    },
+    "tabesugiru": {
+      "id": "tabesugiru",
+      "word": "食べ過ぎる",
+      "reading": "たべすぎる",
+      "row": "tabe",
+      "col": "sugiru",
+      "status": "known",
+      "series": "sugiru",
+      "stars": 4,
+      "cls": "④",
+      "gloss": "吃得太多·吃过量",
+      "cat": "動作",
+      "note": "過ぎる表「超过正常量」，带一点劝诫语气，常用来提醒吃多"
+    },
+    "tabenokosu": {
+      "id": "tabenokosu",
+      "word": "食べ残す",
+      "reading": "たべのこす",
+      "row": "tabe",
+      "col": "nokosu",
+      "status": "known",
+      "series": "tabe",
+      "stars": 5,
+      "cls": "①",
+      "gloss": "剩饭没吃完·吃剩",
+      "cat": "動作",
+      "note": "残す=留下，字面就是「吃着吃着剩下了」，剩饭名词为食べ残し"
+    },
+    "tabekiru": {
+      "id": "tabekiru",
+      "word": "食べ切る",
+      "reading": "たべきる",
+      "row": "tabe",
+      "col": "kiru",
+      "status": "known",
+      "series": "tabe",
+      "stars": 3,
+      "cls": "②",
+      "gloss": "全部吃完·吃完",
+      "cat": "動作",
+      "note": "强调「吃光」不留剩；与食べ終わる（只是吃这个动作结束）相比，食べ切る强调把量吃尽"
+    },
+    "tabehajimeru": {
+      "id": "tabehajimeru",
+      "word": "食べ始める",
+      "reading": "たべはじめる",
+      "row": "tabe",
+      "col": "hajimeru",
+      "status": "known",
+      "series": "hajimeru",
+      "stars": 5,
+      "cls": "④",
+      "gloss": "开始吃",
+      "cat": "動作",
+      "note": "始める表动作起始，口语常以「さあ、食べ始めよう」开头"
+    },
+    "tabeowaru": {
+      "id": "tabeowaru",
+      "word": "食べ終わる",
+      "reading": "たべおわる",
+      "row": "tabe",
+      "col": "owaru",
+      "status": "known",
+      "series": "owaru",
+      "stars": 5,
+      "cls": "④",
+      "gloss": "吃完·吃罢",
+      "cat": "動作",
+      "note": "終わる只表「吃这个动作完成」，不管有没有剩，与食べ切る形成对照"
+    },
+    "nomikomu": {
+      "id": "nomikomu",
+      "word": "飲み込む",
+      "reading": "のみこむ",
+      "row": "nomi",
+      "col": "komu",
+      "status": "known",
+      "series": "nomi",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "咽下去·吞下",
+      "cat": "動作",
+      "note": "込む=往肚子里咽；引申为「吞下委屈」「把信息理解消化」"
+    },
+    "nomisugiru": {
+      "id": "nomisugiru",
+      "word": "飲み過ぎる",
+      "reading": "のみすぎる",
+      "row": "nomi",
+      "col": "sugiru",
+      "status": "known",
+      "series": "sugiru",
+      "stars": 4,
+      "cls": "④",
+      "gloss": "喝得太多·饮酒过量",
+      "cat": "動作",
+      "note": "過ぎる=超量；多指喝酒过量，日本语境常见「飲み過ぎに注意」"
+    },
+    "yomikomu": {
+      "id": "yomikomu",
+      "word": "読み込む",
+      "reading": "よみこむ",
+      "row": "yomi",
+      "col": "komu",
+      "status": "known",
+      "series": "yomi",
+      "stars": 3,
+      "cls": "④",
+      "gloss": "研读 · 加载数据",
+      "cat": "IT",
+      "note": "IT里「データを読み込む」=把数据读进内存/加载数据；后项込む虚化，另有「埋头研读」义。"
+    },
+    "yominaosu": {
+      "id": "yominaosu",
+      "word": "読み直す",
+      "reading": "よみなおす",
+      "row": "yomi",
+      "col": "naosu",
+      "status": "known",
+      "series": "yomi",
+      "stars": 5,
+      "cls": "①",
+      "gloss": "重读 · 再读一遍",
+      "cat": "動作",
+      "note": "直す=「重新做一遍」，与書き直す同构，字面可推=重读。"
+    },
+    "yomiageru": {
+      "id": "yomiageru",
+      "word": "読み上げる",
+      "reading": "よみあげる",
+      "row": "yomi",
+      "col": "ageru",
+      "status": "known",
+      "series": "yomi",
+      "stars": 3,
+      "cls": "②",
+      "gloss": "朗读 · 诵读",
+      "cat": "動作",
+      "note": "上げる表「出声/抬高」，如「声を出して読み上げる」=朗读；别与表「读完」的読み切る混淆。"
+    },
+    "yomitoru": {
+      "id": "yomitoru",
+      "word": "読み取る",
+      "reading": "よみとる",
+      "row": "yomi",
+      "col": "toru",
+      "status": "known",
+      "series": "yomi",
+      "stars": 3,
+      "cls": "②",
+      "gloss": "读取 · 领会",
+      "cat": "IT",
+      "note": "IT里「データ/QRコードを読み取る」=读取数据/二维码；注意与書き取る（听写）区分。"
+    },
+    "yomihajimeru": {
+      "id": "yomihajimeru",
+      "word": "読み始める",
+      "reading": "よみはじめる",
+      "row": "yomi",
+      "col": "hajimeru",
+      "status": "known",
+      "series": "hajimeru",
+      "stars": 5,
+      "cls": "④",
+      "gloss": "开始读 · 读起来",
+      "cat": "動作",
+      "note": "始める作后项表「开始做」，与読み終わる/読み続ける构成体（アスペクト）系列。"
+    },
+    "yomiowaru": {
+      "id": "yomiowaru",
+      "word": "読み終わる",
+      "reading": "よみおわる",
+      "row": "yomi",
+      "col": "owaru",
+      "status": "known",
+      "series": "owaru",
+      "stars": 5,
+      "cls": "④",
+      "gloss": "读完 · 阅读完毕",
+      "cat": "動作",
+      "note": "終わる表「结束」，与読み始める相对；要强调「全部读完」也可用読み終える。"
+    },
+    "yomitsuzukeru": {
+      "id": "yomitsuzukeru",
+      "word": "読み続ける",
+      "reading": "よみつづける",
+      "row": "yomi",
+      "col": "tsuzukeru",
+      "status": "known",
+      "series": "tsuzukeru",
+      "stars": 5,
+      "cls": "④",
+      "gloss": "持续读 · 继续读",
+      "cat": "動作",
+      "note": "続ける表「持续」，与始める/終わる同为体（アスペクト）系列，字面可推。"
+    },
+    "kakikomu": {
+      "id": "kakikomu",
+      "word": "書き込む",
+      "reading": "かきこむ",
+      "row": "kaki",
+      "col": "komu",
+      "status": "known",
+      "series": "kaki",
+      "stars": 5,
+      "cls": "①",
+      "gloss": "填入 · 写入",
+      "cat": "IT",
+      "note": "「フォームに書き込む」=填入表格；IT里「データを書き込む」=写入数据/文件。"
+    },
+    "kakinaosu": {
+      "id": "kakinaosu",
+      "word": "書き直す",
+      "reading": "かきなおす",
+      "row": "kaki",
+      "col": "naosu",
+      "status": "known",
+      "series": "kaki",
+      "stars": 5,
+      "cls": "①",
+      "gloss": "重写 · 改写",
+      "cat": "動作",
+      "note": "与読み直す同构，直す=「重新做一遍」，写错了重写一遍。"
+    },
+    "kakidasu": {
+      "id": "kakidasu",
+      "word": "書き出す",
+      "reading": "かきだす",
+      "row": "kaki",
+      "col": "dasu",
+      "status": "known",
+      "series": "kaki",
+      "stars": 3,
+      "cls": "②",
+      "gloss": "写出 · 导出",
+      "cat": "IT",
+      "note": "IT里「データを書き出す」=导出数据；另有「开始写」义（書き出し=开头/开头部分），注意语境。"
+    },
+    "kakiageru": {
+      "id": "kakiageru",
+      "word": "書き上げる",
+      "reading": "かきあげる",
+      "row": "kaki",
+      "col": "ageru",
+      "status": "known",
+      "series": "kaki",
+      "stars": 3,
+      "cls": "④",
+      "gloss": "写完 · 完成文书",
+      "cat": "動作",
+      "note": "上げる虚化为「做完」，强调把整篇写完，如「レポートを書き上げる」。"
+    },
+    "kakitoru": {
+      "id": "kakitoru",
+      "word": "書き取る",
+      "reading": "かきとる",
+      "row": "kaki",
+      "col": "toru",
+      "status": "known",
+      "series": "kaki",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "抄写 · 记下",
+      "cat": "動作",
+      "note": "「人の話を書き取る」=听写、把话记下来；别与読み取る（读取）混淆。"
+    },
+    "kakinokosu": {
+      "id": "kakinokosu",
+      "word": "書き残す",
+      "reading": "かきのこす",
+      "row": "kaki",
+      "col": "nokosu",
+      "status": "known",
+      "series": "kaki",
+      "stars": 5,
+      "cls": "①",
+      "gloss": "写下留下 · 留档",
+      "cat": "動作",
+      "note": "「記録を書き残す」=留下记录/留档；「遺言を書き残す」=写下遗嘱。"
+    },
+    "hanashiau": {
+      "id": "hanashiau",
+      "word": "話し合う",
+      "reading": "はなしあう",
+      "row": "hanashi",
+      "col": "au",
+      "status": "known",
+      "series": "hanashi",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "商量·讨论",
+      "cat": "動作",
+      "note": "商务高频「协商」，合う表示相互，会议场景常用"
+    },
+    "hanashikomu": {
+      "id": "hanashikomu",
+      "word": "話し込む",
+      "reading": "はなしこむ",
+      "row": "hanashi",
+      "col": "komu",
+      "status": "known",
+      "series": "hanashi",
+      "stars": 4,
+      "cls": "④",
+      "gloss": "长谈·畅聊",
+      "cat": "動作",
+      "note": "聊得忘了时间，込む＝沉浸其中"
+    },
+    "hanashidasu": {
+      "id": "hanashidasu",
+      "word": "話し出す",
+      "reading": "はなしだす",
+      "row": "hanashi",
+      "col": "dasu",
+      "status": "known",
+      "series": "hanashi",
+      "stars": 4,
+      "cls": "④",
+      "gloss": "开口说·开始讲",
+      "cat": "動作",
+      "note": "〜出す＝动作开始，表示突然开口说话"
+    },
+    "hanashikakeru": {
+      "id": "hanashikakeru",
+      "word": "話し掛ける",
+      "reading": "はなしかける",
+      "row": "hanashi",
+      "col": "kakeru",
+      "status": "known",
+      "series": "hanashi",
+      "stars": 4,
+      "cls": "④",
+      "gloss": "搭话·主动说",
+      "cat": "動作",
+      "note": "掛け＝把动作朝向对方，例「話しかけられてうれしい」"
+    },
+    "hanashihajimeru": {
+      "id": "hanashihajimeru",
+      "word": "話し始める",
+      "reading": "はなしはじめる",
+      "row": "hanashi",
+      "col": "hajimeru",
+      "status": "known",
+      "series": "hajimeru",
+      "stars": 5,
+      "cls": "④",
+      "gloss": "开始说·开口讲",
+      "cat": "動作",
+      "note": "〜始める＝动作开始，字面完全可推"
+    },
+    "hanashitsuzukeru": {
+      "id": "hanashitsuzukeru",
+      "word": "話し続ける",
+      "reading": "はなしつづける",
+      "row": "hanashi",
+      "col": "tsuzukeru",
+      "status": "known",
+      "series": "tsuzukeru",
+      "stars": 5,
+      "cls": "④",
+      "gloss": "继续说·一直讲",
+      "cat": "動作",
+      "note": "〜続ける＝动作持续，强调不中断"
+    },
+    "hanashiowaru": {
+      "id": "hanashiowaru",
+      "word": "話し終わる",
+      "reading": "はなしおわる",
+      "row": "hanashi",
+      "col": "owaru",
+      "status": "known",
+      "series": "owaru",
+      "stars": 5,
+      "cls": "④",
+      "gloss": "说完·讲完",
+      "cat": "動作",
+      "note": "〜終わる＝动作结束，常与〜始める成对出现"
+    },
+    "arukimawaru": {
+      "id": "arukimawaru",
+      "word": "歩き回る",
+      "reading": "あるきまわる",
+      "row": "aruki",
+      "col": "mawaru",
+      "status": "known",
+      "series": "aruki",
+      "stars": 5,
+      "cls": "①",
+      "gloss": "走来走去·四处走动",
+      "cat": "動作",
+      "note": "回る＝到处转，例「部屋の中を歩き回る」"
+    },
+    "arukihajimeru": {
+      "id": "arukihajimeru",
+      "word": "歩き始める",
+      "reading": "あるきはじめる",
+      "row": "aruki",
+      "col": "hajimeru",
+      "status": "known",
+      "series": "hajimeru",
+      "stars": 5,
+      "cls": "④",
+      "gloss": "开始走·迈步",
+      "cat": "動作",
+      "note": "〜始める＝动作开始，与話し始める同构"
+    },
+    "arukitsuzukeru": {
+      "id": "arukitsuzukeru",
+      "word": "歩き続ける",
+      "reading": "あるきつづける",
+      "row": "aruki",
+      "col": "tsuzukeru",
+      "status": "known",
+      "series": "tsuzukeru",
+      "stars": 5,
+      "cls": "④",
+      "gloss": "继续走·一直走",
+      "cat": "動作",
+      "note": "〜続ける＝持续，散步、长途步行语境常用"
+    },
+    "arukidasu": {
+      "id": "arukidasu",
+      "word": "歩き出す",
+      "reading": "あるきだす",
+      "row": "aruki",
+      "col": "dasu",
+      "status": "known",
+      "series": "aruki",
+      "stars": 4,
+      "cls": "④",
+      "gloss": "迈步走·开始走",
+      "cat": "動作",
+      "note": "〜出す＝开始，带「迈出」的方向感"
+    },
+    "hashiridasu": {
+      "id": "hashiridasu",
+      "word": "走り出す",
+      "reading": "はしりだす",
+      "row": "hashiri",
+      "col": "dasu",
+      "status": "known",
+      "series": "hashiri",
+      "stars": 4,
+      "cls": "④",
+      "gloss": "起跑·跑起来",
+      "cat": "動作",
+      "note": "起跑线场景常用，例「ゴールを目指して走り出す」"
+    },
+    "hashirimawaru": {
+      "id": "hashirimawaru",
+      "word": "走り回る",
+      "reading": "はしりまわる",
+      "row": "hashiri",
+      "col": "mawaru",
+      "status": "known",
+      "series": "hashiri",
+      "stars": 5,
+      "cls": "①",
+      "gloss": "跑来跑去·东奔西跑",
+      "cat": "動作",
+      "note": "回る＝到处转，例「子供が庭を走り回る」"
+    },
+    "hashirikomu": {
+      "id": "hashirikomu",
+      "word": "走り込む",
+      "reading": "はしりこむ",
+      "row": "hashiri",
+      "col": "komu",
+      "status": "known",
+      "series": "hashiri",
+      "stars": 3,
+      "cls": "④",
+      "gloss": "跑进·赛前练跑",
+      "cat": "動作",
+      "note": "体育界常用，选手赛前「走り込む」加练跑量储备体能"
+    },
+    "kaitoru": {
+      "id": "kaitoru",
+      "word": "買い取る",
+      "reading": "かいとる",
+      "row": "kai",
+      "col": "toru",
+      "status": "known",
+      "series": "kai",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "收购·买下",
+      "cat": "動作",
+      "note": "買う＋取る＝把钱花出去把东西「取到手」，比单纯「買う」更强调所有权到手；如 古本を買い取る。"
+    },
+    "kaikomu": {
+      "id": "kaikomu",
+      "word": "買い込む",
+      "reading": "かいこむ",
+      "row": "kai",
+      "col": "komu",
+      "status": "known",
+      "series": "kai",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "囤购·大量买入",
+      "cat": "動作",
+      "note": "込む表「大量·彻底地」装进来；パンを買い込む＝囤了一堆面包，同系列还有 話し込む（聊得深入）。"
+    },
+    "kaimodosu": {
+      "id": "kaimodosu",
+      "word": "買い戻す",
+      "reading": "かいもどす",
+      "row": "kai",
+      "col": "modosu",
+      "status": "known",
+      "series": "kai",
+      "stars": 5,
+      "cls": "①",
+      "gloss": "买回·回购",
+      "cat": "商务",
+      "note": "買い戻す＝买回来物归原主；股市「自社株買い戻し」＝股份回购，商务高频。"
+    },
+    "kangaesugiru": {
+      "id": "kangaesugiru",
+      "word": "考え過ぎる",
+      "reading": "かんがえすぎる",
+      "row": "kangae",
+      "col": "sugiru",
+      "status": "known",
+      "series": "sugiru",
+      "stars": 5,
+      "cls": "④",
+      "gloss": "想得太多·过度思考",
+      "cat": "心理",
+      "note": "過ぎる接动词连用形作接尾辞，表「过度」；考えすぎないで＝别想太多。"
+    },
+    "kangaenaosu": {
+      "id": "kangaenaosu",
+      "word": "考え直す",
+      "reading": "かんがえなおす",
+      "row": "kangae",
+      "col": "naosu",
+      "status": "known",
+      "series": "kangae",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "重新考虑·重新思考",
+      "cat": "心理",
+      "note": "直す接尾表「重新做」，如 やり直す（重来）；考え直す＝推翻原想法再想一遍。"
+    },
+    "minaosu": {
+      "id": "minaosu",
+      "word": "見直す",
+      "reading": "みなおす",
+      "row": "mi",
+      "col": "naosu",
+      "status": "known",
+      "series": "mi",
+      "stars": 4,
+      "cls": "①",
+      "gloss": "重看·重新评估",
+      "cat": "商务",
+      "note": "見直す＝再看一遍→重新评估；商务/IT 高频，如 計画を見直す、仕様を見直す。"
+    },
+    "miageru": {
+      "id": "miageru",
+      "word": "見上げる",
+      "reading": "みあげる",
+      "row": "mi",
+      "col": "ageru",
+      "status": "known",
+      "series": "mi",
+      "stars": 5,
+      "cls": "①",
+      "gloss": "抬头看·仰望",
+      "cat": "動作",
+      "note": "上げる＝视线朝上；対词「見下ろす」（俯视），也可表「钦佩地仰望」。"
+    },
+    "miawaseru": {
+      "id": "miawaseru",
+      "word": "見合わせる",
+      "reading": "みあわせる",
+      "row": "mi",
+      "col": "awaseru",
+      "status": "known",
+      "series": "mi",
+      "stars": 2,
+      "cls": "②",
+      "gloss": "互相看·暂缓",
+      "cat": "動作",
+      "note": "顔を見合わせる＝面面相觑；引申为「暂缓·推迟」，如 中止を見合わせる，义已特殊化。"
+    },
+    "furikaeru": {
+      "id": "furikaeru",
+      "word": "振り返る",
+      "reading": "ふりかえる",
+      "row": "furi",
+      "col": "kaeru",
+      "status": "known",
+      "series": "furi",
+      "stars": 3,
+      "cls": "①",
+      "gloss": "回头看·回顾",
+      "cat": "動作",
+      "note": "把身体/头「抡回来」→转头回看；引申「回顾」，如 一年を振り返る。"
+    },
+    "torikumu": {
+      "id": "torikumu",
+      "word": "取り組む",
+      "reading": "とりくむ",
+      "row": "tori",
+      "col": "kumu",
+      "status": "known",
+      "series": "tori",
+      "stars": 1,
+      "cls": "③",
+      "gloss": "着手·致力于",
+      "cat": "動作",
+      "note": "取り虚化成接頭辞，组む承担「着手做」；如 問題に取り組む、仕事に取り組む。"
+    },
+    "uchiawaseru": {
+      "id": "uchiawaseru",
+      "word": "打ち合わせる",
+      "reading": "うちあわせる",
+      "row": "uchi",
+      "col": "awaseru",
+      "status": "known",
+      "series": "uchi",
+      "stars": 2,
+      "cls": "②",
+      "gloss": "碰头·事先商量",
+      "cat": "商务",
+      "note": "名词「打ち合わせ」（会议·碰头）的动词来源；原义「敲打合拢」→把意见对到一起。"
+    }
+  }
+}
