@@ -1223,6 +1223,17 @@ body.in-series .cover { display: none; }
   transition: transform var(--motion-base) var(--ease-standard);
 }
 .sp-ovl.open .sp-modal { transform: none; }
+/* 赞助页内嵌卡片 —— 与 .sp-modal 完全相同的视觉，只是无弹窗动画 */
+.sp-card {
+  position: relative;
+  width: min(880px, 100%);
+  margin-inline: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--elev-raised);
+  overflow: hidden;
+}
 .sp-grid { display: grid; grid-template-columns: 250px 1fr; }
 .sp-photo { position: relative; min-height: 340px; }
 .sp-photo > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -1316,6 +1327,7 @@ body.in-series .cover { display: none; }
 }
 
 @media (max-width: 640px) {
+  .sp-card { width: 100%; }
   .sp-grid { grid-template-columns: 1fr; }
   .sp-photo { min-height: 180px; }
   .sp-polaroid { display: none; }

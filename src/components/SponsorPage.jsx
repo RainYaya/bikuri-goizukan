@@ -8,7 +8,7 @@ import { useNav } from '../lib/nav.jsx';
 export default function SponsorPage() {
   const { openShelves } = useNav();
   return (
-    <div style={{ maxWidth: 'min(880px, 100%)', marginInline: 'auto' }}>
+    <div className="sp-card">
       <div className="sp-grid">
         <div className="sp-photo">
           <img src={sponsor.photo} alt="家里的猫" />
