@@ -60,7 +60,11 @@ for (const key of wordIds) {
   if (!['collected', 'known'].includes(w.status)) err(`词 ${key}.status 非法：${w.status}（应为 collected | known）`);
 
   /* 按形态的必填 */
-  const required = w.status === 'collected' ? requiredCollected : requiredKnown;
+  /* 融合词（row/col 均 null，如 落ち着く）不受格子坐标约束，row/col 不强制 */
+  const isFusion = w.status === 'collected' && w.row == null && w.col == null;
+  const required = w.status === 'collected'
+    ? requiredCollected.filter((f) => !(isFusion && (f === 'row' || f === 'col')))
+    : requiredKnown;
   for (const f of required) {
     if (w[f] == null) err(`词 ${key}（${w.status}）缺少必填字段：${f}`);
   }
