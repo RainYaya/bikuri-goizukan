@@ -32,7 +32,13 @@ AI：  → 返回 JSON（code block）
 ````markdown
 你是日语复合动词图鉴《複合動詞図鑑》的编辑助手。这个图鉴用「前項 × 後項」的组合地图来组织词：每个复合动词 = 一个前项系（如 取り〜）与一个后项系（如 〜込む）的交点。
 
-现在给你一个词，请按下面的「构词分类」和「字段说明」分析它，并**只输出一个 JSON 代码块**（不要输出其他文字），字段必须严格符合 schema。
+【系统架构 · 必读】（决定你要输出哪些文件的 JSON）
+本图鉴的内容分布在 4 个数据文件，环环相扣：
+- series.json 存「系」（前项行 / 后项列）；volumes.json 存「后项列 → 卷」；words.json 存「词」；series-content.json 存「系的叙事区块」。
+- 不变量：①词的 前项/后项 必须已存在于 series.json ②每个后项列必须落在 volumes.json 的某卷里 ③系内容块的 id 必须存在于 series.json。
+- 输出要求：若这个词需要**新的前项或后项**，除了词条，还必须一并输出 series.json 的对应行/列条目，且若是**新后项列**还要给出 volumes.json 的卷归属（放进语义最接近的那卷，如 過ぎる→体・程度 卷）；若是**新系**且想要叙事页，另附 series-content.json 的 insight 区块。不要只给 words.json。
+
+现在给你一个词，请按下面的「构词分类」和「字段说明」分析它，并**只输出 JSON 代码块**（不要输出其他文字），字段必须严格符合 schema。
 
 【构词分类 ①–⑤】（决定 cls 字段）
 ① 前項が後項を修飾 —— 前项修饰后项，词义 ≈ 前项方式 + 后项动作（例：押し出す「推着拿出」）
@@ -183,6 +189,45 @@ mawaru(〜回る) nokosu(〜残す) awaseru(〜合わせる) ukeru(〜受ける)
 ````
 
 加完系后，在 `src/data/series.json` 的 `rows`（前项）或 `cols`（后项）数组里加上这条记录。新系会自动获得通用系页（无需改代码）。
+
+---
+
+## 3.5 系叙事内容 Prompt —— 给某个系配专属叙事页（series-content.json）
+
+### 使用说明
+
+新系默认只有「成员墙 + 空槽」通用页。想给它配「覚え方の原型」「语义树」「隐喻面板」等叙事内容，用这个 Prompt 生成 `series-content.json` 的区块列表。
+
+### Prompt 正文
+
+````markdown
+你是日语复合动词图鉴《複合動詞図鑑》的编辑助手。这个图鉴的每个「系」可以用一组有序「区块」来配叙事页，存进 src/data/series-content.json。
+
+已知的区块类型（type）与字段：
+- insight：覚え方の原型 —— { "type":"insight", "label":"<标题>", "text":"<正文，可含 <b>>" }
+- tree：语义扩展树 —— { "type":"tree", "eyebrow":"<ja>", "eyebrowZh":"<zh>", "title":"<ja>", "root":"<根词>", "branches":[{"label":"<分支>","cls":"bl-get|bl-handle","items":[{"id":"<words.json里的id>","cn":"<中文>","stars":<1-5>}]}] }
+- patterns：构词规律 + 场景频率 —— { "type":"patterns", "eyebrow/eyebrowZh/title", "note":"<说明>", "tags":{"biz":{"label":"場景頻度 · 商务高频","items":[{"word":"<词>","cn":"<译>"}]},"it":{...}} }（**公式行 items 自动从成员词派生（最多 3 条），不要生成 items**；tags 只有该系确有商务/IT 高频词时才给）
+- confusables：易混淆对比 —— { "type":"confusables", "eyebrow/eyebrowZh/title", "cards":[{"jp":"<词>","em":"<强调点>","cn":"<释义>","note":"<详解>"}] }
+- words-chips：精选词条 —— { "type":"words-chips", "eyebrow/eyebrowZh/title", "chips":[{"id":"<words.json的id>","gloss":"<中文>","this":true}], "archive":{...}? }
+- metaphor：隐喻面板 —— { "type":"metaphor", "eyebrow/eyebrowZh/title", "panels":[{"type":"bounce|flip","title":"<ja>","subtitle":"<zh>","core":"<核心>","groups":[{"label":"<组>","desc":"<说明>","words":[{"jp":"<词>","cn":"<译>","intuition":"<直觉>"}]}]}], "mnemonic":{"pill":"瞬間口訣","text":"<口诀>"}? }
+- wcards：精选词卡 —— { "type":"wcards", "eyebrow/eyebrowZh/title", "cards":[{"jp":"<词>","cat":"tag-bounce|tag-flip","catLabel":"<类>","cn":"<译>","intuition":"<直觉>","ex":"<例句>／<译>","id":"<words.json的id 可选，有则本种卡>"}] }
+- practice：实战联想 —— { "type":"practice", "eyebrow/eyebrowZh/title", "items":[{"jp":"<词>","cn":"<译>","hint":"<提示>"}] }
+- struct：构词结构定位 —— { "type":"struct", "eyebrow/eyebrowZh", "items":[{"no":"①","jp":"<ja>","zh":"<zh>","ex":"<例词>","lit":true?}], "note":"<说明>" }
+- wgrid-groups：分仓词墙 —— { "type":"wgrid-groups", "eyebrow/eyebrowZh/title", "groups":[{"label":"<仓名>","cls":"cat-immerse|cat-enter|cat-state|cat-idiom","items":[{"jp":"<词>","cn":"<译>","foot":"honshu|proto"?}]}] }
+- memberwall：成员墙（数据驱动，不写词）—— { "type":"memberwall", "eyebrow/eyebrowZh", "kind":"row|col", "id":"<系id>" }
+- intersect：交叉点 —— { "type":"intersect", "eyebrow/eyebrowZh", "html":"<可含 <b>>" }
+- mnemonic：瞬間口訣 —— { "type":"mnemonic", "pill":"瞬間口訣", "text":"<口诀>" }
+- archive：归档区 —— { "type":"archive", "label":"归档区", "chips":["<条目>"], "hint":"<提示>" }
+
+要求：
+1. 给下面的系，产出一个 JSON 数组（有序区块列表），保存进 src/data/series-content.json 里该系 id 对应的值。
+2. 最常用的组合是 [insight, ...根据系特色加 1-3 个叙事区块, memberwall(若适合), archive(若需要)]。
+3. memberwall 不写词（自动从 words.json 派生）；words-chips / tree / wcards 里的 id 必须引用 words.json 中真实存在的 id。
+4. 内容用日文+中文混排；近缘词必须是真实存在的复合动词。
+5. 只输出 JSON 代码块。
+
+系：<系 id，如 tachi，或直接给系名 立ち〜>
+````
 
 ---
 

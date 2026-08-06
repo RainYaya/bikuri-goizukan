@@ -107,10 +107,44 @@ for (const key of wordIds) {
   }
 }
 
+/* ── 跨文件不变量（链：series.json ↔ volumes.json ↔ series-content.json） ── */
+const volumes = read('src/data/volumes.json');
+const content = read('src/data/series-content.json');
+
+/* ① 卷的列必须存在于 series.json.cols；② 每个后项列必须落在恰好一卷里 */
+const colSet = new Set(colIds);
+const covered = new Map();
+volumes.forEach((v, vi) => {
+  v.cols.forEach((c) => {
+    if (!colSet.has(c)) err(`volumes[${vi}]（${v.name}）引用不存在的后项列：${c}`);
+    if (covered.has(c)) err(`后项列 ${c} 出现在多卷：${covered.get(c)} 与 ${v.id}`);
+    covered.set(c, v.id);
+  });
+});
+for (const c of colIds) {
+  if (!covered.has(c)) err(`后项列 ${c} 未归属任何卷 —— 点亮模式会丢失该列的词`);
+}
+
+/* ③ 系列内容块的 key 必须存在于 series.json（或 yugo）；④ 区块 type 必须合法 */
+const KNOWN_TYPES = ['insight', 'tree', 'patterns', 'confusables', 'conf-pair', 'words-chips', 'archive', 'metaphor', 'wcards', 'practice', 'struct', 'wgrid-groups', 'memberwall', 'intersect', 'mnemonic', 'empty-slots'];
+for (const [sid, sections] of Object.entries(content || {})) {
+  if (sid !== 'yugo' && !rowIds.includes(sid) && !colIds.includes(sid)) {
+    err(`series-content.json 的 key "${sid}" 不存在于 series.json（也不是 yugo）`);
+  }
+  sections.forEach((sec, i) => {
+    if (!KNOWN_TYPES.includes(sec.type)) {
+      err(`series-content.json[${sid}][${i}] 的 type "${sec.type}" 不是已知区块类型`);
+    }
+    if (sec.type === 'memberwall' && !['row', 'col'].includes(sec.kind)) {
+      err(`series-content.json[${sid}][${i}] memberwall 的 kind 应为 row/col`);
+    }
+  });
+}
+
 /* ── 汇总 ─────────────────────────────────────────────── */
 if (errors.length) {
   console.error(`✗ 数据校验失败：${errors.length} 个错误`);
   errors.forEach((e) => console.error('  ✗ ' + e));
   process.exit(1);
 }
-console.log(`✓ 数据校验通过：${rowIds.length} 前項系 · ${colIds.length} 後項系 · ${wordIds.length} 词条（${Object.values(words.words).filter((w) => w.status === 'collected').length} 収蔵済）`);
+console.log(`✓ 数据校验通过：${rowIds.length} 前項系 · ${colIds.length} 後項系 · ${wordIds.length} 词条（${Object.values(words.words).filter((w) => w.status === 'collected').length} 収蔵済） · ${Object.keys(content || {}).length} 个系内容块`);

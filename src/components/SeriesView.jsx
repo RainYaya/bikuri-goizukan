@@ -1,25 +1,41 @@
 import { rowSeries, colSeries } from '../lib/data.js';
+import seriesContent from '../data/series-content.json';
 import Home from './Home.jsx';
-import GenericSeries from './series/GenericSeries.jsx';
-import ToriSeries from './series/ToriSeries.jsx';
-import KaesuSeries from './series/KaesuSeries.jsx';
-import KomuSeries from './series/KomuSeries.jsx';
-import DashiSeries from './series/DashiSeries.jsx';
-import OshimuSeries from './series/OshimuSeries.jsx';
-import YugoSeries from './series/YugoSeries.jsx';
+import SeriesHead from './SeriesHead.jsx';
+import { Sections } from './series/Sections.jsx';
 
 /**
- * SeriesView —— 系总览分发。
- * 有定制页的 6 个系走专属组件；其余行/列系自动走 GenericSeries（无需改代码即可扩展新系）。
+ * SeriesView —— 系总览（数据驱动）。
+ * 每个系 = series-head（来自 series.json）+ 有序内容区块（来自 series-content.json）。
+ * 没有配置内容的系（含任何新系）自动回退到 [成员墙, 空槽统计] 两个默认区块。
  */
+function kindFor(id) {
+  if (id === 'yugo') return 'yugo';
+  if (rowSeries(id)) return 'row';
+  if (colSeries(id)) return 'col';
+  return null;
+}
+
 export default function SeriesView({ id }) {
-  if (id === 'tori') return <ToriSeries />;
-  if (id === 'kaesu') return <KaesuSeries />;
-  if (id === 'komu') return <KomuSeries />;
-  if (id === 'dashi') return <DashiSeries />;
-  if (id === 'oshimu') return <OshimuSeries />;
-  if (id === 'yugo') return <YugoSeries />;
-  if (rowSeries(id)) return <GenericSeries kind="row" id={id} />;
-  if (colSeries(id)) return <GenericSeries kind="col" id={id} />;
-  return <Home />;
+  const kind = kindFor(id);
+  if (!kind) return <Home />;
+
+  const sections = seriesContent[id] ? [...seriesContent[id]] : [
+    { type: 'memberwall', eyebrow: '詞目一覧', eyebrowZh: '成员墙 —— 点击看词卡', kind, id },
+    { type: 'empty-slots', kind, id },
+  ];
+  /* 构词规律：任何有词的系都自动给一个（公式行自动从成员词派生，最多 3 条）；
+     内容里已配过 patterns 的用策展版本（title/note/tags），否则用默认标题 */
+  if (!sections.some((s) => s.type === 'patterns')) {
+    const idx = sections.findIndex((s) => s.type === 'insight');
+    if (idx >= 0) sections.splice(idx + 1, 0, { type: 'patterns' });
+    else sections.unshift({ type: 'patterns' });
+  }
+
+  return (
+    <>
+      <SeriesHead kind={kind} id={id} />
+      <Sections list={sections} kind={kind} id={id} />
+    </>
+  );
 }

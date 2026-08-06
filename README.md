@@ -51,8 +51,9 @@ bikuri-Goizukan/
 │       ├── SeriesHead / Minimap / MemberWall / Stars / DonateModal
 │       └── series/           # 6 个定制系页 + GenericSeries
 └── docs/
+    ├── CONTENT-ARCHITECTURE.md # ★ 内容架构：数据文件依赖链 + 不变量 + 加内容决策树
     ├── CONTENT-FORMAT.md     # ★ JSON Schema 与内容管理规范
-    └── AI-PROMPTS.md         # ★ 给 AI 的 Prompt 模板（加词用）
+    └── AI-PROMPTS.md         # ★ 给 AI 的 Prompt 模板（加词 / 加系 / 加系叙事内容）
 ```
 
 ---
@@ -101,8 +102,10 @@ npm run preview    # 本地预览构建产物（验证部署效果）
 | 想做什么 | 改哪里 |
 |---|---|
 | 改标题 / 页脚 / 赞助文案 / 关掉赞助弹窗 | `src/config.js` |
-| 加一个新词（含 AI 生成） | `src/data/words.json` + `docs/AI-PROMPTS.md` |
+| 加一个新词（含 AI 生成） | `src/data/words.json`（新前项/后项还要 `series.json` + `volumes.json`） |
 | 加一个新的前项/后项系 | `src/data/series.json`（自动获得通用系页） |
+| 给某系配叙事页（覚え方/树/隐喻面板…） | `src/data/series-content.json` + `docs/AI-PROMPTS.md` §3.5 |
+| 理解数据文件怎么联动 | `docs/CONTENT-ARCHITECTURE.md` |
 | 给某系配专属定制页 | 在 `src/components/series/` 新增组件，并在 `SeriesView.jsx` 注册一行 |
 | 加一个新的顶层视图 | `App.jsx` 的 `parseHash` / `renderView` / 导航按钮各加一处 |
 | 加一个首访弹窗之外的交互 | 参考 `DonateModal.jsx`（localStorage + config 开关模式） |

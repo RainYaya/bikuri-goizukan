@@ -11,9 +11,12 @@
  *   mode      : 'lit'（点亮模式，分巻剪枝）| 'full'（全図点阵）
  *   shelfMode : 'shelves'（棚表示）| 'cards'（卡片表示）
  *
- * hash 路由与原版一致用 history.replaceState。默认进入 収蔵棚。
+ * 路由：history.pushState —— 每次切换视图新增一条历史记录，
+ * 因此浏览器后退 / 手机侧滑会按视图逐级回退（而不是直接退出网站）。
+ * popstate 监听还原视图；cls/mode/shelfMode 作为跨视图偏好保留。
+ * 默认进入 収蔵棚。
  */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { WORDS } from './lib/data.js';
 import { NavContext } from './lib/nav.jsx';
 import Nav from './components/Nav.jsx';
@@ -45,6 +48,13 @@ function hashFor(state) {
 
 export default function App() {
   const [state, setState] = useState(() => parseHash(window.location.hash));
+  /* stateRef：供 navigate / popstate 同步读取最新状态（避免闭包陈旧） */
+  const stateRef = useRef(state);
+  /* navCounter：记录本站 push 了几条历史；goBack 只在本站历史内后退，避免退到外部页面 */
+  const navCounter = useRef(0);
+  useEffect(() => {
+    history.replaceState({ n: 0 }, '', window.location.hash);
+  }, []);
 
   /* body 类：in-series（藏封面）· map-view（显交差点図）。shelf 域默认藏 #grid-map */
   useEffect(() => {
@@ -54,18 +64,45 @@ export default function App() {
     document.body.classList.toggle('map-view', mapView);
   }, [state]);
 
+  /* stateRef 跟随渲染后的最新 state */
+  useEffect(() => { stateRef.current = state; }, [state]);
+
+  /* 后退 / 前进：popstate → 按 URL hash 还原视图（偏好 cls/mode/shelfMode 保留，Tour 退出） */
   useEffect(() => {
-    const onHash = () => setState((prev) => ({ ...parseHash(window.location.hash), cls: prev.cls, mode: prev.mode, shelfMode: prev.shelfMode }));
+    const onPop = () => {
+      const next = {
+        ...parseHash(window.location.hash),
+        cls: stateRef.current.cls,
+        mode: stateRef.current.mode,
+        shelfMode: stateRef.current.shelfMode,
+        tourStep: -1,
+        _gotoSponsor: false,
+      };
+      stateRef.current = next;
+      setState(next);
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
+
+  /* 手动改地址栏 hash：同样还原视图 */
+  useEffect(() => {
+    const onHash = () => {
+      const next = { ...parseHash(window.location.hash), cls: stateRef.current.cls, mode: stateRef.current.mode, shelfMode: stateRef.current.shelfMode, tourStep: -1, _gotoSponsor: false };
+      stateRef.current = next;
+      setState(next);
+    };
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
+  /* 导航：pushState 新增一条历史记录 → 浏览器后退/侧滑可逐级回退 */
   const navigate = useCallback((next) => {
-    setState((prev) => {
-      const merged = { ...prev, ...next };
-      history.replaceState(null, '', hashFor(merged));
-      return merged;
-    });
+    const merged = { ...stateRef.current, ...next };
+    stateRef.current = merged;
+    navCounter.current += 1;
+    history.pushState({ n: navCounter.current }, '', hashFor(merged));
+    setState(merged);
   }, []);
 
   const openShelves = useCallback(() => {
@@ -82,13 +119,10 @@ export default function App() {
 
   const openWord = useCallback((id) => {
     if (!WORDS[id]) return;
-    setState((prev) => {
-      const fromSeries = prev.view === 'series' || (prev.view === 'word' && prev.backSeries);
-      const merged = { ...prev, view: 'word', word: id, series: null, backSeries: fromSeries ? prev.backSeries : null };
-      history.replaceState(null, '', hashFor(merged));
-      return merged;
-    });
-  }, []);
+    const prev = stateRef.current;
+    const fromSeries = prev.view === 'series' || (prev.view === 'word' && prev.backSeries);
+    navigate({ view: 'word', word: id, series: null, backSeries: fromSeries ? prev.backSeries : null });
+  }, [navigate]);
 
   const setCls = useCallback((cls) => { setState((prev) => ({ ...prev, cls })); }, []);
   const setMode = useCallback((mode) => { setState((prev) => ({ ...prev, mode })); }, []);
@@ -146,7 +180,14 @@ export default function App() {
     if (!seen && !window.location.hash) startTour();
   }, [startTour]);
 
+  /* 站内「← 回到」按钮：只在本站 push 的历史内后退（逐级回退）；
+     深链接直接打开词卡时（n=0）无本站历史 → 确定性回退，避免退到外部页面 */
   const goBack = useCallback(() => {
+    const cur = window.history.state;
+    if (cur && typeof cur.n === 'number' && cur.n > 0) {
+      window.history.back();
+      return;
+    }
     if (state.view === 'word') {
       if (state.backSeries) openSeries(state.backSeries);
       else if (state.domain === 'map') openMap();
