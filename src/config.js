@@ -16,11 +16,12 @@ export const site = {
 
 export const sponsor = {
   enabled: true,
-  /* 猫图：photo 是大背景，polaroid 是左下角小相框 */
-  photo: '/cat2.jpg',                   // 弹窗左侧猫大图
-  polaroid: '/cat1.jpg',                // 宝丽来小照
-  weixinQR: '/weixin-qr.png',           // 微信收款码
-  zhifubaoQR: '/zhifubao-qr.png',       // 支付宝收款码
+  /* 猫图：photo 是大背景，polaroid 是左下角小相框。
+     用相对路径（无前导 /）—— hash 路由下 URL 路径固定在站点根，GitHub Pages 子路径 / Vercel 根域都正确解析 */
+  photo: 'cat2.jpg',
+  polaroid: 'cat1.jpg',
+  weixinQR: 'weixin-qr.png',
+  zhifubaoQR: 'zhifubao-qr.png',
   title: 'この図鑑、役に立ってますか？',
   copy: '如果它对你有帮助，欢迎<b>赞助一点</b> —— 它会变成我家猫的猫粮。',
   closeBtn: '先逛逛图鉴',
